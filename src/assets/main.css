@@ -24,13 +24,13 @@ a,
 @media (min-width: 1024px) {
   body {
     display: flex;
-    place-items: center;
-    padding-top: 3rem;
+    justify-content: center; /* Center content on larger screens */
+    padding-top: 0;
   }
 
   #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex; /* Use flex instead of grid for more flexibility */
+    flex-direction: column; /* Align content vertically */
     padding: 0 2rem;
   }
 }

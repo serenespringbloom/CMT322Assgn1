@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&display=swap');
+
+
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
   --vt-c-white: #ffffff;
@@ -64,8 +67,10 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  color: var(--color-text);
-  background: var(--color-background);
+  margin: 0; /* Remove any default margin */
+  padding: 0; /* Ensure no extra padding is added */
+  color: #554149;
+  background: #FFC8DD;
   transition:
     color 0.5s,
     background-color 0.5s;

@@ -69,10 +69,10 @@ const toggleMenu = () => {
   height: 50px; /* Adjust logo size */
   }
 
-   /* body {
+   body {
     padding-top: 3rem; /* This ensures spacing between navbar and the body. 6 percent.*/
-   /* align-items: center;
-  } */
+   align-items: center;
+  }
 
   .nav-links {
     display: flex;
@@ -138,10 +138,9 @@ const toggleMenu = () => {
 }
 
 /* When windows is maximised */
-  @media (max-width: 100%) {
-
+ @media (max-width: 100%) {
     .navTop {
-      flex-direction: column; /* Stack content on smaller screens */
+      flex-direction: column;
       text-align: center;
     }
 
@@ -152,7 +151,7 @@ const toggleMenu = () => {
     }
 
     .cart {
-      margin-top: 1rem; /* Space below navigation links */
+      margin-top: 1rem;
     }
   }
 

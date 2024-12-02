@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="about">
     <h1>This is an about page</h1>
   </div>
@@ -12,4 +12,13 @@
     align-items: center;
   }
 }
-</style>
+</style> -->
+<script setup lang="ts">
+import TheWelcome from '../components/TheWelcome.vue'
+</script>
+
+<template>
+  <main>
+    <TheWelcome />
+  </main>
+</template>

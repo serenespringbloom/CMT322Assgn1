@@ -11,11 +11,14 @@ import { RouterLink, RouterView } from 'vue-router'
   </head>
   <body>
     <nav id="navTop">
+      <div class="logo">
+        <img src="@/assets/images/mcblogo.png" alt="" height="60" width="100">
+      </div>
       <ul class="nav-links">
         <li><RouterLink to="/">HOME</RouterLink></li>
         <li><a href="#event">EVENT</a></li>
         <li><RouterLink to="/ticket">TICKET</RouterLink></li>
-        <li><a href="#merchandise">MERCHANDISE</a></li>
+        <li><RouterLink to="/merchandise">MERCHANDISE</RouterLink></li>
         <li><a href="#contact">CONTACT</a></li>
         <li><a href="#feedback">FEEDBACK</a></li>
       </ul>
@@ -31,12 +34,15 @@ import { RouterLink, RouterView } from 'vue-router'
     top: 0;
     left: 0;
     background: #f4d0d6; /* Background color for the header */
+    position: absolute;
+    top: 0;
+    left: 0;
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between; /* Ensures items are spaced left and right */
     align-items: center; /* Vertically centers items */
     width: 100%; /* Full horizontal width */
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    box-shadow: 0px 2px 4px rgb(215, 118, 7); /* Subtle shadow for depth */
   }
 
   .nav-links {

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import Header from './components/Header.vue'
 </script>
 
 <template>
@@ -10,32 +9,27 @@ import Header from './components/Header.vue'
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Malam Citra Bayu</title>
   </head>
-  <header>
-    <body>
-      <nav id="navTop">
-        <ul class="nav-links">
-          <li><RouterLink to="/">HOME</RouterLink></li>
-          <li><a href="#event">EVENT</a></li>
-          <li><RouterLink to="/ticket">TICKET</RouterLink></li>
-          <li><a href="#merchandise">MERCHANDISE</a></li>
-          <li><a href="#contact">CONTACT</a></li>
-          <li><a href="#feedback">FEEDBACK</a></li>
-        </ul>
-        <div class="cart">RM 0.00 🛒</div>
-      </nav>
-    </body>
-  </header> 
-  <RouterView />
+  <body>
+    <nav id="navTop">
+      <ul class="nav-links">
+        <li><RouterLink to="/">HOME</RouterLink></li>
+        <li><a href="#event">EVENT</a></li>
+        <li><RouterLink to="/ticket">TICKET</RouterLink></li>
+        <li><a href="#merchandise">MERCHANDISE</a></li>
+        <li><a href="#contact">CONTACT</a></li>
+        <li><a href="#feedback">FEEDBACK</a></li>
+      </ul>
+      <div class="cart">RM 0.00 🛒</div>
+    </nav>    
+    <RouterView />
+  </body>
 </template>
 
 <style scoped>
-  header{
-    width: 100%;
-    position: absolute;
-    top: -46%;
-    left: 0;
-  }
   #navTop {
+    position: absolute;
+    top: 0;
+    left: 0;
     background: #f4d0d6; /* Background color for the header */
     padding: 1rem 2rem;
     display: flex;

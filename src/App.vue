@@ -2,6 +2,7 @@
 import { RouterLink, RouterView } from 'vue-router'
 import logo from '@/assets/MCBLogo.png'
 
+
 import { ref } from 'vue';
 
 const isMenuOpen = ref(false);
@@ -9,6 +10,7 @@ const isMenuOpen = ref(false);
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
 };
+
 
 </script>
 
@@ -22,11 +24,13 @@ const toggleMenu = () => {
 
   <body>
     <nav id="navTop">
+
       <!-- <div class="nav-container">  -->
       <!-- Brand/Logo -->
       <div class="brand">
         <img :src="logo" alt="Malam Citra Bayu Logo" />
       </div>
+
 
       <!-- Hamburger Icon -->
       <button class="nav-toggle" @click="toggleMenu">
@@ -35,6 +39,7 @@ const toggleMenu = () => {
 
       <!--Navigation Links-->
       <ul class="nav-links" :class="{ open: isMenuOpen }">
+
         <li><RouterLink to="/">HOME</RouterLink></li>
         <li><RouterLink to="/event">EVENT</RouterLink></li>
         <li><RouterLink to="/ticket">TICKET</RouterLink></li>
@@ -43,7 +48,9 @@ const toggleMenu = () => {
         <li><RouterLink to="/feedback">FEEDBACK</RouterLink></li>
       </ul>
       <div class="cart">RM 0.00 🛒</div>
+
     <!-- </div> -->
+
     </nav>
     <RouterView />
   </body>
@@ -63,6 +70,8 @@ const toggleMenu = () => {
     width: 100%; /* Full horizontal width */
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
   }
+
+
 
 
   .brand img {
@@ -106,6 +115,7 @@ const toggleMenu = () => {
     color: #007bff; /* Change color on hover */
     cursor: pointer; /* Pointer cursor to indicate it's interactive */
   }
+
 
   /* Hamburger button */
 .nav-toggle {
@@ -155,6 +165,7 @@ const toggleMenu = () => {
     }
   }
 
+
  /* Responsive design, when windows is minimised */
 @media (max-width: 768px) {
   .nav-links {
@@ -197,4 +208,5 @@ const toggleMenu = () => {
     display: block;
   }
 }
+
 </style>

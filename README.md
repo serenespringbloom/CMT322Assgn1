@@ -19,6 +19,9 @@ See [Vite Configuration Reference](https://vite.dev/config/).
 ```sh
 npm install
 ```
+```sh
+npm install vue@3 @chenfengyuan/vue-countdown@2
+```
 
 ### Compile and Hot-Reload for Development
 

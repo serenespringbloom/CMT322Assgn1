@@ -64,8 +64,8 @@
 body {
   min-height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  /* justify-content: center; */
+  /* align-items: center; */
   flex-direction: column;
   margin: 0; /* Remove any default margin */
   padding: 0; /* Ensure no extra padding is added */
@@ -95,5 +95,5 @@ body {
 }
 
 h1 {
-  text-align: center;
+  /* text-align: center; */
 }

@@ -24,7 +24,7 @@ a,
 @media (min-width: 1024px) {
   body {
     display: flex;
-    justify-content: center; /* Center content on larger screens */
+    justify-content: center; /*Center content on larger screens*/
     padding-top: 0;
   }
 

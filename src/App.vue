@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import logo from '@/assets/MCBLogo.png'
+  import { RouterLink, RouterView } from 'vue-router'
+  import { computed } from 'vue';
+  import { useRoute } from 'vue-router';
+  import logo from '@/assets/MCBLogo.png'
+  import { ref } from 'vue';
 
+  const isMenuOpen = ref(false);
 
-import { ref } from 'vue';
-
-const isMenuOpen = ref(false);
-
-const toggleMenu = () => {
-  isMenuOpen.value = !isMenuOpen.value;
-};
-
-
+  const toggleMenu = () => {
+    isMenuOpen.value = !isMenuOpen.value;
+  };
+  const route = useRoute();
+  const hideHeader = computed(() => route.meta.showHeader === false);
 </script>
 
 <template>
@@ -23,8 +23,7 @@ const toggleMenu = () => {
   </head>
 
   <body>
-    <nav id="navTop">
-
+    <nav v-if="!hideHeader" id="navTop">
       <!-- <div class="nav-container">  -->
       <!-- Brand/Logo -->
       <div class="brand">
@@ -39,13 +38,13 @@ const toggleMenu = () => {
 
       <!--Navigation Links-->
       <ul class="nav-links" :class="{ open: isMenuOpen }">
-
         <li><RouterLink to="/">HOME</RouterLink></li>
         <li><RouterLink to="/event">EVENT</RouterLink></li>
         <li><RouterLink to="/ticket">TICKET</RouterLink></li>
         <li><RouterLink to="/merchandise">MERCHANDISE</RouterLink></li>
         <li><RouterLink to="/contact">CONTACT</RouterLink></li>
         <li><RouterLink to="/feedback">FEEDBACK</RouterLink></li>
+        <li><RouterLink to="/admin">ADMIN</RouterLink></li>
       </ul>
       <div class="cart">RM 0.00 🛒</div>
     </nav>

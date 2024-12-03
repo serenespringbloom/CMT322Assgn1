@@ -12,9 +12,6 @@
     align-items: center;
   }
 }
-<<<<<<< Updated upstream
-</style>
-=======
 
 .title {
   font-family: 'EB Garamond', serif; /* Use EB Garamond */
@@ -176,4 +173,3 @@ h1 {
   background-color: #ffd966;
 }
 </style> 
->>>>>>> Stashed changes

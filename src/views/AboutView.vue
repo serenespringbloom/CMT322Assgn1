@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import CountdownTimer from "@/components/countdownTimer.vue"; // Include if using the timer component
-
+  import CountdownTimer from "@/components/countdownTimer.vue"; // Include if using the timer component
 </script>
 
 <template>
@@ -9,7 +8,8 @@ import CountdownTimer from "@/components/countdownTimer.vue"; // Include if usin
       <!-- Left Side: Title and Buttons -->
       <div class="hero-content left">
         <p class="date">01 JUNE, 2024</p>
-        <h1 class="title">Malam Citra Bayu 16th</h1>        <p class="tagline">Megar Karya, Remangi Persona Bayu</p>
+        <h1 class="title">Malam Citra Bayu 16th</h1>        
+        <p class="tagline">Megar Karya, Remangi Persona Bayu</p>
         <div class="buttons">
           <button class="btn-primary">BOOK NOW</button>
           <a href="#" class="teaser-link">🎥 Watch The Teaser</a>
@@ -25,7 +25,7 @@ import CountdownTimer from "@/components/countdownTimer.vue"; // Include if usin
           <CountdownTimer />
         </div>
       </div>
-      <p class="venue">Dewan Tuanku Syed Putra, USM</p>
+      <button class="venue">Dewan Tuanku Syed Putra, USM</button>
     </section>
   </div>
     </div>
@@ -192,8 +192,14 @@ h1 {
   background: #ffcc33; /* Gold background */
   color: #333; /* Text color */
   padding: 0.5rem 1rem;
+  border: none;
   border-radius: 20px; /* Rounded corners */
   display: inline-block; /* Ensure proper spacing */
   font-weight: bold; /* Optional: Highlight venue text */
 }
-</style>
+
+.venue:hover {
+  background-color: #ffd966;
+}
+</style> 
+

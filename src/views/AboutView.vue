@@ -1,17 +1,125 @@
+<script setup lang="ts">
+  import CountdownTimer from "@/components/countdownTimer.vue"; // Include if using the timer component
+</script>
+
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
+  <div class="body">
+    <div class="hero">
+      <!-- Left Side: Title and Buttons -->
+      <div class="hero-content left">
+        <p class="date">01 JUNE, 2024</p>
+        <h1 class="title">Malam Citra Bayu 16th</h1>        
+        <p class="tagline">Megar Karya, Remangi Persona Bayu</p>
+        <div class="buttons">
+          <button class="btn-primary">BOOK NOW</button>
+          <a href="#" class="teaser-link">🎥 Watch The Teaser</a>
+        </div>
+      </div>
+
+      <!-- Right Side: Countdown -->
+      <div class="hero-content right">
+    <section class="countdown">
+      <h2 class="countdown-title">COUNTDOWN 🕒</h2>
+      <div class="timer-container">
+        <div class="timer">
+          <CountdownTimer />
+        </div>
+      </div>
+      <button class="venue">Dewan Tuanku Syed Putra, USM</button>
+    </section>
+  </div>
+    </div>
   </div>
 </template>
 
-<style>
-@media (min-width: 1024px) {
-  .about {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
+<style scoped>
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
+
+.title {
+  font-family: 'EB Garamond', serif; /* Use EB Garamond */
+  font-size: 5rem; /* Adjust the font size for emphasis */
+  font-weight: 400; /* Use a bold weight for better visibility */
+  color: #554149; /* White text for contrast */
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Optional: Add a subtle shadow for effect */
+  margin: 0.5rem 0; /* Add some spacing around the title */
+}
+
+.body {
+  position: relative;
+  background-color: #ffc8dd; /* Full opacity background color */
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-image: url('@/assets/backgroundMain.png');
+  background:cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  opacity: 0.05; /* 5% opacity for the background image */
+  z-index: 1;
+}
+
+.hero {
+  position: relative;
+  display: flex; /* Enable flexbox layout */
+  justify-content: space-between; /* Space items apart */
+  align-items: center; /* Align items vertically centered */
+  height: 100%;
+  width: 100%;
+  z-index: 2; /* Content above the background image */
+  color: #554149;
+  text-align: left;
+  padding: 0 5rem;
+}
+
+.hero-content {
+  flex: 1; /* Each content block takes equal space */
+  max-width: 50%; /* Limit content width */
+  padding: 1rem;
+}
+
+.hero-content.left {
+  text-align: left; /* Align text to the left for the title */
+}
+
+.hero-content.right {
+  text-align: center; /* Center align the countdown content */
+}
+
+.date {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+h1 {
+  font-size: 3rem;
+  margin: 0.5rem 0;
+}
+
+.tagline {
+  font-family: 'EB Garamond', serif;
+  font-size: 1.5rem;
+  margin: 1rem 0;
+  color: #554149;
+}
+
 
 .title {
   font-family: 'EB Garamond', serif; /* Use EB Garamond */

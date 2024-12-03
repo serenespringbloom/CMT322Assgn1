@@ -109,7 +109,7 @@ h1 {
 .hero-content {
   flex: 1; /* Each content block takes equal space */
   max-width: 50%; /* Limit content width */
-  padding: 11rem;
+  padding: 10.5rem;
 }
 
 .hero-content.left {

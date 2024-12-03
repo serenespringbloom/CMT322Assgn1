@@ -12,5 +12,7 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
+
 app.component("VueCountdown", VueCountdown);
+
 app.mount('#app')

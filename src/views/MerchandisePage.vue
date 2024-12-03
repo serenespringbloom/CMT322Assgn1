@@ -15,10 +15,11 @@
 <style>
 @media (min-width: 1024px) {
   .a{
-    top: 30;
-    min-height: 100vh;
+    top: 20;
+    min-height: 20vh;
     display: flex;
     align-items: center;
+    letter-spacing: .9rem;
   }
 }
 

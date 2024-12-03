@@ -20,13 +20,16 @@
     display: flex;
     align-items: center;
     letter-spacing: .9rem;
+    font-family: 'Plus Jakarta Sans', serif;
+    font-size: 1.0rem;
   }
 }
 
 .bajusatu img{
   background-color: aliceblue;
   border-radius: 0px;
-  max-width: 600px;
+  max-width: 360px;
+  
 }
 
 .card-satu{

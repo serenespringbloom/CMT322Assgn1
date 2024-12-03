@@ -26,17 +26,13 @@ const router = createRouter({
       path: '/merchandise',
       name: 'merchandise',
       component: () => import('../views/MerchandisePage.vue'),
-
+    },
+    {
       path: '/feedback',
       name: 'feedback',
       component: () => import('../views/FeedbackView.vue'),
-    },
-    {
-      path: '/merchandise',
-      name: 'merchandise',
-      component: () => import('../views/MerchandiseView.vue'),
-
     }
+    
   ],
 })
 

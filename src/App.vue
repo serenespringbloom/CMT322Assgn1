@@ -39,13 +39,13 @@ const toggleMenu = () => {
 
       <!--Navigation Links-->
       <ul class="nav-links" :class="{ open: isMenuOpen }">
-
         <li><RouterLink to="/">HOME</RouterLink></li>
         <li><RouterLink to="/event">EVENT</RouterLink></li>
         <li><RouterLink to="/ticket">TICKET</RouterLink></li>
         <li><RouterLink to="/merchandise">MERCHANDISE</RouterLink></li>
         <li><RouterLink to="/contact">CONTACT</RouterLink></li>
         <li><RouterLink to="/feedback">FEEDBACK</RouterLink></li>
+        <li><RouterLink to="/admin">ADMIN</RouterLink></li>
       </ul>
       <div class="cart">RM 0.00 🛒</div>
     </nav>

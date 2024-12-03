@@ -18,11 +18,10 @@
     top: 20;
     min-height: 20vh;
     display: flex;
-    align-items: center;
+    /* align-items: center; */
     letter-spacing: .9rem;
     font-family: 'Plus Jakarta Sans', serif;
     font-size: 1.0rem;
-
   }
 }
 

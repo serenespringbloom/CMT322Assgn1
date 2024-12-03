@@ -48,9 +48,6 @@ const toggleMenu = () => {
         <li><RouterLink to="/feedback">FEEDBACK</RouterLink></li>
       </ul>
       <div class="cart">RM 0.00 🛒</div>
-
-    <!-- </div> -->
-
     </nav>
     <RouterView />
   </body>
@@ -58,29 +55,26 @@ const toggleMenu = () => {
 
 <style scoped>
   #navTop {
-    position: fixed;
+    display: inline-block;
     top: 0;
     left: 0;
-    background: #f4d0d6; /* Background color for the header */
-    z-index: 1000; /* Ensure navbar is above all other elements */
+    background: #f4d0d6; 
+    z-index: 1000; 
     padding: 1rem 2rem;
     display: flex;
-    justify-content: space-between; /* Ensures items are spaced left and right */
-    align-items: center; /* Vertically centers items */
-    width: 100%; /* Full horizontal width */
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    justify-content: space-between;
+    align-items: center; 
+    width: 100%;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); 
   }
-
-
-
 
   .brand img {
   height: 50px; /* Adjust logo size */
   }
 
    body {
-    padding-top: 3rem; /* This ensures spacing between navbar and the body. 6 percent.*/
-   align-items: center;
+    /* padding-top: 3rem; This ensures spacing between navbar and the body. 6 percent. */
+    /* align-items: center; */
   }
 
   .nav-links {

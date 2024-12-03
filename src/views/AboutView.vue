@@ -196,8 +196,4 @@ h1 {
   display: inline-block; /* Ensure proper spacing */
   font-weight: bold; /* Optional: Highlight venue text */
 }
-</style> -->
-<script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
-</script>
-
+</style>

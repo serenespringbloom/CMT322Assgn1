@@ -8,7 +8,7 @@
       <!-- Left Side: Title and Buttons -->
       <div class="hero-content left">
         <p class="date">01 JUNE, 2024</p>
-        <h1 class="title">Malam Citra Bayu 16th</h1>        
+        <h1 class="title">Malam Citra Bayu 16th</h1>
         <p class="tagline">Megar Karya, Remangi Persona Bayu</p>
         <div class="buttons">
           <button class="btn-primary">BOOK NOW</button>
@@ -32,13 +32,30 @@
     <!-- Event Details Section -->
     <div class="event-details">
       <!-- About Section -->
-      <section id="about">
-        <h2>About</h2>
-        <p>
-          Malam Citra Bayu is an annual event celebrating culture, creativity,
-          and unity through performances and artistic showcases.
-        </p>
-      </section>
+      <section id="about" class="details-section about">
+        <div class="content-wrapper">
+    <!-- Text Content -->
+    <div class="text-content">
+      <button class="venue">ABOUT</button>
+      <p>
+        Malam Citra Bayu (MCB) is one of the largest annual cultural events at Universiti Sains Malaysia
+        (USM) organized by the Sabah Student Organization (PERSIS USM). MCB is a national-level creative
+        traditional dance competition conceptualized to appreciate the arts and culture of the community
+        in Sabah. For this year's event, the 16th edition of Malam Citra Bayu returns with a new theme
+        and fresh perspective, inviting 9 public universities in Malaysia to compete on the stage of
+        Dewan Tuanku Syed Putra with their own choreography.
+      </p>
+    </div>
+    <!-- Image Content -->
+    <div class="image-content">
+      <div class="image-wrapper">
+        <div class="gradient-overlay">
+          <img src="@/assets/images/usmdancers.png" alt="USM Dancers" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
       <!-- History Section -->
       <section id="history">
@@ -125,11 +142,11 @@ body {
 
 .title {
   font-family: 'EB Garamond', serif; /* Use EB Garamond */
-  font-size: 5.5rem; /* Adjust the font size for emphasis */
+  font-size: 4.5rem; /* Adjust the font size for emphasis */
   font-weight: 400; /* Use a bold weight for better visibility */
   color: #554149; /* White text for contrast */
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Optional: Add a subtle shadow for effect */
-  margin: 0.5rem 0; /* Add some spacing around the title */
+  margin: -0.3rem 0; /* Add some spacing around the title */
 }
 
 .body {
@@ -156,9 +173,10 @@ body {
 }
 
 .date {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 h1 {
@@ -168,7 +186,8 @@ h1 {
 
 .tagline {
   font-family: 'EB Garamond', serif;
-  font-size: 1.75rem;
+  font-size: 1.3rem;
+  font-weight: bold;
   margin: 1rem 0;
   color: #554149;
 }
@@ -185,7 +204,7 @@ h1 {
   z-index: 2; /* Content above the background image */
   color: #554149;
   text-align: left;
-  padding: 0 5rem;
+  padding: 0 2rem;
 }
 
 .hero-content {
@@ -200,7 +219,9 @@ h1 {
 }
 
 .hero-content.right {
+  flex: 2; /* Allocate more space to the right side */
   text-align: center; /* Center align the countdown content */
+  padding: 4rem; /* Add padding for better spacing */
 }
 
 .buttons {
@@ -208,9 +229,9 @@ h1 {
 }
 
 .btn-primary {
-  background-color: #ffcc33;
-  color: #000;
-  font-size: 1.2rem;
+  background: linear-gradient(108deg, #a48e69 -50%, #dcc39c 100%);
+  color: #000; /* Text color */
+  font-size: 1rem;
   font-weight: bold;
   border: none;
   border-radius: 0px;
@@ -218,21 +239,25 @@ h1 {
   margin-right: 1rem;
   cursor: pointer;
   transition: background 0.3s ease;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 .btn-primary:hover {
-  background-color: #ffd966;
+  background: linear-gradient(108deg, #dcc39c -50%, #a48e69 100%);
+  transform: scale(1.05);
 }
 
 .teaser-link {
   color: #554149;
-  font-size: 1.5rem;
+  font-size: 1rem;
   text-decoration: none;
   transition: color 0.3s ease;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: bold;
 }
 
 .teaser-link:hover {
-  color: #ffcc33;
+  color: #433303;
 }
 
 /* Countdown Section */
@@ -244,27 +269,12 @@ h1 {
 
 /* Title Styling */
 .countdown-title {
-  font-size: 2.5rem;
+  font-size: 2rem;
   margin-bottom: 1rem;
   letter-spacing: 0.6rem; /* Add spacing between characters */
   font-weight: bold;
   text-transform: uppercase; /* Optional: Make all text uppercase */
-}
-
-/* Timer Styling with Background */
-.timer-container {
-  background: #f4d0d6; /* Background color for the timer */
-  padding: 1.5rem;
-  border-radius: 10px; /* Optional: Rounded corners */
-  display: inline-block; /* Fit the content width */
-}
-
-.timer {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 /* Venue Styling */
@@ -272,16 +282,102 @@ h1 {
   margin-top: 1rem;
   font-size: 1.2rem;
   font-style: bold;
-  background: #ffcc33; /* Gold background */
-  color: #333; /* Text color */
-  padding: 0.5rem 1rem;
+  background: linear-gradient(108deg, #a48e69 -50%, #dcc39c 100%);
+  padding: 0.6rem 1rem;
   border: none;
   border-radius: 20px; /* Rounded corners */
   display: inline-block; /* Ensure proper spacing */
   font-weight: bold; /* Optional: Highlight venue text */
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 .venue:hover {
-  background-color: #ffd966;
+  background: linear-gradient(108deg, #dcc39c -50%, #a48e69 100%);
 }
-</style> 
+
+/* General Styling for Event Details */
+.details-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 3rem;
+  color: #554149;
+  text-align: justify;
+  background-color: rgba(255, 200, 221, 0.2); /* Light pink overlay */
+  border-radius: 10px;
+  overflow: hidden; /* Prevent content from spilling out */
+  margin: 2rem 0;
+}
+
+.details-section.about .content-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2rem;
+}
+
+.text-content {
+  flex: 1; /* Take equal space */
+}
+
+.image-content {
+  flex: 1; /* Image takes up equal space */
+  display: flex;
+  justify-content: flex-end; /* Push the image to the right */
+  align-items: center; /* Align content vertically */
+  position: relative; /* For gradient positioning */
+  overflow: hidden; /* Hide overflow outside the container */
+  margin-right: -4rem;
+}
+
+.image-wrapper {
+  position: relative;
+  width: 100%; /* Full width of the right-side container */
+  height: 100%; /* Full height of the right-side container */
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: auto;
+  object-fit: cover; /* Ensure the image fits nicely */
+}
+
+.gradient-overlay {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  opacity: 0.7;
+  mask-image: linear-gradient(to left, rgba(0, 0, 0, 1.0) 15%, transparent 100%);
+}
+
+.details-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.details-section p {
+  font-size: 1rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  line-height: 1.6;
+}
+
+
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .details-section.about .content-wrapper {
+    flex-direction: column; /* Stack content vertically on smaller screens */
+    text-align: center;
+  }
+
+  .image-content {
+    justify-content: center; /* Add spacing between text and image */
+  }
+  .gradient-overlay {
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%);
+  }
+}
+
+</style>

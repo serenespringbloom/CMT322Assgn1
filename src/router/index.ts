@@ -30,9 +30,29 @@ const router = createRouter({
       meta: { showHeader: true },
     },
     {
+
+      path: '/merchandise-detail2',
+      name: 'merchandise-detail2',
+      component: () => import('../views/MerchandiseDetail2.vue'),
+      meta: { showHeader: true },
+    },
+    {
+
+      path: '/merchandise-detail3',
+      name: 'merchandise-detail3',
+      component: () => import('../views/MerchandiseDetail3.vue'),
+      meta: { showHeader: true },
+    },
+    {
       path: '/feedback',
       name: 'feedback',
       component: () => import('../views/FeedbackView.vue'),
+      meta: { showHeader: true },
+    },
+    {
+      path: '/cart',
+      name: 'cart',
+      component: () => import('../views/Cart.vue'),
       meta: { showHeader: true },
     },
     {

@@ -6,7 +6,7 @@ export default {
     return {
       // Merchandise data
       merchandise: [
-        { id: 1, name: "Black Pink Cotton Tee", price: 38, image: "../assets/images/merchant1.png" }
+        { id: 2, name: "White Pink Cotton Tee", price: 38, image: "../assets/images/merchant2.png" }
       ],
       // Selected size and quantity state
       selectedSize: "", 
@@ -56,17 +56,17 @@ export default {
 
 <template>
     <body>
-        <div class="head-one">
-        <h1>BLACK PINK COTTON TEE</h1>
+        <div class="head-two">
+        <h1>WHITE PINK COTTON TEE</h1>
         </div>
 
         <section>
-            <div class="product-one">
-                <div class="product-media"><img src="@/assets/images/merchant1.png" alt="" /></div>
-                <div class="product-info">
+            <div class="product-two">
+                <div class="product-media"><img src="@/assets/images/merchant2.png" alt="" /></div>
+                <div class="product-infotwo">
                     <section>
                         <p>Malam Citra Bayu</p>
-                        <div class="product-title">BLACK PINK COTTON TEE</div>
+                        <div class="product-titletwo">WHITE PINK COTTON TEE</div>
                         <div>RM 38</div>
                         <!-- Size Clothes -->
                         <fieldset class="product-size">
@@ -120,7 +120,7 @@ export default {
 </template>
 
 <style>
-.head-one{
+.head-two{
     top: 20;
     min-height: 10vh;
     display: flex;
@@ -133,7 +133,7 @@ export default {
     margin-bottom: 30px;
 }
 
-.product-one{
+.product-two{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -149,13 +149,13 @@ export default {
     border-style: double;
 
 }
-.product-info{
+.product-infotwo{
     display: block;
     padding: 0 0 0 4rem;
     max-width: 35%;
 }
 
-.product-title{
+.product-titletwo{
     font-size: 1.5rem;
     letter-spacing: 0.06rem
 }

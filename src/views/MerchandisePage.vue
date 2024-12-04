@@ -27,7 +27,7 @@
               <div class="card-satu">
                 <h2>White Pink Cotton Tee</h2>
                 <p>RM 38</p>
-                <a href="#" class="button">Buy Now</a>
+                <a class="button"><RouterLink to="/merchandise-detail2">Buy Now</RouterLink></a>
               </div>
             </div>
         <!-- Third Merchant -->
@@ -36,7 +36,7 @@
               <div class="card-satu">
                 <h2>White Blue Cotton Tee</h2>
                 <p>RM 38</p>
-                <a href="#" class="button">Buy Now</a>
+                <a class="button"><RouterLink to="/merchandise-detail3">Buy Now</RouterLink></a>
               </div>
             </div>
         </section>

@@ -29,10 +29,17 @@ const router = createRouter({
       meta: { showHeader: true },
     },
     {
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/LoginView.vue'),
+      meta: { showHeader: false },
+    },
+    {
       path: '/admin',
       name: 'admin',
       component: () => import('../views/AdminView.vue'),
-      meta: { showHeader: false },
+      meta: { showHeader: false,
+              requiresAuth: true },
       children: [
         { path: '/dashboard', component: () => import('../views/DashboardView.vue') },
         { path: '/form', component: () => import('../views/FormView.vue') },
@@ -41,5 +48,15 @@ const router = createRouter({
     } 
   ],
 })
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = sessionStorage.getItem('isAuthenticated') === 'true';
+
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next('/login'); // Redirect to login if not authenticated
+  } else {
+    next(); // Proceed to route
+  }
+});
 
 export default router

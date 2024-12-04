@@ -46,7 +46,7 @@
         <li><RouterLink to="/feedback">FEEDBACK</RouterLink></li>
         <li><RouterLink to="/dashboard">ADMIN</RouterLink></li>
       </ul>
-      <div class="cart">RM 0.00 🛒</div>
+      <div class="cart"><RouterLink to="/cart">0.00 🛒</RouterLink></div>
     </nav>
     <RouterView />
   </body>

@@ -18,16 +18,98 @@
 
       <!-- Right Side: Countdown -->
       <div class="hero-content right">
-    <section class="countdown">
-      <h2 class="countdown-title">COUNTDOWN 🕒</h2>
-      <div class="timer-container">
-        <div class="timer">
-          <CountdownTimer />
-        </div>
+        <section class="countdown">
+          <h2 class="countdown-title">COUNTDOWN 🕒</h2>
+          <div class="timer-container">
+            <div class="timer">
+              <CountdownTimer />
+            </div>
+          </div>
+          <button class="venue">Dewan Tuanku Syed Putra, USM</button>
+        </section>
       </div>
-      <button class="venue">Dewan Tuanku Syed Putra, USM</button>
-    </section>
-  </div>
+    </div>
+    <!-- Event Details Section -->
+    <div class="event-details">
+      <!-- About Section -->
+      <section id="about">
+        <h2>About</h2>
+        <p>
+          Malam Citra Bayu is an annual event celebrating culture, creativity,
+          and unity through performances and artistic showcases.
+        </p>
+      </section>
+
+      <!-- History Section -->
+      <section id="history">
+        <h2>History</h2>
+        <p>
+          Since its inception, Malam Citra Bayu has brought together talented
+          performers to promote cultural appreciation and artistic expression.
+        </p>
+      </section>
+
+      <!-- Agenda Section -->
+      <section id="agenda">
+        <h2>Agenda</h2>
+        <ul>
+          <li>6:00 PM - Registration</li>
+          <li>7:00 PM - Opening Ceremony</li>
+          <li>7:30 PM - Cultural Performances</li>
+          <li>9:30 PM - Closing Ceremony</li>
+        </ul>
+      </section>
+
+      <!-- Performers Section -->
+      <section id="performers">
+        <h2>Performers</h2>
+        <p>
+          Featuring renowned artists and talented performers from across the
+          country.
+        </p>
+      </section>
+
+      <!-- Ticket and Merchandise Section -->
+      <section id="tickets-merchandise">
+        <h2>Ticket & Merchandise</h2>
+        <p>
+          Get your tickets and explore exclusive merchandise for the event!
+          <a href="#">Buy Tickets</a> | <a href="#">Shop Merchandise</a>
+        </p>
+      </section>
+
+      <!-- Past Events Section -->
+      <section id="past-events">
+        <h2>Past Event Highlights</h2>
+        <p>Check out photos and feedback from our previous events!</p>
+        <img src="https://via.placeholder.com/600x300" alt="Past Event Photos" />
+      </section>
+
+      <!-- Sponsors Section -->
+      <section id="sponsors">
+        <h2>Sponsors & Special Thanks</h2>
+        <p>
+          A big thank you to our sponsors for making this event possible.
+        </p>
+        <ul>
+          <li>Sponsor 1</li>
+          <li>Sponsor 2</li>
+          <li>Sponsor 3</li>
+        </ul>
+      </section>
+
+      <!-- Google Maps Section -->
+      <section id="location">
+        <h2>Location</h2>
+        <p>Dewan Tuanku Syed Putra, Universiti Sains Malaysia, Penang.</p>
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18..."
+          width="600"
+          height="450"
+          style="border:0;"
+          loading="lazy"
+        ></iframe>
+      </section>
     </div>
   </div>
 </template>
@@ -39,12 +121,11 @@ body {
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;
 }
 
 .title {
   font-family: 'EB Garamond', serif; /* Use EB Garamond */
-  font-size: 5rem; /* Adjust the font size for emphasis */
+  font-size: 5.5rem; /* Adjust the font size for emphasis */
   font-weight: 400; /* Use a bold weight for better visibility */
   color: #554149; /* White text for contrast */
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Optional: Add a subtle shadow for effect */
@@ -56,7 +137,6 @@ body {
   background-color: #ffc8dd; /* Full opacity background color */
   height: 100vh;
   width: 100%;
-  overflow: hidden;
 }
 
 .body::before {
@@ -76,19 +156,19 @@ body {
 }
 
 .date {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
 
 h1 {
-  font-size: 3rem;
+  font-size: 4rem;
   margin: 0.5rem 0;
 }
 
 .tagline {
   font-family: 'EB Garamond', serif;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   margin: 1rem 0;
   color: #554149;
 }
@@ -100,6 +180,8 @@ h1 {
   align-items: center; /* Align items vertically centered */
   height: 100%;
   width: 100%;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 85%);
+  background-color: rgba(255, 240, 240, 0.3);
   z-index: 2; /* Content above the background image */
   color: #554149;
   text-align: left;
@@ -109,7 +191,8 @@ h1 {
 .hero-content {
   flex: 1; /* Each content block takes equal space */
   max-width: 50%; /* Limit content width */
-  padding: 10.5rem;
+  padding: 11.5rem;
+  padding-bottom:15%;
 }
 
 .hero-content.left {
@@ -127,11 +210,11 @@ h1 {
 .btn-primary {
   background-color: #ffcc33;
   color: #000;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: bold;
   border: none;
   border-radius: 0px;
-  padding: 0.75rem 1.5rem;
+  padding: 0.85rem 1.5rem;
   margin-right: 1rem;
   cursor: pointer;
   transition: background 0.3s ease;
@@ -143,7 +226,7 @@ h1 {
 
 .teaser-link {
   color: #554149;
-  font-size: 1rem;
+  font-size: 1.5rem;
   text-decoration: none;
   transition: color 0.3s ease;
 }
@@ -161,7 +244,7 @@ h1 {
 
 /* Title Styling */
 .countdown-title {
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin-bottom: 1rem;
   letter-spacing: 0.6rem; /* Add spacing between characters */
   font-weight: bold;
@@ -180,14 +263,14 @@ h1 {
   display: flex;
   justify-content: center;
   gap: 1.5rem;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: bold;
 }
 
 /* Venue Styling */
 .venue {
   margin-top: 1rem;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-style: bold;
   background: #ffcc33; /* Gold background */
   color: #333; /* Text color */

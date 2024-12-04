@@ -1,12 +1,15 @@
 <script>
-import { ref } from "vue";
-
 export default {
   data() {
     return {
       // Merchandise data
       merchandise: [
-        { id: 1, name: "Black Pink Cotton Tee", price: 38, image: "../assets/images/merchant1.png" }
+        {
+          id: 1,
+          name: "Black Pink Cotton Tee",
+          price: 38,
+          image: require("@/assets/images/merchant1.png"), // Adjust for your project structure
+        },
       ],
       // Selected size and quantity state
       selectedSize: "", 
@@ -29,11 +32,14 @@ export default {
       // Get the current cart from localStorage or initialize it to an empty array
       const currentCart = JSON.parse(localStorage.getItem("cart")) || [];
 
-      // Check if the item already exists in the cart
-      const existingItem = currentCart.find((cartItem) => cartItem.id === item.id && cartItem.size === this.selectedSize);
+      // Check if the item already exists in the cart with the same size
+      const existingItem = currentCart.find(
+        (cartItem) =>
+          cartItem.id === item.id && cartItem.size === this.selectedSize
+      );
 
       if (existingItem) {
-        // If the item exists and the size matches, increase the quantity
+        // If the item exists, increase the quantity
         existingItem.quantity += this.quantity;
       } else {
         // If the item doesn't exist, add it with the selected size and quantity
@@ -47,10 +53,14 @@ export default {
       // Save the updated cart to localStorage
       localStorage.setItem("cart", JSON.stringify(currentCart));
 
-      // Show feedback message
-      alert(`${item.name} in size ${this.selectedSize} has been added to the cart!`);
-    }
-  }
+      // Reset the size and quantity after adding to the cart
+      this.quantity = 1;
+      this.selectedSize = "";
+
+      // Feedback message
+      alert(`${item.name} (Size: ${this.selectedSize}) has been added to the cart!`);
+    },
+  },
 };
 </script>
 
@@ -66,8 +76,8 @@ export default {
                 <div class="product-info">
                     <section>
                         <p>Malam Citra Bayu</p>
-                        <div class="product-title">BLACK PINK COTTON TEE</div>
-                        <div>RM 38</div>
+                        <div class="product-title">{{ merchandise[0].name }}</div>
+                        <div>RM {{ merchandise[0].price }}</div>
                         <!-- Size Clothes -->
                         <fieldset class="product-size">
                          <div class="size-group">
@@ -98,20 +108,22 @@ export default {
 
                         <!-- Quantity -->
                         <div class="quantity">
-                            <label>Quantity</label>
-                            <div class="counter">
-                                <button class="btn minus" type="button" v-on:click="decrement">
-                                -</button>
-                            <input type="text" v-model="quantity" id="qtyInput" readonly />  
-                            <button class="btn minus" type="button" v-on:click="increment">
-                                +</button>
-                            </div>
+                          <label>Quantity</label>
+                          <div class="counter">
+                            <button class="btn minus" type="button" @click="decrement">-</button>
+                            <input type="text" v-model="quantity" id="qtyInput" readonly />
+                            <button class="btn plus" type="button" @click="increment">+</button>
+                          </div>
                         </div>
 
                          <!-- Add to Cart Button -->
-                        <div>
-                        <button @click="addToCart(merchandise[0])" :disabled="!selectedSize">Add to Cart</button>
-                        </div>
+                         <button
+                          class="button-cart"
+                          @click="addToCart(merchandise[0])"
+                          :disabled="!selectedSize"
+                        >
+                          Add to Cart
+                        </button>
                     </section>
                 </div>
             </div>

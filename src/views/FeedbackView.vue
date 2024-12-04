@@ -35,90 +35,109 @@
 
         <!-- Feedback Form -->
         <section class="feedback-form">
-          <h3>Give Your Feedback!</h3>
-          <!-- Interactive Stars -->
-          <div class="stars">
-  <span
-    v-for="star in 5"
-    :key="star"
-    @click="selectRating(star)"
-    @mouseover="hoverRating(star)"
-    @mouseleave="resetHover"
-    :class="{ filled: star <= (hover || rating) }"
-  >
-    ★
-  </span>
-</div>   <form @submit.prevent="handleSubmit">
-  <div class="form-group">
-  <!-- Ticket ID -->
-  <div class="form-item">
-    <label for="ticket-id">Ticket ID</label>
-    <input id="ticket-id" type="text" placeholder="Enter your Ticket ID" />
+  <h3>Give Your Feedback!</h3>
+  <!-- Interactive Stars -->
+  <div class="stars">
+    <span
+      v-for="star in 5"
+      :key="star"
+      @click="selectRating(star)"
+      @mouseover="hoverRating(star)"
+      @mouseleave="resetHover"
+      :class="{ filled: star <= (hover || rating) }"
+    >
+      ★
+    </span>
   </div>
-
-  <!-- Full Name -->
-  <div class="form-item">
-    <label for="full-name">Full Name</label>
-    <input id="full-name" type="text" placeholder="Enter your Full Name" />
-  </div>
-
-  <!-- Programme -->
-  <div class="form-item">
-    <label for="programme">Programme</label>
-    <select id="programme">
-      <option disabled selected>Choose Programme</option>
-      <option>Programme A</option>
-      <option>Programme B</option>
-    </select>
-  </div>
-</div>
-
-<!-- Feedback Text -->
-<div class="form-item">
-  <label for="feedback-text">Feedback</label>
-  <textarea id="feedback-text" placeholder="Write your feedback here!"></textarea>
-</div>
-
-<!-- Submit Button -->
-<button type="submit" class="btn-submit">SUBMIT</button>
-          </form>
-        </section>
+  <!-- Form -->
+  <form @submit.prevent="handleSubmit">
+    <div class="form-group">
+      <!-- Ticket ID -->
+      <div class="form-item">
+        <label for="ticket-id">Ticket ID</label>
+        <input
+          id="ticket-id"
+          type="text"
+          v-model="ticketId"
+          placeholder="Enter your Ticket ID"
+        />
       </div>
+
+      <!-- Full Name -->
+      <div class="form-item">
+        <label for="full-name">Full Name</label>
+        <input
+          id="full-name"
+          type="text"
+          v-model="fullName"
+          placeholder="Enter your Full Name"
+        />
+      </div>
+
+      <!-- Programme -->
+      <div class="form-item">
+        <label for="programme">Programme</label>
+        <select id="programme" v-model="programme">
+          <option disabled selected>Choose Programme</option>
+          <option>Programme A</option>
+          <option>Programme B</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Feedback Text -->
+    <div class="form-item">
+      <label for="feedback-text">Feedback</label>
+      <textarea
+        id="feedback-text"
+        v-model="feedbackText"
+        placeholder="Write your feedback here!"
+      ></textarea>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn-submit">SUBMIT</button>
+  </form>
+</section>
+</div>
 
       <!-- Right Section: Participant Names -->
       <div class="right-content">
-        <div
-          class="participant-card"
-          v-for="item in feedbackData"
-          :key="item.name"
-          @click="setActiveItem(item)"
-        >
-          <img :src="item.image" alt="Profile" />
-          <p>{{ item.name }}</p>
-        </div>
-      </div>
+  <div
+    class="participant-card"
+    v-for="(item, index) in feedbackData"
+    :key="index"
+    @click="setActiveItem(item)"
+  >
+    <img :src="item.image" alt="Profile" />
+    <p>{{ item.name }}</p>
+  </div>
+</div>
     </section>
   </main>
 </template>
 
 <script setup>
-import Papa from 'papaparse';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted } from "vue";
+import Papa from "papaparse";
 
-// Reactive references
+// Reactive variables
 const feedbackData = ref([]);
 const activeItem = ref(null);
 
 // Form fields
-const ticketId = ref('');
-const fullName = ref('');
-const programme = ref('');
-const feedbackText = ref('');
-const rating = ref(0); // Stores the selected rating
-const hover = ref(0); // Tracks hover state for stars
+const ticketId = ref("");
+const fullName = ref("");
+const programme = ref("");
+const feedbackText = ref("");
+const rating = ref(0);
+const hover = ref(0);
+const setActiveItem = (item) => {
+  activeItem.value = item;
+};
 
+// On component mount, load feedback data
 onMounted(() => {
-  // Load and parse the CSV file
   fetch("/src/assets/feedback.csv")
     .then((response) => response.text())
     .then((csvText) => {
@@ -127,54 +146,51 @@ onMounted(() => {
         skipEmptyLines: true,
         complete: (results) => {
           feedbackData.value = results.data.map((item) => {
-            // Replace placeholder with local avatar path
             if (item.image === "https://via.placeholder.com/80") {
-              item.image = "/src/assets/images/avatar.jpg"; // Use your local avatar image
+              item.image = "/src/assets/images/avatar.jpg"; // Default avatar image
             }
             return item;
           });
-          activeItem.value = feedbackData.value[0]; // Set the first item as active by default
+          activeItem.value = feedbackData.value[0]; // Default first item
         },
       });
     })
     .catch((error) => console.error("Error loading CSV:", error));
 });
 
-const setActiveItem = (item) => {
-  activeItem.value = item;
-};
-
+// Handle form submission
 const handleSubmit = () => {
-  // Validate form inputs
+  // Validation
   if (!ticketId.value || !fullName.value || !feedbackText.value || rating.value === 0) {
-    alert('Please fill in all fields and select a rating');
+    alert("Please fill in all fields and select a rating.");
     return;
   }
 
+  // Create new feedback entry
   const newFeedback = {
-    'Ticket ID': ticketId.value || 'N/A', // Optional ticket ID
+    "Ticket ID": ticketId.value,
     name: fullName.value,
-    programme: programme.value || 'N/A', // Optional Programme,
+    programme: programme.value || "N/A", // Default to "N/A" if not selected
     text: feedbackText.value,
-    image: '/src/assets/images/avatar.jpg', // Default placeholder image
+    image: "/src/assets/images/avatar.jpg", // Default avatar
     rating: rating.value,
   };
 
-  // Add new feedback to the data array
+  // Add to feedback list
   feedbackData.value.push(newFeedback);
 
   // Reset form fields
-  ticketId.value = '';
-  fullName.value = '';
-  programme.value = '';
-  feedbackText.value = '';
+  ticketId.value = "";
+  fullName.value = "";
+  programme.value = "";
+  feedbackText.value = "";
   rating.value = 0;
   hover.value = 0;
 
-  alert('Thank you for your feedback!');
+  alert("Thank you for your feedback!");
 };
 
-// Functions to handle interactive stars
+// Star rating handlers
 const selectRating = (star) => {
   rating.value = star;
 };
@@ -185,28 +201,6 @@ const hoverRating = (star) => {
 
 const resetHover = () => {
   hover.value = 0;
-};
-
-// Optional: Download CSV functionality
-const downloadCSV = () => {
-  // Convert feedback data to CSV
-  const csvContent = [
-    '"name","programme","text","image","rating"',
-    ...feedbackData.value.map(item =>
-      `"${item.name}","${item.programme}","${item.text}","${item.rating}","${item.image}"`
-    )
-  ].join('\n');
-
-  // Create download link
-  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-  const link = document.createElement('a');
-  const url = URL.createObjectURL(blob);
-  link.setAttribute('href', url);
-  link.setAttribute('download', 'feedback.csv');
-  link.style.visibility = 'hidden';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
 };
 </script>
 

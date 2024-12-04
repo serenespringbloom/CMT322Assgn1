@@ -44,7 +44,7 @@
         <li><RouterLink to="/merchandise">MERCHANDISE</RouterLink></li>
         <li><RouterLink to="/contact">CONTACT</RouterLink></li>
         <li><RouterLink to="/feedback">FEEDBACK</RouterLink></li>
-        <li><RouterLink to="/dashboard">ADMIN</RouterLink></li>
+        <span><RouterLink to="/dashboard">ADMIN</RouterLink></span>
       </ul>
       <div class="cart">RM 0.00 🛒</div>
     </nav>
@@ -70,12 +70,7 @@
   .brand img {
   height: 50px; /* Adjust logo size */
   }
-
-   body {
-    /* padding-top: 3rem; This ensures spacing between navbar and the body. 6 percent. */
-    /* align-items: center; */
-  }
-
+  
   .nav-links {
     display: flex;
     gap: 1.5rem; /* Evenly spaced links */

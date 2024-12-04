@@ -85,22 +85,17 @@ const toggleSeat = (seat) => {
 
 // Adjust ticket counts to maintain total equal to selectedSeats
 const adjustTickets = (type, value) => {
-  const totalSeats = selectedSeats.value.length;
+  value = Math.max(0, Math.min(value, selectedSeats.value.length)); // Prevent invalid values
   const otherType = type === 'student' ? publicTickets : studentTickets;
 
-  const updatedType = type === 'student' ? studentTickets : publicTickets;
-  const diff = totalSeats - value - otherType.value;
+  const remainingSeats = selectedSeats.value.length - value;
+  otherType.value = Math.max(0, Math.min(remainingSeats, otherType.value));
 
-  if (diff > 0) {
-    // Add remaining tickets to the other type
-    otherType.value += diff;
-  } else if (diff < 0) {
-    // Reduce tickets from the other type
-    otherType.value = Math.max(0, otherType.value + diff);
+  if (type === 'student') {
+    studentTickets.value = value;
+  } else {
+    publicTickets.value = value;
   }
-
-  // Update the current type
-  updatedType.value = value;
 };
 
 // Ticket pricing logic

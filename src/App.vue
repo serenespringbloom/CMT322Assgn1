@@ -46,7 +46,7 @@
         <li><RouterLink to="/feedback">FEEDBACK</RouterLink></li>
         <span><RouterLink to="/dashboard">ADMIN</RouterLink></span>
       </ul>
-      <div class="cart">RM 0.00 🛒</div>
+      <div class="cart"><RouterLink to="/cart">0.00 🛒</RouterLink></div>
     </nav>
     <RouterView />
   </body>
@@ -70,7 +70,7 @@
   .brand img {
   height: 50px; /* Adjust logo size */
   }
-  
+
   .nav-links {
     display: flex;
     gap: 1.5rem; /* Evenly spaced links */

@@ -1,3 +1,10 @@
+<script setup>
+  import { RouterLink, RouterView } from 'vue-router'
+  import { computed } from 'vue';
+  import { useRoute } from 'vue-router';    
+  
+</script>
+
 <template>
     <body>
         <div class="a">
@@ -11,7 +18,7 @@
               <div class="card-satu">
                 <h2>Black Pink Cotton Tee</h2>
                 <p>RM 38</p>
-                <a href="#" class="button">Buy Now</a>
+                <a class="button"><RouterLink to="/merchandise-detail">Buy Now</RouterLink></a>
               </div>
             </div>
         <!-- Second Merchant -->
@@ -81,5 +88,4 @@
   border: none;
   color: black;
 }
-
 </style>

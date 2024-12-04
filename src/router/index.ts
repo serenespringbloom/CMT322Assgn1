@@ -23,6 +23,13 @@ const router = createRouter({
       meta: { showHeader: true },
     },
     {
+
+      path: '/merchandise-detail',
+      name: 'merchandise-detail',
+      component: () => import('../views/MerchandiseDetail1.vue'),
+      meta: { showHeader: true },
+    },
+    {
       path: '/feedback',
       name: 'feedback',
       component: () => import('../views/FeedbackView.vue'),

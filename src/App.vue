@@ -44,7 +44,7 @@
         <li><RouterLink to="/merchandise">MERCHANDISE</RouterLink></li>
         <li><RouterLink to="/contact">CONTACT</RouterLink></li>
         <li><RouterLink to="/feedback">FEEDBACK</RouterLink></li>
-        <li><RouterLink to="/admin">ADMIN</RouterLink></li>
+        <li><RouterLink to="/dashboard">ADMIN</RouterLink></li>
       </ul>
       <div class="cart">RM 0.00 🛒</div>
     </nav>

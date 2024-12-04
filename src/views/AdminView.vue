@@ -1,5 +1,13 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const handleLogout = () => {
+  sessionStorage.removeItem('isAuthenticated');
+  router.push('/login'); // Redirect to login page
+};
 </script>
 
 <template>
@@ -19,6 +27,7 @@ import { RouterLink, RouterView } from 'vue-router'
           <li><RouterLink to="/form">Form</RouterLink></li>
           <li><RouterLink to="/table">Table</RouterLink></li>
           <li><RouterLink to="/">Back To Main Page</RouterLink></li>
+          <button @click="handleLogout">Logout</button>
         </ul>
       </div>
       <div class="admin-content">

@@ -6,7 +6,7 @@
 
 <template>
   <div class="body">
-    <div class="hero">
+    <div class="hero" id="hero">
       <!-- Left Side: Title and Buttons -->
       <div class="hero-content left">
         <p class="date">01 JUNE, 2024</p>

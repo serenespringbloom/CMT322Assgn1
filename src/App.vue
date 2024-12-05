@@ -59,11 +59,11 @@ onMounted(() => {
 
       <!-- Navigation Links -->
       <ul class="nav-links" :class="{ open: isMenuOpen }">
-        <li><RouterLink to="/">HOME</RouterLink></li>
-        <li><RouterLink to="/event">EVENT</RouterLink></li>
+        <li><a href="#hero">HOME</a></li>
+        <li><a href="#about">EVENT</a></li>
         <li><RouterLink to="/ticket">TICKET</RouterLink></li>
         <li><RouterLink to="/merchandise">MERCHANDISE</RouterLink></li>
-        <li><RouterLink to="/contact">CONTACT</RouterLink></li>
+        <li><a href="#location">CONTACT</a></li>
         <li><RouterLink to="/feedback">FEEDBACK</RouterLink></li>
         <li><RouterLink to="/refund">REFUND</RouterLink></li>
         <span><RouterLink to="/dashboard">ADMIN</RouterLink></span>

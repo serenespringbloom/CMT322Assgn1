@@ -14,12 +14,13 @@
         <h2>MCB</h2>
         <nav>
           <ul class="footer-links">
-            <li><RouterLink to="/home">HOME</RouterLink></li>
-            <li><RouterLink to="/events">EVENTS</RouterLink></li>
+            <li><a href="#hero">HOME</a></li>
+            <li><a href="#about">EVENT</a></li>
             <li><RouterLink to="/ticket">TICKET</RouterLink></li>
             <li><RouterLink to="/merchandise">MERCHANDISE</RouterLink></li>
-            <li><RouterLink to="/contact">CONTACT</RouterLink></li>
             <li><RouterLink to="/feedback">FEEDBACK</RouterLink></li>
+            <li><RouterLink to="/refund">REFUND</RouterLink></li>
+            <li><RouterLink to="/dashboard">ADMIN</RouterLink></li>
           </ul>
         </nav>
         <!-- Social Media Icons -->

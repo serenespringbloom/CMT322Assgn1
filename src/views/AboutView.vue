@@ -13,8 +13,8 @@
         <h1 class="title">Malam Citra Bayu 16th</h1>
         <p class="tagline">Megar Karya, Remangi Persona Bayu</p>
         <div class="buttons">
-          <button class="btn-primary">BOOK NOW</button>
-          <a href="#" class="teaser-link">🎥 Watch The Teaser</a>
+          <a href="#tickets-merchandise"><button class="btn-primary">BOOK NOW</button></a>
+          <a href="https://www.youtube.com/watch?v=bGMYtLEpnfA" class="teaser-link">🎥 Watch The Teaser</a>
         </div>
       </div>
 
@@ -301,7 +301,7 @@
   background-position: center;
   background-size: cover;
   opacity: 0.05; /* 5% opacity for the background image */
-  z-index: 1;
+  z-index: 0;
 }
 
 .date {

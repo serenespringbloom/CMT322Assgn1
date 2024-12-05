@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import logo from "@/assets/MCBLogo.png";
+import Footer from "./components/Footer.vue";
 
 // Navigation state
 const isMenuOpen = ref(false);
@@ -12,6 +13,7 @@ const toggleMenu = () => {
 // Route handling
 const route = useRoute();
 const hideHeader = computed(() => route.meta.showHeader === false);
+const hideFooter = computed(() => route.meta.showFooter === false);
 
 // Cart-related logic
 const cart = ref([]);
@@ -72,12 +74,34 @@ onMounted(() => {
         <RouterLink to="/cart">{{ totalPrice }} 🛒</RouterLink>
       </div>
     </nav>
-    <RouterView />
+    <main><RouterView /></main>
+    <footer v-if="!hideFooter" class="footer">
+      <Footer />
+    </footer>
   </body>
 </template>
 
 
 <style scoped>
+  template, body {
+    height: 100%; /* Ensure the html and body stretch to fill the viewport */
+    margin: 0; /* Remove default margin */
+    display: flex;
+    flex-direction: column; /* Use a column layout */
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Make the body fill the viewport height */
+    margin: 0; /* Remove default body margin */
+  }
+
+  main {
+    flex-grow: 1;
+    display: inline-block;
+  }
+
   #navTop {
     display: inline-block;
     top: 0;
@@ -87,6 +111,7 @@ onMounted(() => {
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
+    flex-shrink: 0;
     align-items: center; 
     width: 100%;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); 
@@ -177,7 +202,6 @@ onMounted(() => {
       margin-top: 1rem;
     }
   }
-
 
  /* Responsive design, when windows is minimised */
 @media (max-width: 768px) {

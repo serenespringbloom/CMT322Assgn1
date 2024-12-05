@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import CountdownTimer from "@/components/countdownTimer.vue"; // Include if using the timer component
   import { Icon } from "@iconify/vue";
+  import Footer from "../components/Footer.vue";
 </script>
 
 <template>
@@ -31,32 +32,32 @@
       </div>
     </div>
     <!-- Event Details Section -->
-  <div class="event-details">
-      <!-- About Section -->
-      <section id="about" class="details-section about">
-        <div class="content-wrapper">
-    <!-- Text Content -->
-    <div class="text-content">
-      <button class="venue">ABOUT</button>
-      <p>
-        Malam Citra Bayu (MCB) is one of the largest annual cultural events at Universiti Sains Malaysia
-        (USM) organized by the Sabah Student Organization (PERSIS USM). MCB is a national-level creative
-        traditional dance competition conceptualized to appreciate the arts and culture of the community
-        in Sabah. For this year's event, the 16th edition of Malam Citra Bayu returns with a new theme
-        and fresh perspective, inviting 9 public universities in Malaysia to compete on the stage of
-        Dewan Tuanku Syed Putra with their own choreography.
-      </p>
-    </div>
-    <!-- Image Content -->
-    <div class="image-content">
-      <div class="image-wrapper">
-        <div class="gradient-overlay">
-          <img src="@/assets/images/usmdancers.png" alt="USM Dancers" />
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+    <div class="event-details">
+        <!-- About Section -->
+        <section id="about" class="details-section about">
+          <div class="content-wrapper">
+            <!-- Text Content -->
+            <div class="text-content">
+              <button class="venue">ABOUT</button>
+              <p>
+                Malam Citra Bayu (MCB) is one of the largest annual cultural events at Universiti Sains Malaysia
+                (USM) organized by the Sabah Student Organization (PERSIS USM). MCB is a national-level creative
+                traditional dance competition conceptualized to appreciate the arts and culture of the community
+                in Sabah. For this year's event, the 16th edition of Malam Citra Bayu returns with a new theme
+                and fresh perspective, inviting 9 public universities in Malaysia to compete on the stage of
+                Dewan Tuanku Syed Putra with their own choreography.
+              </p>
+            </div>
+            <!-- Image Content -->
+            <div class="image-content">
+              <div class="image-wrapper">
+                <div class="gradient-overlay">
+                  <img src="@/assets/images/usmdancers.png" alt="USM Dancers" />
+                </div>
+              </div>
+            </div>
+          </div>
+      </section>
 
 
       <!-- History Section -->
@@ -106,45 +107,44 @@
       </section> -->
 
       <!-- Ticket and Merchandise Section -->
-    <section id="tickets-merchandise">
-      <h2>Ticket & Merchandise</h2>
-      <p>
-        Get your tickets and explore exclusive merchandise for the event!
-        <RouterLink to="/merchandise"><button class="btn-merchandise">Shop Merchandise</button></RouterLink>
-      </p>
-      <div class="ticket-card">
-        <div class="card-content">
-          <h3>Event Ticket - 01 January 2025</h3>
-          <ul>
-            <li>One night pass access all entertainment</li>
-            <li>Wristband and Snack</li>
-            <li>Meet Event Performers</li>
-            <li>Pick Seat</li>
-          </ul>
-          <div class="price">
-            <span>MYR 15</span>
-            <RouterLink to="/ticket"><button>BUY NOW</button></RouterLink>
+      <section id="tickets-merchandise">
+        <h2>Ticket & Merchandise</h2>
+        <p>
+          Get your tickets and explore exclusive merchandise for the event!
+          <RouterLink to="/merchandise"><button class="btn-merchandise">Shop Merchandise</button></RouterLink>
+        </p>
+        <div class="ticket-card">
+          <div class="card-content">
+            <h3>Event Ticket - 01 January 2025</h3>
+            <ul>
+              <li>One night pass access all entertainment</li>
+              <li>Wristband and Snack</li>
+              <li>Meet Event Performers</li>
+              <li>Pick Seat</li>
+            </ul>
+            <div class="price">
+              <span>MYR 15</span>
+              <RouterLink to="/ticket"><button>BUY NOW</button></RouterLink>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="ticket-card">
-        <div class="card-content">
-          <h3>Event Ticket - 01 June 2025 (Student)</h3>
-          <ul>
-            <li>One night pass access all entertainment</li>
-            <li>Wristband and Snack</li>
-            <li>Meet Event Performers</li>
-            <li>Pick Seat</li>
-          </ul>
-          <div class="price">
-            <span>MYR 12</span>
-            <RouterLink to="/ticket"><button>BUY NOW</button></RouterLink>
+        <div class="ticket-card">
+          <div class="card-content">
+            <h3>Event Ticket - 01 June 2025 (Student)</h3>
+            <ul>
+              <li>One night pass access all entertainment</li>
+              <li>Wristband and Snack</li>
+              <li>Meet Event Performers</li>
+              <li>Pick Seat</li>
+            </ul>
+            <div class="price">
+              <span>MYR 12</span>
+              <RouterLink to="/ticket"><button>BUY NOW</button></RouterLink>
+            </div>
           </div>
         </div>
-      </div>
-</section>
-
+      </section>
 
       <!-- Past Winner Section -->
       <section id="past-events">
@@ -215,18 +215,13 @@
         ></iframe>
       </section>
     </div>
+    <footer class="footer">
+      <Footer />
+    </footer>
   </div>
 </template>
 
 <style scoped>
-html,
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-}
-
 .title {
   font-family: 'EB Garamond', serif; /* Use EB Garamond */
   font-size: 4.5rem; /* Adjust the font size for emphasis */
@@ -237,7 +232,6 @@ body {
 }
 
 .body {
-  position: relative;
   background-color: #ffc8dd; /* Full opacity background color */
   height: 100vh;
   width: 100%;
@@ -280,7 +274,6 @@ h1 {
 }
 
 .hero {
-  position: relative;
   display: flex; /* Enable flexbox layout */
   justify-content: space-between; /* Space items apart */
   align-items: center; /* Align items vertically centered */
@@ -392,7 +385,6 @@ h1 {
   text-align: justify;
   background-color: rgba(255, 200, 221, 0.2); /* Light pink overlay */
   border-radius: 10px;
-  overflow: hidden; /* Prevent content from spilling out */
   margin: 2rem 0;
 }
 

@@ -255,15 +255,29 @@
 
       <!-- Google Maps Section -->
       <section id="location">
-        <h2>Location</h2>
-        <p>Dewan Tuanku Syed Putra, Universiti Sains Malaysia, Penang.</p>
-        <iframe 
-          src="https://www.google.com/maps/embed?pb=!1m18..."
-          width="600"
-          height="450"
-          style="border:0;"
-          loading="lazy"
-        ></iframe>
+        <div class="container-contact">
+          <div class="contact-description">
+            <!-- Put Icon -->
+            <h2>Contact Us</h2>
+            <p>If you have any querier or require further information, please do not hesitate to contact us!</p>
+          </div> 
+          
+          <div class="location-detail">
+            <!-- Put Icon -->
+            <h2>Our Location</h2>
+            <p>Dewan Tuanku Syed Putra, Universiti Sains Malaysia, Penang.</p>
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18..."
+              width="600"
+              height="450"
+              style="border:0;"
+              loading="lazy"
+            ></iframe>
+          </div>
+
+          <div class
+          
+        </div>
       </section>
     </div>
     <footer class="footer">

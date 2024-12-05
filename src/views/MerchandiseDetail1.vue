@@ -141,13 +141,14 @@ export default {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 3rem;
+  gap: 6rem;
   padding: 2rem;
 }
 
 .product-image img {
   width: 100%;
   max-width: 400px;
+  padding: 2rem;
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
@@ -157,6 +158,8 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  margin-top: -0.02rem;
+  margin-left: 0.15rem;
 }
 
 /* Brand and Name */
@@ -173,7 +176,7 @@ export default {
 
 .price {
   font-size: 1.5rem;
-  color: #de1919;
+  color: #927e5b;
   font-weight: bold;
 }
 

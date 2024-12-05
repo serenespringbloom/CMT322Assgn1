@@ -76,6 +76,7 @@
 .header h1 {
   font-size: 2.3rem;
   letter-spacing: 2rem;
+  margin-bottom: 1.5rem;
   color: #554149;
   text-transform: uppercase;
 }

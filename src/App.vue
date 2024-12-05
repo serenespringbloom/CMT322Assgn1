@@ -66,12 +66,13 @@ onMounted(() => {
         <li><a href="#location">CONTACT</a></li>
         <li><RouterLink to="/feedback">FEEDBACK</RouterLink></li>
         <li><RouterLink to="/refund">REFUND</RouterLink></li>
-        <span><RouterLink to="/dashboard">ADMIN</RouterLink></span>
+        <li><RouterLink to="/dashboard">ADMIN</RouterLink></li>
       </ul>
 
       <!-- Cart Total -->
       <div class="cart">
-        <RouterLink to="/cart">{{ totalPrice }} 🛒</RouterLink>
+        <span class="cart-icon">🛒</span>
+        <RouterLink to="/cart">RM {{ totalPrice }}</RouterLink>
       </div>
     </nav>
     <main><RouterView /></main>
@@ -144,15 +145,34 @@ onMounted(() => {
   }
 
   .cart {
-    font-weight: bold;
-    color: #333; /* Dark text for the cart */
-    padding: 0.5rem 1rem;
-  }
+  display: flex;
+  align-items: center;
+  background: #DCC39C;
+  color: #554149;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 0px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, background 0.3s ease;
+}
 
-  .cart:hover {
-    color: #007bff; /* Change color on hover */
-    cursor: pointer; /* Pointer cursor to indicate it's interactive */
-  }
+.cart:hover {
+  background: #DCC39C;
+  transform: translateY(-3px);
+  cursor: pointer;
+}
+
+.cart-icon {
+  margin-right: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.cart-total {
+  font-size: 1rem;
+  color: #554149;
+  font-weight: bold;
+}
 
 
   /* Hamburger button */

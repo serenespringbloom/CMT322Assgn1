@@ -70,7 +70,7 @@
           </div>
           <div>
               <Icon icon="arcticons:pass-culture"  class="icon-size"  style="color: #ec9910"/>
-            
+
             <h2>Iconic culture</h2>
             <p>Witness the Sabahan culture demonstrated through traditional dance by representatives from universities.</p>
           </div>
@@ -82,7 +82,7 @@
           </div>
           <div>
               <Icon icon="fluent:people-checkmark-24-filled" class="icon-size"  style="color: #ec9910" />
-            
+
             <h2>Engaging Vibe</h2>
             <p>Observing the welcoming atmosphere presented by the authentic Sabahan with their rise made the audience relish the night.</p>
           </div>
@@ -253,41 +253,39 @@
       </section>
 
 
-      <!-- Google Maps Section -->
       <section id="location">
-        <div class="container-contact">
-          <div class="contact-description">
-            <!-- Put Icon -->
-            <h2>Contact Us</h2>
-            <p>If you have any querier or require further information, please do not hesitate to contact us!</p>
-          </div> 
-          
-          <div class="location-detail">
-            <!-- Put Icon -->
-            <h2>Our Location</h2>
-            <p>Dewan Tuanku Syed Putra, Universiti Sains Malaysia, Penang.</p>
-            <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18..."
-              width="600"
-              height="450"
-              style="border:0;"
-              loading="lazy"
-            ></iframe>
-          </div>
+  <div class="location-container">
+    <h2 class="location-title">Contact and Find Us</h2>
 
-          <div class="call-info">
-            <!-- Put Icon -->
-            <h2>Call Us</h2>
-            <p>Dewan Tuanku Syed Putra, Universiti Sains Malaysia, Penang.</p>
-          </div>
+    <!-- Map Section -->
+    <div class="map-wrapper">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18..."
+        width="600"
+        height="350"
+        style="border:0;"
+        loading="lazy"
+      ></iframe>
+      <!-- Overlay Text -->
+      <div class="location-overlay">
+        <h3>Our Location</h3>
+        <p>Dewan Tuanku Syed Putra, Universiti Sains Malaysia, Penang.</p>
+      </div>
+    </div>
 
-          <div class="email-info">
-            <!-- Put Icon -->
-            <h2>Email Us</h2>
-            <p>Dewan Tuanku Syed Putra, Universiti Sains Malaysia, Penang.</p>
-          </div>
-        </div>
-      </section>
+    <!-- Contact Info Section -->
+    <div class="contact-info">
+      <div class="info-item">
+        <span class="icon">📧</span>
+        <p>mcb@usm.my</p>
+      </div>
+      <div class="info-item">
+        <span class="icon">📞</span>
+        <p>01X-XXXXXXX</p>
+      </div>
+    </div>
+  </div>
+</section>
     </div>
     <footer class="footer">
       <Footer />
@@ -545,9 +543,9 @@ h1 {
 /* History Container using Grid */
 .history-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-  gap: 30px;  
-  max-width: 1200px; 
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
   width: 100%;
   padding: 20px;
 }
@@ -561,7 +559,7 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start; 
+  align-items: flex-start;
 
 }
 
@@ -655,14 +653,14 @@ h1 {
   font-size: 24px;
   font-weight: bold;
   color: #333;
-  padding-right: 40px; 
+  padding-right: 40px;
 }
 
 .agenda-title img {
   max-width: 110%;  /* Make sure the image does not exceed the width of its container */
   height: auto;  /* Maintain aspect ratio */
-  object-fit: cover;  
-  border-radius: 8px; 
+  object-fit: cover;
+  border-radius: 8px;
   display: block;
 }
 
@@ -884,10 +882,10 @@ h1 {
 }
 .slider-wrapper {
   display: flex;
-  justify-content: center; 
+  justify-content: center;
   align-items: center;
-  overflow: hidden; 
-  gap: 20px; 
+  overflow: hidden;
+  gap: 20px;
   padding: 20px;
   max-width: 100%;
   width: 500vw;
@@ -964,7 +962,7 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 150px; 
+  max-width: 150px;
 }
 
 .sponsor-list li img {
@@ -1035,6 +1033,137 @@ h1 {
 
   .history-container p {
     font-size: 0.95rem;
+  }
+}
+
+/* General Styling */
+.location h1{
+  font-size: 2rem;
+  color: #1a1a1a; /* Yellow heading */
+  margin-bottom: 20px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  align-content: center;
+}
+
+#location {
+  /* background: linear-gradient(to bottom right, #ffe5ed, #ffc8dd); */
+  padding: 3rem 2rem;
+  border-radius: 20px;
+  /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); */
+  font-family: "Plus Jakarta Sans", sans-serif;
+  /* color: #554149; */
+}
+
+/* Title Styling */
+.location-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #554149;
+  margin-bottom: 2rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Location Container */
+.location-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* Map Section */
+.map-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.map-wrapper:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.map-wrapper iframe {
+  width: 100%;
+  height: 350px;
+  border: none;
+}
+
+.location-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.location-overlay h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.location-overlay p {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Contact Info Section */
+.contact-info {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  text-align: center;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.2rem;
+  background: #fff;
+  padding: 1.5rem 2rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.info-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.info-item .icon {
+  font-size: 2rem;
+  color: #de1919;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .location-title {
+    font-size: 2rem;
+  }
+
+  .location-container {
+    gap: 1.5rem;
+  }
+
+  .map-wrapper iframe {
+    height: 250px;
+  }
+
+  .contact-info {
+    flex-direction: column;
+    gap: 1.5rem;
   }
 }
 </style>

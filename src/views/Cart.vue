@@ -139,7 +139,7 @@ const checkout = () => {
       <!-- Order Summary Section -->
       <div class="cart-summary">
         <h2>Order Summary</h2>
-        <p>Total: RM {{ totalPrice }}</p>
+        <p class="total-price">Total Price: RM {{ totalPrice }}</p>
         <div class="checkout-inputs">
           <input
           type="email"
@@ -177,11 +177,11 @@ const checkout = () => {
 
 <style scoped>
 .cart-page {
-  font-family: Arial, sans-serif;
+  font-family: "Plus Jakarta Sans", serif;
   padding: 20px;
-  background: #ffe4e9;
   padding-bottom: 10%;
   margin: 3%;
+  border-radius: 10px;
 }
 
 h1 {
@@ -200,17 +200,19 @@ h1 {
   display: flex;
   justify-content: space-between;
   gap: 20px;
+  flex-wrap: wrap;
   padding-top: 2%;
-  width: 80%;
-  margin-left: 9%;
+  width: 90%;
+  margin: 0 auto;
 }
 
 .cart-items {
   flex: 2;
-  background: #fff;
-  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(255, 240, 245, 0.8), rgba(255, 200, 221, 0.8));
+  border-radius: 15px;
   padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease-in-out;
 }
 
 .cart-group {
@@ -218,47 +220,67 @@ h1 {
 }
 
 .cart-group h2 {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   margin-bottom: 10px;
+  color: #554149;
 }
 
 .cart-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #ccc;
-  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  padding: 12px 0;
 }
 
 .cart-item-image {
   width: 80px;
   height: 80px;
   object-fit: cover;
-  border-radius: 5px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+
 
 .cart-item-details {
   flex: 1;
   margin-left: 20px;
+  margin-bottom: 5px;
+}
+
+.cart-item-details h4 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.cart-item-details p {
+  font-size: 1rem;
+  color: #656565;
 }
 
 .quantity-controls {
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-top:9px;
 }
 
 .quantity-btn {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #a48e69, #dcc39c);
   color: white;
   border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
+  border-radius: 50%;
+  padding: 8px 12px;
+  font-size: 1rem;
   cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
 }
 
 .quantity-btn:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #dcc39c, #a48e69);
+  transform: scale(1.1);
 }
 
 .remove-button {
@@ -268,33 +290,60 @@ h1 {
   border-radius: 5px;
   padding: 8px 16px;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .remove-button:hover {
   background-color: #d43f3f;
+  transform: translateY(-3px);
 }
 
 .cart-summary {
   flex: 1;
-  background: #fff;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #fff1f5, #ffe5ed);
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   text-align: center;
-  max-height: 410px;
+  max-height: 450px;
+  animation: fadeIn 0.3s ease-in-out;
+  font-family: "Plus Jakarta Sans", sans-serif;
 }
 
 .cart-summary h2 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #554149;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .cart-summary p {
   font-size: 1.2rem;
   margin: 10px 0;
+  color: #6b4f57;
+  font-weight: 500;
+}
+
+.cart-summary p span {
+  font-weight: bold;
+  color: #a48e69;
+}
+
+.cart-summary .total-price {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #554149;
+  margin: 1rem 0;
+  padding: 0.5rem 0;
+  background: linear-gradient(135deg, #ffe8e8, #ffc8dd);
+  border-radius: 10px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .checkout-inputs {
+  font-family: "Plus Jakarta Sans", sans-serif;
   margin: 20px 0;
   display: flex;
   flex-direction: column;
@@ -302,10 +351,16 @@ h1 {
 }
 
 .checkout-inputs input {
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  padding: 12px;
+  border-radius: 10px;
+  border: 2px solid #ccc;
   font-size: 1rem;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.checkout-inputs input:focus {
+  border-color: #ffc8dd;
+  box-shadow: 0 0 8px rgba(255, 200, 221, 0.5);
 }
 
 .checkout-inputs input.invalid {
@@ -313,21 +368,68 @@ h1 {
 }
 
 .checkout-button {
-  background-color: #28a745;
+  background: linear-gradient(135deg, #6bcf6b, #4caf50);
   color: white;
   border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
+  border-radius: 25px;
+  padding: 12px 20px;
   cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+  transition: all 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 .checkout-button:disabled {
   background-color: #a5d6a7;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 .checkout-button:hover:enabled {
-  background-color: #218838;
+  background: linear-gradient(135deg, #4caf50, #6bcf6b);
+  transform: translateY(-3px);
+}
+
+.remove-button {
+  background: linear-gradient(135deg, #ff5f57, #d9534f);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  box-shadow: 0 5px 15px rgba(217, 83, 79, 0.3);
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.remove-button:hover {
+  background: linear-gradient(135deg, #d9534f, #ff5f57);
+  transform: translateY(-3px);
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quantity-btn {
+  background: linear-gradient(135deg, #a48e69, #dcc39c);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 8px 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+.quantity-btn:hover {
+  background: linear-gradient(135deg, #dcc39c, #a48e69);
+  transform: scale(1.1);
 }
 
 .empty-cart {
@@ -335,5 +437,17 @@ h1 {
   margin-top: 30px;
   color: #555;
   font-size: 1.2rem;
+  font-weight: bold;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

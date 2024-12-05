@@ -31,7 +31,7 @@
       </div>
     </div>
     <!-- Event Details Section -->
-    <div class="event-details">
+  <div class="event-details">
       <!-- About Section -->
       <section id="about" class="details-section about">
         <div class="content-wrapper">
@@ -57,6 +57,7 @@
     </div>
   </div>
 </section>
+
 
       <!-- History Section -->
       <section id="history">
@@ -127,43 +128,111 @@
         </div>
       </section>
 
-      <!-- Performers Section -->
+      <!-- Performers Section
       <section id="performers">
         <h2>Performers</h2>
         <p>
           Featuring renowned artists and talented performers from across the
           country.
         </p>
-      </section>
+      </section> -->
 
       <!-- Ticket and Merchandise Section -->
-      <section id="tickets-merchandise">
-        <h2>Ticket & Merchandise</h2>
-        <p>
-          Get your tickets and explore exclusive merchandise for the event!
-          <a href="#">Buy Tickets</a> | <a href="#">Shop Merchandise</a>
-        </p>
-      </section>
+    <section id="tickets-merchandise">
+      <h2>Ticket & Merchandise</h2>
+      <p>
+        Get your tickets and explore exclusive merchandise for the event!
+        <RouterLink to="/merchandise"><button class="btn-merchandise">Shop Merchandise</button></RouterLink>
+      </p>
+      <div class="ticket-card">
+        <div class="card-content">
+          <h3>Event Ticket - 01 January 2025</h3>
+          <ul>
+            <li>One night pass access all entertainment</li>
+            <li>Wristband and Snack</li>
+            <li>Meet Event Performers</li>
+            <li>Pick Seat</li>
+          </ul>
+          <div class="price">
+            <span>MYR 15</span>
+            <RouterLink to="/ticket"><button>BUY NOW</button></RouterLink>
+          </div>
+        </div>
+      </div>
 
-      <!-- Past Events Section -->
+      <div class="ticket-card">
+        <div class="card-content">
+          <h3>Event Ticket - 01 June 2025 (Student)</h3>
+          <ul>
+            <li>One night pass access all entertainment</li>
+            <li>Wristband and Snack</li>
+            <li>Meet Event Performers</li>
+            <li>Pick Seat</li>
+          </ul>
+          <div class="price">
+            <span>MYR 12</span>
+            <RouterLink to="/ticket"><button>BUY NOW</button></RouterLink>
+          </div>
+        </div>
+      </div>
+</section>
+
+
+      <!-- Past Winner Section -->
       <section id="past-events">
-        <h2>Past Event Highlights</h2>
-        <p>Check out photos and feedback from our previous events!</p>
-        <img src="https://via.placeholder.com/600x300" alt="Past Event Photos" />
+        <h2>Past MCB Highlights</h2>
+        <p>Lists of Winner in the past MCB</p>
+        <h3> Overall Winner:</h3>
+        <div class="slider-wrapper">
+          <div class="swiper-slide">
+            <img src="@/assets/images/mcb-winner.jpg" alt="UKM">
+            <p>Universiti Kebangsaan Malaysia (UKM)</p>
+          </div>
+          <div class="swiper-slide">
+            <img src="@/assets/images/mcb-secondplace.jpg" alt="USM">
+            <p>Universiti Sains Malaysia (USM)</p>
+          </div>
+          <div class="swiper-slide">
+            <img src="@/assets/images/mcb-thirdplace.jpg" alt="UPSI">
+            <p>Universiti Pendidikan Sultan Idris (UPSI)</p>
+          </div>
+        </div>
+
+        <h3> Photo Moments</h3>
+        <div class="slider-wrapper">
+          <div class="swiper-slide">
+            <img src="@/assets/images/moment-1.png" alt="">
+          </div>
+          <div class="swiper-slide">
+            <img src="@/assets/images/moment-2.jpg" alt="">
+          </div>
+          <div class="swiper-slide">
+            <img src="@/assets/images/moment-3.jpg" alt="">
+          </div>
+          <div class="swiper-slide">
+            <img src="@/assets/images/moment-4.jpg" alt="">
+          </div>
+          <div class="swiper-slide">
+            <img src="@/assets/images/moment-5.jpg" alt="">
+          </div>
+          <div class="swiper-slide">
+            <img src="@/assets/images/moment-6.jpg" alt="">
+          </div>
+        </div>
       </section>
 
       <!-- Sponsors Section -->
       <section id="sponsors">
-        <h2>Sponsors & Special Thanks</h2>
-        <p>
-          A big thank you to our sponsors for making this event possible.
-        </p>
-        <ul>
-          <li>Sponsor 1</li>
-          <li>Sponsor 2</li>
-          <li>Sponsor 3</li>
+        <h2>Our Event Partners</h2>
+        <ul class="sponsor-list">
+          <li><img src="@/assets/images/ikrar.png" alt="ikrar"></li>
+          <li><img src="@/assets/images/smj-logo.avif" alt="smj"></li>
+          <li><img src="@/assets/images/MDDNPP-logo.png" alt="MDDNPP"></li>
+          <li><img src="@/assets/images/bhepa-usm.png" alt="BHEPA"></li>
+          <li><img src="@/assets/images/ZusCoffee-logo.png" alt="ZusCoffee"></li>
         </ul>
       </section>
+
 
       <!-- Google Maps Section -->
       <section id="location">
@@ -251,7 +320,7 @@ h1 {
   width: 100%;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 85%);
   background-color: rgba(255, 240, 240, 0.3);
-  z-index: 2; /* Content above the background image */
+  z-index: 1; /* Content above the background image */
   color: #554149;
   text-align: left;
   padding: 0 2rem;
@@ -368,6 +437,7 @@ h1 {
 
 .text-content {
   flex: 1; /* Take equal space */
+  z-index: 5;
 }
 
 .image-content {
@@ -487,12 +557,11 @@ h1 {
 }
 
 /* Agenda styling */
-/* General Section Styling */
 #agenda {
   background-color: #f8e8f0; /* Light pink background */
   padding: 50px;
   text-align: center;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 #agenda h2:first-of-type {
@@ -579,6 +648,243 @@ h1 {
   .agendaWrapper {
     flex-direction: column;
   }
+}
+
+/* Ticket and Merchandise Styling */
+#tickets-merchandise {
+  background-color: #ffc8dd;
+  padding: 50px 20px;
+  text-align: center;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  z-index: 5;
+}
+
+#tickets-merchandise h2 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+}
+
+#tickets-merchandise p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 30px;
+  z-index: 5;
+}
+
+.btn-merchandise {
+  background: linear-gradient(108deg, #a48e69 -50%, #dcc39c 100%);
+  color: #000;
+  text-decoration: none;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  z-index: 10;
+  position: relative;
+}
+
+#tickets-merchandise a:hover {
+  text-decoration: underline;
+}
+
+/* Ticket Card Styling */
+.ticket-card {
+  display: flex;
+  flex-direction: row;
+  background-color: #fff;
+  color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 20px auto;
+  max-width: 800px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* .card-image img {
+  width: 300px;
+  height: 200px;
+  object-fit: cover;
+} */
+
+.card-content {
+  padding: 20px;
+  text-align: left;
+  flex-grow: 1;
+}
+
+.card-content h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #f0c14b;
+  margin-bottom: 10px;
+}
+
+.card-content li {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.price {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.price span {
+  font-size: 24px;
+  font-weight: bold;
+  color: #f0c14b;
+}
+
+.price button {
+  background: linear-gradient(108deg, #a48e69 -50%, #dcc39c 100%);
+  color: #000;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 0px;
+  padding: 0.85rem 1.5rem;
+  margin-right: 1rem;
+  cursor: pointer;
+  z-index: 5;
+  position: relative;
+  transition: background 0.3s ease;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.price button:hover {
+  background-color: #dba51d;
+}
+
+/* Past Winner Styling */
+#past-events {
+  background-color: #ffc8dd;
+  padding: 50px 20px;
+  text-align: center;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  z-index: 5;
+}
+
+#past-events h2 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+}
+
+#past-events h3 {
+  font-size: 26px;
+  font-weight: 400;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+}
+
+#past-events p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 30px;
+}
+.slider-wrapper {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  overflow: hidden; 
+  gap: 20px; 
+  padding: 20px;
+  max-width: 100%;
+  width: 500vw;
+  transition: all 1.5s ease-in-out;
+}
+
+/* Style for each slide */
+.swiper-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center text and images */
+  text-align: center;
+  width: 300px; /* Adjust width of each slide */
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for gallery effect */
+  background-color: #fff;
+}
+
+/* Image style */
+.swiper-slide img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-bottom: 5px solid #ffc8dd; /* Border below the image */
+}
+
+/* Paragraph text style */
+.swiper-slide p {
+  margin: 10px 0 0 0;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #554149;
+  padding: 10px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: #f8f1f1;
+}
+
+/* Sponsors Section Styling */
+#sponsors {
+  background-color: #f8e8f0; /* Dark background */
+  text-align: center;
+  padding: 50px 20px;
+}
+
+#sponsors h2 {
+  font-size: 2rem;
+  color: #1a1a1a; /* Yellow heading */
+  margin-bottom: 20px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+#sponsors p {
+  font-size: 1.2rem;
+  color: #ffffff;
+  margin-bottom: 40px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Sponsor List */
+.sponsor-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Sponsor Images */
+.sponsor-list li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 150px; 
+}
+
+.sponsor-list li img {
+  width: 100%;
+  height: auto;
+  filter: grayscale(100%); /* Optional: grayscale effect */
+  opacity: 0.9;
+  transition: all 0.3s ease;
+}
+
+.sponsor-list li img:hover {
+  filter: grayscale(0%);
+  opacity: 1;
+  transform: scale(1.1); /* Scale effect on hover */
 }
 
 

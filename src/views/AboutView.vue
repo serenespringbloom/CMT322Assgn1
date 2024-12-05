@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import CountdownTimer from "@/components/countdownTimer.vue"; // Include if using the timer component
-  import { Icon } from "@iconify/vue";
+  import { Icon } from '@iconify/vue';
   import Footer from "../components/Footer.vue";
 </script>
 
@@ -13,8 +13,8 @@
         <h1 class="title">Malam Citra Bayu 16th</h1>
         <p class="tagline">Megar Karya, Remangi Persona Bayu</p>
         <div class="buttons">
-          <button class="btn-primary">BOOK NOW</button>
-          <a href="#" class="teaser-link">🎥 Watch The Teaser</a>
+          <a href="#tickets-merchandise"><button class="btn-primary">BOOK NOW</button></a>
+          <a href="https://www.youtube.com/watch?v=bGMYtLEpnfA" class="teaser-link">🎥 Watch The Teaser</a>
         </div>
       </div>
 
@@ -64,22 +64,25 @@
       <section id="history">
         <div class="history-container">
           <div>
-            <Icon icon="mingcute:certificate-line" width="55" height="55"  style="color: #ec9910" />
+            <Icon icon="mingcute:certificate-fill" class="icon-size"  style="color: #ec9910" />
             <h2>Established Event</h2>
             <p>Now in its 16th edition since 2008, continue its legacy as premier cultural event for national-level.</p>
           </div>
           <div>
-            <Icon icon="arcticons:pass-culture" width="55" height="55" style="color: #ec9910" />
+              <Icon icon="arcticons:pass-culture"  class="icon-size"  style="color: #ec9910"/>
+            
             <h2>Iconic culture</h2>
             <p>Witness the Sabahan culture demonstrated through traditional dance by representatives from universities.</p>
           </div>
           <div>
-            <Icon icon="mdi:dance-ballroom" width="55" height="55"  style="color: #ec9910" />
+              <Icon icon="mdi:dance-ballroom"  class="icon-size"  style="color: #ec9910" />
+
             <h2>Multiple Performers</h2>
             <p>Skilled ensembles that showcase their expertise in dance inspired by Sabahan themes.</p>
           </div>
           <div>
-            <Icon icon="fluent:people-checkmark-24-filled" width="55" height="55"  style="color: #ec9910" />
+              <Icon icon="fluent:people-checkmark-24-filled" class="icon-size"  style="color: #ec9910" />
+            
             <h2>Engaging Vibe</h2>
             <p>Observing the welcoming atmosphere presented by the authentic Sabahan with their rise made the audience relish the night.</p>
           </div>
@@ -252,15 +255,38 @@
 
       <!-- Google Maps Section -->
       <section id="location">
-        <h2>Location</h2>
-        <p>Dewan Tuanku Syed Putra, Universiti Sains Malaysia, Penang.</p>
-        <iframe 
-          src="https://www.google.com/maps/embed?pb=!1m18..."
-          width="600"
-          height="450"
-          style="border:0;"
-          loading="lazy"
-        ></iframe>
+        <div class="container-contact">
+          <div class="contact-description">
+            <!-- Put Icon -->
+            <h2>Contact Us</h2>
+            <p>If you have any querier or require further information, please do not hesitate to contact us!</p>
+          </div> 
+          
+          <div class="location-detail">
+            <!-- Put Icon -->
+            <h2>Our Location</h2>
+            <p>Dewan Tuanku Syed Putra, Universiti Sains Malaysia, Penang.</p>
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18..."
+              width="600"
+              height="450"
+              style="border:0;"
+              loading="lazy"
+            ></iframe>
+          </div>
+
+          <div class="call-info">
+            <!-- Put Icon -->
+            <h2>Call Us</h2>
+            <p>Dewan Tuanku Syed Putra, Universiti Sains Malaysia, Penang.</p>
+          </div>
+
+          <div class="email-info">
+            <!-- Put Icon -->
+            <h2>Email Us</h2>
+            <p>Dewan Tuanku Syed Putra, Universiti Sains Malaysia, Penang.</p>
+          </div>
+        </div>
       </section>
     </div>
     <footer class="footer">
@@ -298,7 +324,7 @@
   background-position: center;
   background-size: cover;
   opacity: 0.05; /* 5% opacity for the background image */
-  z-index: 1;
+  z-index: 0;
 }
 
 .date {
@@ -519,11 +545,9 @@ h1 {
 /* History Container using Grid */
 .history-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
-
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
   gap: 30px;  
   max-width: 1200px; 
-
   width: 100%;
   padding: 20px;
 }
@@ -537,34 +561,49 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: center;
-
   align-items: flex-start; 
 
 }
 
-/* Headings styling */
-.history-container h2 {
-  font-size: 1.5rem;
+/* History Card Styling */
+.history-card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  width: 300px;
+  text-align: center;
+}
+
+
+/* Title and Paragraph Styling */
+.history-card h2 {
+  font-size: 20px;
   font-weight: bold;
-  margin-bottom: 10px;
   color: #333;
+  margin-bottom: 10px;
 }
 
-/* Paragraphs styling */
-.history-container p {
-  font-size: 1rem;
-  color: #555;
+
+/* Icon Styling */
+.icon-size {
+  width: 55px;
+  height: auto;
+  display: inline-block;
+  margin-bottom: 15px;
+  color: #ec9910;
+}
+
+.history-card p {
+  font-size: 14px;
   line-height: 1.6;
+  color: #666;
 }
 
-/* Optional: Responsive typography */
+/* Media Query for Responsive Design */
 @media (max-width: 768px) {
-  .history-container h2 {
-    font-size: 1.25rem;
-  }
-
-  .history-container p {
-    font-size: 0.95rem;
+  .history-card {
+    width: 100%;
   }
 }
 
@@ -578,7 +617,6 @@ h1 {
 
 
 
-#agenda h2:first-of-type {
 /* #agenda h2:first-of-type {
   font-size: 36px;
   font-weight: 700;
@@ -592,7 +630,7 @@ h1 {
   color: #666;
   margin-bottom: 40px;
 
-} 
+} */
 
 
 /* Agenda styling */

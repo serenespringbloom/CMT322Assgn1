@@ -118,6 +118,7 @@
             <p>Giving the award based on the category that has finalised and annoucing the winner of MCB 16th edition.</p>
           </div>
 
+
           <div class="agenda-detail">
             <h3>11:00 PM - 11:30 PM</h3>
             <h3>5</h3>
@@ -174,6 +175,7 @@
   </div>
 </section>
 
+
       <!-- Performers Section
       <section id="performers">
         <h2>Performers</h2>
@@ -205,6 +207,7 @@
           </div>
         </div>
       </div>
+
 
       <div class="ticket-card">
         <div class="card-content">
@@ -558,8 +561,10 @@ h1 {
 .history-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
+
   gap: 30px;  
   max-width: 1200px; 
+
   width: 100%;
   padding: 20px;
 }
@@ -573,7 +578,9 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: center;
+
   align-items: flex-start; 
+
 }
 
 /* Headings styling */
@@ -610,7 +617,9 @@ h1 {
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-/* #agenda h2:first-of-type {
+
+
+#agenda h2:first-of-type {
   font-size: 36px;
   font-weight: 700;
   color: #333;
@@ -622,7 +631,8 @@ h1 {
   font-weight: 600;
   color: #666;
   margin-bottom: 40px;
-} */
+
+} 
 
 .agenda-container {
   display: flex;
@@ -637,16 +647,16 @@ h1 {
   font-size: 32px;
   font-weight: bold;
   color: #333;
+
+
 }
 
 /* Agenda Wrapper */
 .agendaWrapper {
-  flex: 2; 
-  text-align: left;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
 }
 
 /* Individual Agenda Details */

@@ -237,6 +237,7 @@
         <h3> Overall Winner:</h3>
         <div class="slider-wrapper">
           <div class="swiper-slide">
+            <h2>1st</h2>
             <img src="@/assets/images/mcb-winner.jpg" alt="UKM">
             <p>Universiti Kebangsaan Malaysia (UKM)</p>
           </div>

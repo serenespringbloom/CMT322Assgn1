@@ -146,7 +146,7 @@ loadFromSessionStorage();
 
 <template>
   <div class="title">
-    <h1>Seat Selection</h1>
+    <h1>SEAT SELECTION</h1>
   </div>
   <div class="page-container">
     <!-- Seat Grid Section -->
@@ -287,10 +287,17 @@ loadFromSessionStorage();
 
 <style scoped>
 /* Layout */
+
 .title{
-  text-align: center;
-  padding-top: 1.5%;
-  height: 25px;
+  top: 20;
+  min-height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  letter-spacing: .9rem;
+  font-family: 'Plus Jakarta Sans', serif;
+  font-size: 1rem;
+  margin-top: 4%;
 }
 
 .page-container {
@@ -298,7 +305,7 @@ loadFromSessionStorage();
   gap: 20px;
   min-width: 1600px;
   max-width: 1600px;
-  margin: auto;
+  margin: 50px auto;
   padding: 20px;
   font-family: Arial, sans-serif;
   background: none;

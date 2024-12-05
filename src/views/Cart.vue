@@ -99,7 +99,7 @@ const checkout = () => {
 
 <template>
   <div class="cart-page">
-    <h1>Your Cart</h1>
+    <h1>YOUR CART</h1>
     <div class="cart-container">
       <!-- Cart Items Section -->
       <div class="cart-items">
@@ -172,14 +172,20 @@ const checkout = () => {
   font-family: Arial, sans-serif;
   padding: 20px;
   background: #ffe4e9;
-  padding-bottom: 15%;
+  padding-bottom: 10%;
   margin: 3%;
 }
 
 h1 {
-  text-align: center;
-  color: #333;
-  padding-top: 1%;
+  top: 20;
+  min-height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  letter-spacing: .9rem;
+  font-family: 'Plus Jakarta Sans', serif;
+  font-size: 2.0rem;
+  margin-bottom: 30px;
 }
 
 .cart-container {

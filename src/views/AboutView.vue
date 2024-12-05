@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import CountdownTimer from "@/components/countdownTimer.vue"; // Include if using the timer component
-  import { Icon } from "@iconify/vue";
+  import { Icon } from '@iconify/vue';
   import Footer from "../components/Footer.vue";
 </script>
 
@@ -69,17 +69,20 @@
             <p>Now in its 16th edition since 2008, continue its legacy as premier cultural event for national-level.</p>
           </div>
           <div>
-            <Icon icon="arcticons:pass-culture" width="55" height="55" style="color: #ec9910" />
+              <Icon icon="arcticons:pass-culture"  width="55" height="55"  style="color: #ec9910"/>
+            
             <h2>Iconic culture</h2>
             <p>Witness the Sabahan culture demonstrated through traditional dance by representatives from universities.</p>
           </div>
           <div>
-            <Icon icon="mdi:dance-ballroom" width="55" height="55"  style="color: #ec9910" />
+              <Icon icon="mdi:dance-ballroom"  width="55" height="55"  style="color: #ec9910" />
+
             <h2>Multiple Performers</h2>
             <p>Skilled ensembles that showcase their expertise in dance inspired by Sabahan themes.</p>
           </div>
           <div>
-            <Icon icon="fluent:people-checkmark-24-filled" width="55" height="55"  style="color: #ec9910" />
+              <Icon icon="fluent:people-checkmark-24-filled" width="55" height="55"  style="color: #ec9910" />
+            
             <h2>Engaging Vibe</h2>
             <p>Observing the welcoming atmosphere presented by the authentic Sabahan with their rise made the audience relish the night.</p>
           </div>
@@ -519,11 +522,9 @@ h1 {
 /* History Container using Grid */
 .history-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
-
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
   gap: 30px;  
   max-width: 1200px; 
-
   width: 100%;
   padding: 20px;
 }
@@ -537,34 +538,39 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: center;
-
   align-items: flex-start; 
 
 }
 
-/* Headings styling */
-.history-container h2 {
-  font-size: 1.5rem;
+/* History Card Styling */
+.history-card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  width: 300px;
+  text-align: center;
+}
+
+
+/* Title and Paragraph Styling */
+.history-card h2 {
+  font-size: 20px;
   font-weight: bold;
-  margin-bottom: 10px;
   color: #333;
+  margin-bottom: 10px;
 }
 
-/* Paragraphs styling */
-.history-container p {
-  font-size: 1rem;
-  color: #555;
+.history-card p {
+  font-size: 14px;
   line-height: 1.6;
+  color: #666;
 }
 
-/* Optional: Responsive typography */
+/* Media Query for Responsive Design */
 @media (max-width: 768px) {
-  .history-container h2 {
-    font-size: 1.25rem;
-  }
-
-  .history-container p {
-    font-size: 0.95rem;
+  .history-card {
+    width: 100%;
   }
 }
 

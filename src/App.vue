@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import logo from "@/assets/MCBLogo.png";
+import Footer from "./components/Footer.vue";
 
 // Navigation state
 const isMenuOpen = ref(false);
@@ -12,6 +13,7 @@ const toggleMenu = () => {
 // Route handling
 const route = useRoute();
 const hideHeader = computed(() => route.meta.showHeader === false);
+const hideFooter = computed(() => route.meta.showFooter === false);
 
 // Cart-related logic
 const cart = ref([]);
@@ -61,7 +63,7 @@ onMounted(() => {
         <li><a href="#about">EVENT</a></li>
         <li><RouterLink to="/ticket">TICKET</RouterLink></li>
         <li><RouterLink to="/merchandise">MERCHANDISE</RouterLink></li>
-        <li><RouterLink to="/contact">CONTACT</RouterLink></li>
+        <li><a href="#location">CONTACT</a></li>
         <li><RouterLink to="/feedback">FEEDBACK</RouterLink></li>
         <li><RouterLink to="/refund">REFUND</RouterLink></li>
         <span><RouterLink to="/dashboard">ADMIN</RouterLink></span>
@@ -72,12 +74,34 @@ onMounted(() => {
         <RouterLink to="/cart">{{ totalPrice }} 🛒</RouterLink>
       </div>
     </nav>
-    <RouterView />
+    <main><RouterView /></main>
+    <footer v-if="!hideFooter" class="footer">
+      <Footer />
+    </footer>
   </body>
 </template>
 
 
 <style scoped>
+  template, body {
+    height: 100%; /* Ensure the html and body stretch to fill the viewport */
+    margin: 0; /* Remove default margin */
+    display: flex;
+    flex-direction: column; /* Use a column layout */
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Make the body fill the viewport height */
+    margin: 0; /* Remove default body margin */
+  }
+
+  main {
+    flex-grow: 1;
+    display: inline-block;
+  }
+
   #navTop {
     display: inline-block;
     top: 0;
@@ -178,7 +202,6 @@ onMounted(() => {
       margin-top: 1rem;
     }
   }
-
 
  /* Responsive design, when windows is minimised */
 @media (max-width: 768px) {

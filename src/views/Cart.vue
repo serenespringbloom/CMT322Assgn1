@@ -2,6 +2,10 @@
 import { ref, computed, onMounted } from "vue";
 
 const cart = ref([]); // Cart items
+const email = ref(""); // User email
+const phone = ref(""); // User phone number
+const isEmailValid = ref(false);
+const isPhoneValid = ref(false);
 
 // Load cart from localStorage on page load
 onMounted(() => {
@@ -63,11 +67,27 @@ const totalPrice = computed(() =>
   cart.value.reduce((total, item) => total + item.price * item.quantity, 0)
 );
 
+// Validate email
+const validateEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  isEmailValid.value = emailRegex.test(email);
+};
+
+// Validate Malaysian phone number
+const validatePhone = (phone) => {
+  const phoneRegex = /^(?:\+601|601|01)\d{7,9}$/;
+  isPhoneValid.value = phoneRegex.test(phone);
+};
+
 // Simulate checkout process
-const checkout = () =>
-{
+const checkout = () => {
   if (!cart.value.length) {
     alert("Your cart is empty!");
+    return;
+  }
+
+  if (!isEmailValid.value || !isPhoneValid.value) {
+    alert("Please enter valid email and phone number.");
     return;
   }
 
@@ -87,7 +107,6 @@ const checkout = () =>
           <div class="cart-group" v-for="(items, vendor) in groupCartByVendor()" :key="vendor">
             <h2>{{ vendor }}</h2>
             <div class="cart-item" v-for="item in items" :key="item.id + item.size">
-              <input type="checkbox" />
               <img :src="item.image" :alt="item.name" class="cart-item-image" />
               <div class="cart-item-details">
                 <h2>{{ item.name }}</h2>
@@ -113,7 +132,36 @@ const checkout = () =>
       <div class="cart-summary">
         <h2>Order Summary</h2>
         <p>Total: RM {{ totalPrice }}</p>
-        <button @click="checkout" class="checkout-button">Proceed to Checkout</button>
+        <div class="checkout-inputs">
+          <input
+          type="email"
+          placeholder="Enter your email"
+          v-model="email"
+          @input="validateEmail(email)"
+          :class="{ invalid: !isEmailValid && email }"
+          />
+          <span v-if="email && !isEmailValid" class="error-message">
+            Please enter a valid email address.
+          </span>
+
+          <input
+            type="text"
+            placeholder="Enter your phone number"
+            v-model="phone"
+            @input="validatePhone(phone)"
+            :class="{ invalid: !isPhoneValid && phone }"
+          />
+          <span v-if="phone && !isPhoneValid" class="error-message">
+            Please enter a valid Malaysian phone number (e.g., +60123456789).
+          </span>
+        </div>
+        <button
+          @click="checkout"
+          class="checkout-button"
+          :disabled="!isEmailValid || !isPhoneValid"
+        >
+          Proceed to Checkout
+        </button>
       </div>
     </div>
   </div>
@@ -231,6 +279,24 @@ h1 {
   margin: 10px 0;
 }
 
+.checkout-inputs {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.checkout-inputs input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.checkout-inputs input.invalid {
+  border-color: red;
+}
+
 .checkout-button {
   background-color: #28a745;
   color: white;
@@ -240,7 +306,12 @@ h1 {
   cursor: pointer;
 }
 
-.checkout-button:hover {
+.checkout-button:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+}
+
+.checkout-button:hover:enabled {
   background-color: #218838;
 }
 

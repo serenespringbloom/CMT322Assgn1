@@ -31,6 +31,21 @@ const seats = computed(() => {
 const selectedSeats = ref([]);
 const studentTickets = ref(0);
 const publicTickets = ref(0);
+const showCheckoutPopup = ref(false); // State for showing the popup
+const email = ref(''); // User email
+const phone = ref(''); // User phone number
+
+// Validation for email
+const isEmailValid = computed(() => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email.value);
+});
+
+// Validation for Malaysian phone number
+const isPhoneValid = computed(() => {
+  const phoneRegex = /^(\+60|0)[1-9][0-9]{7,9}$/;
+  return phoneRegex.test(phone.value);
+});
 
 // Load data from sessionStorage
 const loadFromSessionStorage = () => {
@@ -111,11 +126,18 @@ const totalPrice = computed(() => {
 
 // Complete the purchase and update booked seats
 const completePurchase = () => {
-  bookedSeats.value.push(...selectedSeats.value); // Add selected seats to booked seats
-  selectedSeats.value = []; // Clear selected seats
-  studentTickets.value = 0; // Clear student tickets
-  publicTickets.value = 0; // Clear public tickets
-  alert('Purchase complete!');
+  if (isEmailValid.value && isPhoneValid.value) {
+    bookedSeats.value.push(...selectedSeats.value);
+    selectedSeats.value = [];
+    studentTickets.value = 0;
+    publicTickets.value = 0;
+    email.value = '';
+    phone.value = '';
+    showCheckoutPopup.value = false;
+    alert('Purchase complete!');
+  } else {
+    alert('Please provide valid email and phone number.');
+  }
 };
 
 // Load data when the component is mounted
@@ -216,7 +238,49 @@ loadFromSessionStorage();
       <p class="total-price">Total Price: RM {{ totalPrice }}</p>
 
       <!-- Complete Purchase Button -->
-      <button class="complete-btn" @click="completePurchase">Complete Purchase</button>
+      <button class="checkout-btn" @click="showCheckoutPopup = true">Proceed to Checkout</button>
+    </div>
+  </div>
+  <!-- Checkout Popup -->
+  <div v-if="showCheckoutPopup" class="checkout-popup">
+    <div class="popup-content">
+      <h2>Checkout Summary</h2>
+      <p><strong>Selected Seats:</strong> {{ selectedSeats.join(', ') || 'None' }}</p>
+      <p><strong>Number of Student Tickets:</strong> {{ studentTickets }}</p>
+      <p><strong>Number of Public Tickets:</strong> {{ publicTickets }}</p>
+      <p><strong>Total Price:</strong> RM {{ totalPrice }}</p>
+
+      <!-- Email and Phone Inputs -->
+      <div class="checkout-inputs">
+        <input
+          type="email"
+          v-model="email"
+          placeholder="Enter your email"
+          :class="{ invalid: !isEmailValid && email }"
+        />
+        <span v-if="email && !isEmailValid" class="error-message">
+          Please enter a valid email address.
+        </span>
+        <input
+          type="text"
+          v-model="phone"
+          placeholder="Enter your phone number"
+          :class="{ invalid: !isPhoneValid && phone }"
+        />
+        <span v-if="phone && !isPhoneValid" class="error-message">
+          Please enter a valid Malaysian phone number.
+        </span>
+      </div>
+
+      <!-- Complete Purchase Button -->
+      <button
+        class="complete-btn"
+        :disabled="!isEmailValid || !isPhoneValid"
+        @click="completePurchase"
+      >
+        Complete Purchase
+      </button>
+      <button class="close-btn" @click="showCheckoutPopup = false">Close</button>
     </div>
   </div>
 </template>
@@ -328,5 +392,92 @@ loadFromSessionStorage();
 .total-price {
   font-size: 1.5rem;
   font-weight: bold;
+}
+
+.checkout-btn {
+  background-color: #dcc39c;
+  padding: 16px 30px;
+  margin-top: 20px;
+  border: none;
+  color: black;
+}
+
+.checkout-btn:hover {
+  background-color: #f0f0f0;
+  border-color: #b5b5b5;
+  cursor: pointer;
+}
+
+.checkout-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  width: 400px;
+  text-align: center;
+}
+
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9rem;
+}
+
+.complete-btn {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.complete-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.close-btn {
+  background-color: #d9534f;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+/* Overlay to ensure background is dimmed */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.checkout-inputs{
+  display: flex;
+  flex-direction: column;
+  gap:10px;
+  padding:5px;
+}
+
+input{
+  padding:8px;
+  margin:4px;
 }
 </style>

@@ -255,39 +255,39 @@
 
       <!-- Google Maps Section -->
       <section id="location">
-        <div class="container-contact">
-          <div class="contact-description">
-            <!-- Put Icon -->
-            <h2>Contact Us</h2>
-            <p>If you have any querier or require further information, please do not hesitate to contact us!</p>
-          </div> 
-          
-          <div class="location-detail">
-            <!-- Put Icon -->
-            <h2>Our Location</h2>
-            <p>Dewan Tuanku Syed Putra, Universiti Sains Malaysia, Penang.</p>
-            <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18..."
-              width="600"
-              height="450"
-              style="border:0;"
-              loading="lazy"
-            ></iframe>
-          </div>
+      <div class="location-container">
+        <h2 class="location-title">Contact and Find Us</h2>
 
-          <div class="call-info">
-            <!-- Put Icon -->
-            <h2>Call Us</h2>
-            <p>Dewan Tuanku Syed Putra, Universiti Sains Malaysia, Penang.</p>
-          </div>
-
-          <div class="email-info">
-            <!-- Put Icon -->
-            <h2>Email Us</h2>
+        <!-- Map Section -->
+        <div class="map-wrapper">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12345.67890123!2d100.3028544!3d5.3616547!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x304acb0000000000%3A0x1234567890abcdef!2sDewan+Tuanku+Syed+Putra%2C+Universiti+Sains+Malaysia!5e0!3m2!1sen!2smy!4v1700000000000"
+            width="600"
+            height="350"
+            style="border:0;"
+            loading="lazy"
+          ></iframe>
+          <!-- Overlay Text -->
+          <div class="location-overlay">
+            <h3>Our Location</h3>
             <p>Dewan Tuanku Syed Putra, Universiti Sains Malaysia, Penang.</p>
           </div>
         </div>
-      </section>
+
+        <!-- Contact Info Section -->
+        <div class="contact-info">
+          <div class="info-item">
+            <span class="icon">📧</span>
+            <p>mcb@usm.my</p>
+          </div>
+          <div class="info-item">
+            <span class="icon">📞</span>
+            <p>01X-XXXXXXX</p>
+          </div>
+    </div>
+  </div>
+</section>
+
     </div>
     <footer class="footer">
       <Footer />

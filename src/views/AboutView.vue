@@ -83,7 +83,7 @@
             <p>Dengar lagu Naratu tu pasti layan</p>
           </div>
         </div>
-      </section>
+  </section>
 
       <!-- Agenda Section -->
       <!-- <section id="agenda">
@@ -127,52 +127,58 @@
         </div>
       </section> -->
 
-    <section id="agenda">
-    <!-- Left Side -->
-      <div class="agenda-container">
-        <div class="agenda-title">
-          <h2>Agenda</h2>
-          <h2>01 June, Saturday</h2>
-        </div>
-    <!-- Right Side -->
-      <div class="agendaWrapper">
-        <div class="agenda-detail">
+      <section id="agenda">
+        <!-- Container for Agenda -->
+        <div class="agenda-container">
+          <!-- Left Side -->
+          <div class="agenda-title">
+            <h2>Agenda</h2>
+            <h2>01 June, Saturday</h2>
+            <div class="gradient-overlay2">
+              <img src="@/assets/images/background-agenda.jpg" alt="" />
+            </div>
+          </div>
+
+          <!-- Right Side -->
+          <div class="agendaWrapper">
+            <div class="agenda-detail">
               <h3>07:30 PM - 07:45 PM</h3>
               <h3>1</h3>
               <h3>Registration and Wristband</h3>
-              <p>Register your personal data in customer service and take wristband before entering the room</p>
+              <p>Register your personal data in customer service and take a wristband before entering the room.</p>
             </div>
 
             <div class="agenda-detail">
               <h3>07:45 PM - 08:00 PM</h3>
               <h3>2</h3>
               <h3>Welcoming Speech</h3>
-              <p>Hearing speech from our deputy vice chancellor. An opening speech to open the ceremony and expose the student about the whole picture of MCB event in USM.</p>
+              <p>Hear a speech from our deputy vice chancellor.</p>
             </div>
 
             <div class="agenda-detail">
               <h3>08:00 PM - 10:30 PM</h3>
               <h3>3</h3>
               <h3>Night Citra Performances</h3>
-              <p>Stay for entertaining performance from our invited celebrities from Sabah and also students that perform their traditional dance which originated from Sabah. </p>
+              <p>Enjoy performances from invited celebrities and students showcasing traditional dances.</p>
             </div>
 
             <div class="agenda-detail">
               <h3>10:30 PM - 11:00 PM</h3>
               <h3>4</h3>
               <h3>Award Giving Ceremony</h3>
-              <p>Giving the award based on the category that has finalised and annoucing the winner of MCB 16th edition.</p>
+              <p>Awards will be given based on the finalized categories.</p>
             </div>
 
             <div class="agenda-detail">
               <h3>11:00 PM - 11:30 PM</h3>
               <h3>5</h3>
               <h3>Closing Ceremony & Event Dismissal</h3>
-              <p>Students and Guest may dismiss. Photography session with our guest may be available subjected to celebrities’ approval.</p>
+              <p>Guests and students may leave, with optional photography sessions.</p>
             </div>
-      </div>
-  </div>
+          </div>
+        </div>
 </section>
+
 
       <!-- Performers Section
       <section id="performers">
@@ -603,13 +609,6 @@ h1 {
 }
 
 /* Agenda styling */
-#agenda {
-  background-color: #f2cbde;
-  padding: 50px;
-  text-align: center;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-}
-
 /* #agenda h2:first-of-type {
   font-size: 36px;
   font-weight: 700;
@@ -624,38 +623,68 @@ h1 {
   margin-bottom: 40px;
 } */
 
+/* Agenda styling */
+#agenda {
+  background-color: #f2cbde;
+  padding: 50px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
 .agenda-container {
   display: flex;
-  align-items: flex-start; /* Align content at the top */
-  justify-content: space-between; /* Title on left, content on right */
-  width: 80%; /* Adjust width as needed */
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 80%;
+  margin: 0 auto; /* Center the container */
 }
 
+/* Left Side - Agenda Title */
 .agenda-title {
-  flex: 1; /* Allow the title to take up left side */
+  flex: 1; /* Equal width */
   text-align: left;
-  font-size: 32px;
+  font-size: 24px;
   font-weight: bold;
   color: #333;
+  padding-right: 40px; 
 }
 
-/* Agenda Wrapper */
+.agenda-title img {
+  max-width: 110%;  /* Make sure the image does not exceed the width of its container */
+  height: auto;  /* Maintain aspect ratio */
+  object-fit: cover;  
+  border-radius: 8px; 
+  display: block;
+}
+
+.gradient-overlay2 {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  opacity: 0.7;
+  mask-image: linear-gradient(to right, rgba(0, 0, 0, 1.0) 15%, transparent 100%);
+}
+
+.agenda-title h2 {
+  margin: 0 0 10px;
+}
+
+/* Right Side - Agenda Wrapper */
 .agendaWrapper {
-  flex: 2; 
-  text-align: left;
+  flex: 1; /* Equal width */
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Individual Agenda Details */
+/* Agenda Details Styling */
 .agenda-detail {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
   text-align: left;
+  margin-bottom: 20px;
   position: relative;
 }
 
@@ -663,25 +692,25 @@ h1 {
 .agenda-detail h3:first-of-type {
   font-size: 16px;
   color: #555;
-  margin: 0 0 10px 0;
+  margin-bottom: 5px;
 }
 
 /* Styling for Step Number */
 .agenda-detail h3:nth-of-type(2) {
   font-size: 36px;
   font-weight: 700;
-  color: #c49b61; /* Gold for step numbers */
+  color: #c49b61;
   position: absolute;
   top: 20px;
   right: 20px;
 }
 
-/* Styling for Title */
+/* Styling for Event Title */
 .agenda-detail h3:nth-of-type(3) {
   font-size: 18px;
   font-weight: 600;
   color: #333;
-  margin: 0 0 10px 0;
+  margin-bottom: 10px;
 }
 
 /* Styling for Description */
@@ -691,28 +720,19 @@ h1 {
   color: #666;
 }
 
-/* Button Style */
-#agenda button {
-  background-color: #c49b61; /* Gold Button */
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 20px;
-}
-
-#agenda button:hover {
-  background-color: #b38d55;
-}
-
-/* Optional Media Query for Mobile */
+/* Media Query for Mobile */
 @media (max-width: 768px) {
-  .agendaWrapper {
+  .agenda-container {
     flex-direction: column;
   }
+
+  .agenda-title,
+  .agendaWrapper {
+    flex: 1 1 100%;
+    margin-bottom: 20px;
+  }
 }
+
 
 /* Ticket and Merchandise Styling */
 #tickets-merchandise {
@@ -848,7 +868,7 @@ h1 {
 }
 
 #past-events p {
-  font-size: 16px;
+  font-size: 20px;
   color: #333;
   margin-bottom: 30px;
 }

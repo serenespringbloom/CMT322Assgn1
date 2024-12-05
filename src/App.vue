@@ -1,42 +1,61 @@
-<script setup lang="ts">
-  import { RouterLink, RouterView } from 'vue-router'
-  import { computed } from 'vue';
-  import { useRoute } from 'vue-router';
-  import logo from '@/assets/MCBLogo.png'
-  import { ref } from 'vue';
+<script setup>
+import { ref, computed, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import logo from "@/assets/MCBLogo.png";
 
-  const isMenuOpen = ref(false);
+// Navigation state
+const isMenuOpen = ref(false);
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value;
+};
 
-  const toggleMenu = () => {
-    isMenuOpen.value = !isMenuOpen.value;
-  };
-  const route = useRoute();
-  const hideHeader = computed(() => route.meta.showHeader === false);
+// Route handling
+const route = useRoute();
+const hideHeader = computed(() => route.meta.showHeader === false);
+
+// Cart-related logic
+const cart = ref([]);
+
+// Calculate total price
+const totalPrice = computed(() =>
+  cart.value.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)
+);
+
+// Load cart data from localStorage
+const updateCartFromLocalStorage = () => {
+  cart.value = JSON.parse(localStorage.getItem("cart")) || [];
+};
+
+// Listen for cart updates
+window.addEventListener("cartUpdated", updateCartFromLocalStorage);
+
+// Load cart on component mount
+onMounted(() => {
+  updateCartFromLocalStorage();
+});
 </script>
 
 <template>
   <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Malam Citra Bayu</title>
   </head>
 
   <body>
     <nav v-if="!hideHeader" id="navTop">
-      <!-- <div class="nav-container">  -->
       <!-- Brand/Logo -->
       <div class="brand">
         <img :src="logo" alt="Malam Citra Bayu Logo" />
       </div>
-
 
       <!-- Hamburger Icon -->
       <button class="nav-toggle" @click="toggleMenu">
         <span :class="{ open: isMenuOpen }"></span>
       </button>
 
-      <!--Navigation Links-->
+      <!-- Navigation Links -->
       <ul class="nav-links" :class="{ open: isMenuOpen }">
         <li><RouterLink to="/">HOME</RouterLink></li>
         <li><RouterLink to="/event">EVENT</RouterLink></li>
@@ -44,13 +63,19 @@
         <li><RouterLink to="/merchandise">MERCHANDISE</RouterLink></li>
         <li><RouterLink to="/contact">CONTACT</RouterLink></li>
         <li><RouterLink to="/feedback">FEEDBACK</RouterLink></li>
+        <li><RouterLink to="/refund">REFUND</RouterLink></li>
         <span><RouterLink to="/dashboard">ADMIN</RouterLink></span>
       </ul>
-      <div class="cart"><RouterLink to="/cart">0.00 🛒</RouterLink></div>
+
+      <!-- Cart Total -->
+      <div class="cart">
+        <RouterLink to="/cart">{{ totalPrice }} 🛒</RouterLink>
+      </div>
     </nav>
     <RouterView />
   </body>
 </template>
+
 
 <style scoped>
   #navTop {

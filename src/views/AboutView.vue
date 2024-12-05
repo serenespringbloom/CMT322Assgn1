@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import CountdownTimer from "@/components/countdownTimer.vue"; // Include if using the timer component
   import { Icon } from "@iconify/vue";
-  import { Icon } from "@iconify/vue";
 </script>
 
 <template>
@@ -89,12 +88,43 @@
       <!-- Agenda Section -->
       <section id="agenda">
         <h2>Agenda</h2>
-        <ul>
-          <li>6:00 PM - Registration</li>
-          <li>7:00 PM - Opening Ceremony</li>
-          <li>7:30 PM - Cultural Performances</li>
-          <li>9:30 PM - Closing Ceremony</li>
-        </ul>
+        <h2>01 June, Saturday</h2>
+        <div class="agendaWrapper">
+          <div class="agenda-detail">
+            <h3>07:30 PM - 07:45 PM</h3>
+            <h3>1</h3>
+            <h3>Registration and Wristband</h3>
+            <p>Register your personal data in customer service and take wristband before entering the room</p>
+          </div>
+
+          <div class="agenda-detail">
+            <h3>07:45 PM - 08:00 PM</h3>
+            <h3>2</h3>
+            <h3>Welcoming Speech</h3>
+            <p>Hearing speech from our deputy vice chancellor. An opening speech to open the ceremony and expose the student about the whole picture of MCB event in USM.</p>
+          </div>
+
+          <div class="agenda-detail">
+            <h3>08:00 PM - 10:30 PM</h3>
+            <h3>3</h3>
+            <h3>Night Citra Performances</h3>
+            <p>Stay for entertaining performance from our invited celebrities from Sabah and also students that perform their traditional dance which originated from Sabah. </p>
+          </div>
+
+          <div class="agenda-detail">
+            <h3>10:30 PM - 11:00 PM</h3>
+            <h3>4</h3>
+            <h3>Award Giving Ceremony</h3>
+            <p>Giving the award based on the category that has finalised and annoucing the winner of MCB 16th edition.</p>
+          </div>
+
+          <div class="agenda-detail">
+            <h3>11:00 PM - 11:30 PM</h3>
+            <h3>5</h3>
+            <h3>Closing Ceremony & Event Dismissal</h3>
+            <p>Students and Guest may dismiss. Photography session with our guest may be available subjected to celebrities’ approval.</p>
+          </div>
+        </div>
       </section>
 
       <!-- Performers Section

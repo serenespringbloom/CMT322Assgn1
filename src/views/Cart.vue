@@ -2,7 +2,6 @@
 import { ref, computed, onMounted } from "vue";
 
 const cart = ref([]); // Cart items
-const isCheckoutFailed = ref(false); // Track checkout status
 
 // Load cart from localStorage on page load
 onMounted(() => {
@@ -16,9 +15,47 @@ const saveCartToLocalStorage = () => {
 };
 
 // Remove item from cart
-const removeFromCart = (itemId) => {
-  cart.value = cart.value.filter((item) => item.id !== itemId);
+const removeFromCart = (itemId, size) => {
+  cart.value = cart.value.filter(
+    (item) => !(item.id === itemId && item.size === size)
+  );
   saveCartToLocalStorage();
+};
+
+// Decrease item quantity
+const decreaseQuantity = (itemId, size) => {
+  const item = cart.value.find((item) => item.id === itemId && item.size === size);
+
+  if (item) {
+    if (item.quantity > 1) {
+      item.quantity -= 1;
+    } else {
+      const confirmRemove = confirm("Remove this item from the cart?");
+      if (confirmRemove) removeFromCart(itemId, size);
+    }
+
+    saveCartToLocalStorage();
+  }
+};
+
+// Increase item quantity
+const increaseQuantity = (itemId, size) => {
+  const item = cart.value.find((item) => item.id === itemId && item.size === size);
+  if (item) {
+    item.quantity += 1;
+    saveCartToLocalStorage();
+  }
+};
+
+// Group cart items by vendor (dummy example for grouping, can be customized)
+const groupCartByVendor = () => {
+  const grouped = {};
+  cart.value.forEach((item) => {
+    const vendor = item.vendor || "Default Vendor"; // Use a vendor field or fallback to default
+    if (!grouped[vendor]) grouped[vendor] = [];
+    grouped[vendor].push(item);
+  });
+  return grouped;
 };
 
 // Calculate total price
@@ -27,95 +64,179 @@ const totalPrice = computed(() =>
 );
 
 // Simulate checkout process
-const checkout = () => {
-  if (cart.value.length === 0) {
+const checkout = () =>
+{
+  if (!cart.value.length) {
     alert("Your cart is empty!");
     return;
   }
 
-  // Simulated payment gateway response
-  const paymentSuccess = Math.random() > 0.5; // 50% chance of success for demo
-
-  if (paymentSuccess) {
-    alert("Payment successful! Thank you for your purchase.");
-    cart.value = []; // Clear the cart
-    saveCartToLocalStorage();
-  } else {
-    alert("Payment failed. Please try again.");
-    isCheckoutFailed.value = true; // Retain cart data
-  }
+  alert("Checkout successful! Thank you for your purchase.");
+  cart.value = [];
+  saveCartToLocalStorage();
 };
 </script>
 
 <template>
   <div class="cart-page">
     <h1>Your Cart</h1>
-    <!-- Show cart items -->
-    <div v-if="cart.length">
-      <div v-for="item in cart" :key="item.id" class="cart-item">
-        <img :src="item.image" :alt="item.name" />
-        <h2>{{ item.name }}</h2>
-        <p>Price: RM {{ item.price }}</p>
-        <p>Quantity: {{ item.quantity }}</p>
-        <p>Total: RM {{ item.price * item.quantity }}</p>
-        <button @click="removeFromCart(item.id)">Remove</button>
+    <div class="cart-container">
+      <!-- Cart Items Section -->
+      <div class="cart-items">
+        <div v-if="cart.length">
+          <div class="cart-group" v-for="(items, vendor) in groupCartByVendor()" :key="vendor">
+            <h2>{{ vendor }}</h2>
+            <div class="cart-item" v-for="item in items" :key="item.id + item.size">
+              <input type="checkbox" />
+              <img :src="item.image" :alt="item.name" class="cart-item-image" />
+              <div class="cart-item-details">
+                <h2>{{ item.name }}</h2>
+                <p>Size: {{ item.size.toUpperCase() }}</p>
+                <p>Price: RM {{ item.price }}</p>
+                <p>Total: RM {{ item.price * item.quantity }}</p>
+                <div class="quantity-controls">
+                  <button @click="decreaseQuantity(item.id, item.size)" class="quantity-btn">-</button>
+                  <span>{{ item.quantity }}</span>
+                  <button @click="increaseQuantity(item.id, item.size)" class="quantity-btn">+</button>
+                </div>
+              </div>
+              <button @click="removeFromCart(item.id, item.size)" class="remove-button">Remove</button>
+            </div>
+          </div>
+        </div>
+        <div v-else class="empty-cart">
+          <p>Your cart is empty.</p>
+        </div>
       </div>
+
+      <!-- Order Summary Section -->
       <div class="cart-summary">
-        <h2>Cart Summary</h2>
-        <p>Total Price: RM {{ totalPrice }}</p>
-        <button class="checkout-button" @click="checkout">Checkout</button>
+        <h2>Order Summary</h2>
+        <p>Total: RM {{ totalPrice }}</p>
+        <button @click="checkout" class="checkout-button">Proceed to Checkout</button>
       </div>
-      <p v-if="isCheckoutFailed" class="checkout-error">
-        Payment failed. Your cart data has been retained.
-      </p>
-    </div>
-    <!-- Show empty cart message -->
-    <div v-else>
-      <p>Your cart is empty.</p>
     </div>
   </div>
 </template>
 
 <style scoped>
 .cart-page {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
   font-family: Arial, sans-serif;
+  padding: 20px;
+  background: #ffe4e9;
+  padding-bottom: 15%;
+  margin: 3%;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  padding-top: 1%;
+}
+
+.cart-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: 2%;
+  width: 80%;
+  margin-left: 9%;
+}
+
+.cart-items {
+  flex: 2;
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.cart-group {
+  margin-bottom: 20px;
+}
+
+.cart-group h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
 }
 
 .cart-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   border-bottom: 1px solid #ccc;
   padding: 10px 0;
 }
 
-.cart-item img {
-  width: 100px;
-  height: 100px;
+.cart-item-image {
+  width: 80px;
+  height: 80px;
   object-fit: cover;
-  margin-right: 20px;
+  border-radius: 5px;
 }
 
-.cart-item h2 {
+.cart-item-details {
   flex: 1;
-  font-size: 1.2rem;
-  margin: 0;
+  margin-left: 20px;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quantity-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.quantity-btn:hover {
+  background-color: #0056b3;
+}
+
+.remove-button {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.remove-button:hover {
+  background-color: #d43f3f;
 }
 
 .cart-summary {
-  margin-top: 20px;
+  flex: 1;
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.cart-summary h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.cart-summary p {
   font-size: 1.2rem;
-  font-weight: bold;
+  margin: 10px 0;
 }
 
 .checkout-button {
   background-color: #28a745;
   color: white;
-  padding: 10px 20px;
   border: none;
   border-radius: 5px;
+  padding: 10px 20px;
   cursor: pointer;
 }
 
@@ -123,8 +244,10 @@ const checkout = () => {
   background-color: #218838;
 }
 
-.checkout-error {
-  color: red;
-  margin-top: 10px;
+.empty-cart {
+  text-align: center;
+  margin-top: 30px;
+  color: #555;
+  font-size: 1.2rem;
 }
 </style>

@@ -59,7 +59,7 @@ onMounted(() => {
 
       <!-- Navigation Links -->
       <ul class="nav-links" :class="{ open: isMenuOpen }">
-        <li><a href="#hero">HOME</a></li>
+        <li><RouterLink to="/">HOME</RouterLink></li>
         <li><a href="#about">EVENT</a></li>
         <li><RouterLink to="/ticket">TICKET</RouterLink></li>
         <li><RouterLink to="/merchandise">MERCHANDISE</RouterLink></li>
@@ -106,15 +106,15 @@ onMounted(() => {
     display: inline-block;
     top: 0;
     left: 0;
-    background: #f4d0d6; 
-    z-index: 1000; 
+    background: #f4d0d6;
+    z-index: 1000;
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
     flex-shrink: 0;
-    align-items: center; 
+    align-items: center;
     width: 100%;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); 
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   .brand img {

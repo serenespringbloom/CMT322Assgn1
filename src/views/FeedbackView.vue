@@ -1,7 +1,7 @@
 <template>
   <main class="feedback-page">
     <!-- Header Section -->
-    <section class="feedback-header">
+    <section class="header">
       <h1>FEEDBACK</h1>
       <h2>OUR PARTICIPANT SAY</h2>
     </section>
@@ -206,95 +206,41 @@ const resetHover = () => {
 
 <style scoped>
 .feedback-page {
-  font-family: "Arial", sans-serif;
+  font-family: "Plus Jakarta Sans", serif;
   padding: 2rem;
   background-color: #ffc8dd;
   color: #333;
 }
 
 /* Header Section */
-.feedback-header {
+.header {
   text-align: center;
-  margin-bottom: 2rem;
+  letter-spacing: .9rem;
+  font-family: "Plus Jakarta Sans", serif;
+  margin-top: 1rem;
 }
 
-.feedback-header h1 {
-  font-size: 2.5rem;
-  font-weight: bold;
+.header h1 {
+  font-size: 2.3rem;
+  letter-spacing: 2rem;
+  margin-bottom: 1.5rem;
+  color: #554149;
+  text-transform: uppercase;
 }
 
-.feedback-header h2 {
+.header h2 {
   font-size: 1.5rem;
   font-weight: lighter;
   letter-spacing: 0.1rem;
+  margin: 20px;
+  font-weight: bold;
 }
-
-/* Main Content Section */
-.feedback-testimonial {
-  display: flex;
-  justify-content: space-between;
-  gap: 2rem;
-  align-items: flex-start;
-}
-
-.testimonial-card {
-  flex: 1;
-  max-width: 60%;
-  background-color: #fff;
-  padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  transition: opacity 0.3s ease-in-out;
-}
-
-.participants {
-  flex: 0.4;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.participant-card {
-  text-align: center;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-  background-color: #fff;
-  padding: 1rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.participant-card:hover {
-  transform: scale(1.05);
-}
-</style>
-<style scoped>
 /* General Styles */
 .feedback-page {
   font-family: "Arial", sans-serif;
   padding: 2rem;
   background-color: #ffc8dd;
   color: #333;
-}
-
-/* Header Section */
-.feedback-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.feedback-header h1 {
-  font-size: 2.5rem;
-  font-weight: bold;
-}
-
-.feedback-header h2 {
-  font-size: 1.5rem;
-  font-weight: lighter;
-  letter-spacing: 0.1rem;
 }
 
 /* Main Content Section */
@@ -322,7 +268,8 @@ const resetHover = () => {
   align-items: center;
   max-width: 100%;
   width: 100%;
-  min-height: 150px; /* Ensure consistent height */
+  width: 900px;
+  min-height: 200px; /* Ensure consistent height */
   max-height: 200px; /* Prevent excessive growth */
   overflow: hidden; /* Hide overflowing content */
   transition: opacity 0.3s ease-in-out, height 0.3s ease-in-out;
@@ -368,11 +315,12 @@ const resetHover = () => {
 /* Feedback Form */
 .feedback-form {
   text-align: center;
-  background-color: #fff;
+  background: linear-gradient(135deg, #fff1f5, #ffe5ed);
   padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  font-family: "Arial", sans-serif; /* Apply a consistent font */
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  animation: fadeIn 0.4s ease-out;
 }
 
 .feedback-form h3 {
@@ -467,21 +415,48 @@ textarea:focus {
   box-shadow: 0 0 4px rgba(255, 200, 221, 0.5);
 }
 
+/* Submit Button */
 .btn-submit {
-  background-color: #ffc8dd;
-  color: #333;
+  background: linear-gradient(135deg, #a48e69 -50%, #dcc39c 100%);
+  color: #554149;
   padding: 0.75rem 1.5rem;
-  margin-top: 0.4rem;
+  margin-top: 1rem;
   border: none;
   border-radius: 20px;
   cursor: pointer;
+  font-size: 1rem;
   font-weight: bold;
+  transition: all 0.3s ease;
 }
 
 .btn-submit:hover {
-  background-color: #ffb3c6;
+  background: linear-gradient(135deg, #dcc39c, #a48e69);
+  transform: translateY(-3px);
 }
 
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .form-group {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .form-item {
+    min-width: 100%;
+  }
+}
 /* Right Section: Participants */
 .right-content {
   flex: 1;
@@ -498,6 +473,7 @@ textarea:focus {
   padding: 1rem;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 500px;
 }
 
 .participant-card:hover {

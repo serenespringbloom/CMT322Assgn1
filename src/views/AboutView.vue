@@ -64,24 +64,24 @@
       <section id="history">
         <div class="history-container">
           <div>
-            <Icon icon="mingcute:certificate-fill" width="55" height="55"  style="color: #ec9910" />
+            <Icon icon="mingcute:certificate-fill" class="icon-size"  style="color: #ec9910" />
             <h2>Established Event</h2>
             <p>Now in its 16th edition since 2008, continue its legacy as premier cultural event for national-level.</p>
           </div>
           <div>
-              <Icon icon="arcticons:pass-culture"  width="55" height="55"  style="color: #ec9910"/>
+              <Icon icon="arcticons:pass-culture"  class="icon-size"  style="color: #ec9910"/>
             
             <h2>Iconic culture</h2>
             <p>Witness the Sabahan culture demonstrated through traditional dance by representatives from universities.</p>
           </div>
           <div>
-              <Icon icon="mdi:dance-ballroom"  width="55" height="55"  style="color: #ec9910" />
+              <Icon icon="mdi:dance-ballroom"  class="icon-size"  style="color: #ec9910" />
 
             <h2>Multiple Performers</h2>
             <p>Skilled ensembles that showcase their expertise in dance inspired by Sabahan themes.</p>
           </div>
           <div>
-              <Icon icon="fluent:people-checkmark-24-filled" width="55" height="55"  style="color: #ec9910" />
+              <Icon icon="fluent:people-checkmark-24-filled" class="icon-size"  style="color: #ec9910" />
             
             <h2>Engaging Vibe</h2>
             <p>Observing the welcoming atmosphere presented by the authentic Sabahan with their rise made the audience relish the night.</p>
@@ -559,6 +559,16 @@ h1 {
   font-weight: bold;
   color: #333;
   margin-bottom: 10px;
+}
+
+
+/* Icon Styling */
+.icon-size {
+  width: 55px;
+  height: auto;
+  display: inline-block;
+  margin-bottom: 15px;
+  color: #ec9910;
 }
 
 .history-card p {

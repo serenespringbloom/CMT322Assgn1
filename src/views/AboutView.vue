@@ -64,7 +64,7 @@
       <section id="history">
         <div class="history-container">
           <div>
-            <Icon icon="mingcute:certificate-line" width="55" height="55"  style="color: #ec9910" />
+            <Icon icon="mingcute:certificate-fill" width="55" height="55"  style="color: #ec9910" />
             <h2>Established Event</h2>
             <p>Now in its 16th edition since 2008, continue its legacy as premier cultural event for national-level.</p>
           </div>
@@ -577,8 +577,6 @@ h1 {
 }
 
 
-
-#agenda h2:first-of-type {
 /* #agenda h2:first-of-type {
   font-size: 36px;
   font-weight: 700;
@@ -592,7 +590,7 @@ h1 {
   color: #666;
   margin-bottom: 40px;
 
-} 
+} */
 
 
 /* Agenda styling */

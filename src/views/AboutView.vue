@@ -86,7 +86,7 @@
       </section>
 
       <!-- Agenda Section -->
-      <section id="agenda">
+      <!-- <section id="agenda">
         <h2>Agenda</h2>
         <h2>01 June, Saturday</h2>
         <div class="agendaWrapper">
@@ -125,7 +125,54 @@
             <p>Students and Guest may dismiss. Photography session with our guest may be available subjected to celebrities’ approval.</p>
           </div>
         </div>
-      </section>
+      </section> -->
+
+    <section id="agenda">
+    <!-- Left Side -->
+      <div class="agenda-container">
+        <div class="agenda-title">
+          <h2>Agenda</h2>
+          <h2>01 June, Saturday</h2>
+        </div>
+    <!-- Right Side -->
+      <div class="agendaWrapper">
+        <div class="agenda-detail">
+              <h3>07:30 PM - 07:45 PM</h3>
+              <h3>1</h3>
+              <h3>Registration and Wristband</h3>
+              <p>Register your personal data in customer service and take wristband before entering the room</p>
+            </div>
+
+            <div class="agenda-detail">
+              <h3>07:45 PM - 08:00 PM</h3>
+              <h3>2</h3>
+              <h3>Welcoming Speech</h3>
+              <p>Hearing speech from our deputy vice chancellor. An opening speech to open the ceremony and expose the student about the whole picture of MCB event in USM.</p>
+            </div>
+
+            <div class="agenda-detail">
+              <h3>08:00 PM - 10:30 PM</h3>
+              <h3>3</h3>
+              <h3>Night Citra Performances</h3>
+              <p>Stay for entertaining performance from our invited celebrities from Sabah and also students that perform their traditional dance which originated from Sabah. </p>
+            </div>
+
+            <div class="agenda-detail">
+              <h3>10:30 PM - 11:00 PM</h3>
+              <h3>4</h3>
+              <h3>Award Giving Ceremony</h3>
+              <p>Giving the award based on the category that has finalised and annoucing the winner of MCB 16th edition.</p>
+            </div>
+
+            <div class="agenda-detail">
+              <h3>11:00 PM - 11:30 PM</h3>
+              <h3>5</h3>
+              <h3>Closing Ceremony & Event Dismissal</h3>
+              <p>Students and Guest may dismiss. Photography session with our guest may be available subjected to celebrities’ approval.</p>
+            </div>
+      </div>
+  </div>
+</section>
 
       <!-- Performers Section
       <section id="performers">
@@ -502,7 +549,7 @@ h1 {
 /* Styling for History */
 #history {
   padding: 50px 20px;
-  background-color: #ffc8dd;
+  background-color: #ffc8dd !important;
   display: flex;
   justify-content: center;
 }
@@ -511,8 +558,8 @@ h1 {
 .history-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
-  gap: 30px; /* Space between grid items */
-  max-width: 1200px; /* Optional: max width for the container */
+  gap: 30px;  
+  max-width: 1200px; 
   width: 100%;
   padding: 20px;
 }
@@ -526,7 +573,7 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start; /* Align content to the left */
+  align-items: flex-start; 
 }
 
 /* Headings styling */
@@ -557,13 +604,13 @@ h1 {
 
 /* Agenda styling */
 #agenda {
-  background-color: #f8e8f0; /* Light pink background */
+  background-color: #f2cbde;
   padding: 50px;
   text-align: center;
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-#agenda h2:first-of-type {
+/* #agenda h2:first-of-type {
   font-size: 36px;
   font-weight: 700;
   color: #333;
@@ -575,13 +622,31 @@ h1 {
   font-weight: 600;
   color: #666;
   margin-bottom: 40px;
+} */
+
+.agenda-container {
+  display: flex;
+  align-items: flex-start; /* Align content at the top */
+  justify-content: space-between; /* Title on left, content on right */
+  width: 80%; /* Adjust width as needed */
+}
+
+.agenda-title {
+  flex: 1; /* Allow the title to take up left side */
+  text-align: left;
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
 }
 
 /* Agenda Wrapper */
 .agendaWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  flex: 2; 
+  text-align: left;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Individual Agenda Details */

@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import CountdownTimer from "@/components/countdownTimer.vue"; // Include if using the timer component
+  import { Icon } from "@iconify/vue";
 </script>
 
 <template>
@@ -59,22 +60,71 @@
 
       <!-- History Section -->
       <section id="history">
-        <h2>History</h2>
-        <p>
-          Since its inception, Malam Citra Bayu has brought together talented
-          performers to promote cultural appreciation and artistic expression.
-        </p>
-      </section>
+        <div class="history-container">
+    <div>
+      <Icon icon="mingcute:certificate-fill" width="55" height="55"  style="color: #ec9910" />
+      <h2>Established Event</h2>
+      <p>Now in its 16th edition since 2008, continue its legacy as premier cultural event</p>
+    </div>
+    <div>
+      <Icon icon="arcticons:pass-culture" width="55" height="55"  style="color: #ec9910" />
+      <h2>Iconic culture</h2>
+      <p>Present apa" yang ada hihaa</p>
+    </div>
+    <div>
+      <Icon icon="mdi:dance-ballroom" width="55" height="55"  style="color: #ec9910" />
+      <h2>Multiple Performers</h2>
+      <p>Banyak penari-penari mantap</p>
+    </div>
+    <div>
+      <Icon icon="fluent:people-team-add-24-filled" width="55" height="55"  style="color: #ec9910" />
+      <h2>Engaging Vibe</h2>
+      <p>Dengar lagu Naratu tu pasti layan</p>
+    </div>
+  </div>
+</section>
+
 
       <!-- Agenda Section -->
       <section id="agenda">
         <h2>Agenda</h2>
-        <ul>
-          <li>6:00 PM - Registration</li>
-          <li>7:00 PM - Opening Ceremony</li>
-          <li>7:30 PM - Cultural Performances</li>
-          <li>9:30 PM - Closing Ceremony</li>
-        </ul>
+        <h2>01 June, Saturday</h2>
+        <div class="agendaWrapper">
+          <div class="agenda-detail">
+            <h3>07:30 PM - 07:45 PM</h3>
+            <h3>1</h3>
+            <h3>Registration and Wristband</h3>
+            <p>Register your personal data in customer service and take wristband before entering the room</p>
+          </div>
+
+          <div class="agenda-detail">
+            <h3>07:45 PM - 08:00 PM</h3>
+            <h3>2</h3>
+            <h3>Welcoming Speech</h3>
+            <p>Hearing speech from our deputy vice chancellor. An opening speech to open the ceremony and expose the student about the whole picture of MCB event in USM.</p>
+          </div>
+
+          <div class="agenda-detail">
+            <h3>08:00 PM - 10:30 PM</h3>
+            <h3>3</h3>
+            <h3>Night Citra Performances</h3>
+            <p>Stay for entertaining performance from our invited celebrities from Sabah and also students that perform their traditional dance which originated from Sabah. </p>
+          </div>
+
+          <div class="agenda-detail">
+            <h3>10:30 PM - 11:00 PM</h3>
+            <h3>4</h3>
+            <h3>Award Giving Ceremony</h3>
+            <p>Giving the award based on the category that has finalised and annoucing the winner of MCB 16th edition.</p>
+          </div>
+
+          <div class="agenda-detail">
+            <h3>11:00 PM - 11:30 PM</h3>
+            <h3>5</h3>
+            <h3>Closing Ceremony & Event Dismissal</h3>
+            <p>Students and Guest may dismiss. Photography session with our guest may be available subjected to celebrities’ approval.</p>
+          </div>
+        </div>
       </section>
 
       <!-- Performers Section -->
@@ -379,5 +429,157 @@ h1 {
     mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%);
   }
 }
+
+/* Styling for History */
+#history {
+  padding: 50px 20px;
+  background-color: #ffc8dd;
+  display: flex;
+  justify-content: center;
+}
+
+/* History Container using Grid */
+.history-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
+  gap: 30px; /* Space between grid items */
+  max-width: 1200px; /* Optional: max width for the container */
+  width: 100%;
+  padding: 20px;
+}
+
+/* Individual div styling with Flexbox */
+.history-container > div {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start; /* Align content to the left */
+}
+
+/* Headings styling */
+.history-container h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Paragraphs styling */
+.history-container p {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Optional: Responsive typography */
+@media (max-width: 768px) {
+  .history-container h2 {
+    font-size: 1.25rem;
+  }
+
+  .history-container p {
+    font-size: 0.95rem;
+  }
+}
+
+/* Agenda styling */
+/* General Section Styling */
+#agenda {
+  background-color: #f8e8f0; /* Light pink background */
+  padding: 50px;
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+}
+
+#agenda h2:first-of-type {
+  font-size: 36px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+#agenda h2:nth-of-type(2) {
+  font-size: 20px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+/* Agenda Wrapper */
+.agendaWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Individual Agenda Details */
+.agenda-detail {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: left;
+  position: relative;
+}
+
+/* Styling for Time */
+.agenda-detail h3:first-of-type {
+  font-size: 16px;
+  color: #555;
+  margin: 0 0 10px 0;
+}
+
+/* Styling for Step Number */
+.agenda-detail h3:nth-of-type(2) {
+  font-size: 36px;
+  font-weight: 700;
+  color: #c49b61; /* Gold for step numbers */
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+/* Styling for Title */
+.agenda-detail h3:nth-of-type(3) {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 10px 0;
+}
+
+/* Styling for Description */
+.agenda-detail p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #666;
+}
+
+/* Button Style */
+#agenda button {
+  background-color: #c49b61; /* Gold Button */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+#agenda button:hover {
+  background-color: #b38d55;
+}
+
+/* Optional Media Query for Mobile */
+@media (max-width: 768px) {
+  .agendaWrapper {
+    flex-direction: column;
+  }
+}
+
 
 </style>

@@ -16,6 +16,12 @@ onMounted(() => {
 // Save cart to localStorage
 const saveCartToLocalStorage = () => {
   localStorage.setItem("cart", JSON.stringify(cart.value));
+  dispatchCartUpdate(); // Notify other components about cart updates
+};
+
+// Emit an event to notify other components
+const dispatchCartUpdate = () => {
+  window.dispatchEvent(new Event("cartUpdated"));
 };
 
 // Remove item from cart
@@ -55,7 +61,7 @@ const increaseQuantity = (itemId, size) => {
 const groupCartByVendor = () => {
   const grouped = {};
   cart.value.forEach((item) => {
-    const vendor = item.vendor || "Default Vendor"; // Use a vendor field or fallback to default
+    const vendor = item.vendor || "Malam Citra Bayu Tees"; // Use a vendor field or fallback to default
     if (!grouped[vendor]) grouped[vendor] = [];
     grouped[vendor].push(item);
   });
@@ -107,7 +113,9 @@ const checkout = () => {
           <div class="cart-group" v-for="(items, vendor) in groupCartByVendor()" :key="vendor">
             <h2>{{ vendor }}</h2>
             <div class="cart-item" v-for="item in items" :key="item.id + item.size">
-              <img :src="item.image" :alt="item.name" class="cart-item-image" />
+              <img v-if="(item.id === 1)" src="../assets/images/merchant1.png" :alt="item.name" class="cart-item-image" />
+              <img v-if="(item.id === 2)" src="../assets/images/merchant2.png" :alt="item.name" class="cart-item-image" />
+              <img v-if="(item.id === 3)" src="../assets/images/merchant3.png" :alt="item.name" class="cart-item-image" />
               <div class="cart-item-details">
                 <h2>{{ item.name }}</h2>
                 <p>Size: {{ item.size.toUpperCase() }}</p>
@@ -273,6 +281,7 @@ h1 {
   padding: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
+  max-height: 410px;
 }
 
 .cart-summary h2 {

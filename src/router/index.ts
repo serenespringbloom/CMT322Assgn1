@@ -53,6 +53,14 @@ const router = createRouter({
       path: '/cart',
       name: 'cart',
       component: () => import('../views/Cart.vue'),
+      meta: { showHeader: true,
+              
+            },
+    },
+    {
+      path: '/refund',
+      name: 'refund',
+      component: () => import('../views/RefundView.vue'),
       meta: { showHeader: true },
     },
     {

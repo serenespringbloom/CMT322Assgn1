@@ -6,9 +6,8 @@ export default {
       merchandise: [
         { id: 1, name: "Black Pink Cotton Tee", price: 38, image: "../assets/images/merchant1.png" }
       ],
-      // Selected size and quantity state
-      selectedSize: "", 
-      quantity: 1, 
+      selectedSize: "", // Selected size state
+      quantity: 1, // Selected quantity state
     };
   },
   methods: {
@@ -28,7 +27,9 @@ export default {
       const currentCart = JSON.parse(localStorage.getItem("cart")) || [];
 
       // Check if the item already exists in the cart
-      const existingItem = currentCart.find((cartItem) => cartItem.id === item.id && cartItem.size === this.selectedSize);
+      const existingItem = currentCart.find(
+        (cartItem) => cartItem.id === item.id && cartItem.size === this.selectedSize
+      );
 
       if (existingItem) {
         // If the item exists and the size matches, increase the quantity
@@ -39,20 +40,23 @@ export default {
           ...item,
           size: this.selectedSize,
           quantity: this.quantity,
-          image: item.image,
         });
       }
 
       // Save the updated cart to localStorage
       localStorage.setItem("cart", JSON.stringify(currentCart));
 
+      // Dispatch an event to notify other components of the cart update
+      window.dispatchEvent(new Event("cartUpdated"));
+
       // Show feedback message
       alert(`${item.name} in size ${this.selectedSize.toUpperCase()} has been added to the cart!`);
 
-      this.selectedSize = ""; // Unselect size
-      this.quantity = 1; // Reset quantity to default value
-    }
-  }
+      // Reset form fields
+      this.selectedSize = "";
+      this.quantity = 1;
+    },
+  },
 };
 </script>
 

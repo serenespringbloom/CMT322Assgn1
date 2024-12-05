@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import CountdownTimer from "@/components/countdownTimer.vue"; // Include if using the timer component
   import { Icon } from "@iconify/vue";
-  import { Icon } from "@iconify/vue";
 </script>
 
 <template>

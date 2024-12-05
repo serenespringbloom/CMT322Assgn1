@@ -46,6 +46,9 @@ export default {
       // Save the updated cart to localStorage
       localStorage.setItem("cart", JSON.stringify(currentCart));
 
+      // Dispatch an event to notify other components of the cart update
+      window.dispatchEvent(new Event("cartUpdated"));
+
       this.selectedSize = ""; // Unselect size
       this.quantity = 1; // Reset quantity to default value
 

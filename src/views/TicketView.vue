@@ -1,17 +1,27 @@
 <script setup>
 import { ref, computed, watch } from 'vue';
 
-const rows = 5; // Number of rows in the theatre
-const columns = 8; // Number of seats per row
+const rows = 15; // Number of rows
+const columns = 24; // Number of seats per row
+const seatsPerSection = 8;
 const bookedSeats = ref(['A1', 'B3', 'C5']); // Pre-booked seats
 
-// Generate the seat grid
+// Divide seats into three sections
 const seats = computed(() => {
-  const grid = [];
+  const grid = { left: [], center: [], right: [] };
+  const splitPoint = Math.floor(columns / 3);
+
   for (let i = 0; i < rows; i++) {
     const row = String.fromCharCode(65 + i); // A, B, C...
     for (let j = 1; j <= columns; j++) {
-      grid.push(`${row}${j}`);
+      const seat = `${row}${j}`;
+      if (j <= splitPoint) {
+        grid.left.push(seat);
+      } else if (j <= splitPoint * 2) {
+        grid.center.push(seat);
+      } else {
+        grid.right.push(seat);
+      }
     }
   }
   return grid;
@@ -75,22 +85,17 @@ const toggleSeat = (seat) => {
 
 // Adjust ticket counts to maintain total equal to selectedSeats
 const adjustTickets = (type, value) => {
-  const totalSeats = selectedSeats.value.length;
+  value = Math.max(0, Math.min(value, selectedSeats.value.length)); // Prevent invalid values
   const otherType = type === 'student' ? publicTickets : studentTickets;
 
-  const updatedType = type === 'student' ? studentTickets : publicTickets;
-  const diff = totalSeats - value - otherType.value;
+  const remainingSeats = selectedSeats.value.length - value;
+  otherType.value = Math.max(0, Math.min(remainingSeats, otherType.value));
 
-  if (diff > 0) {
-    // Add remaining tickets to the other type
-    otherType.value += diff;
-  } else if (diff < 0) {
-    // Reduce tickets from the other type
-    otherType.value = Math.max(0, otherType.value + diff);
+  if (type === 'student') {
+    studentTickets.value = value;
+  } else {
+    publicTickets.value = value;
   }
-
-  // Update the current type
-  updatedType.value = value;
 };
 
 // Ticket pricing logic
@@ -118,79 +123,210 @@ loadFromSessionStorage();
 </script>
 
 <template>
-  <!-- Seat Grid -->
-  <div class="seat-grid">
-    <div
-      v-for="seat in seats"
-      :key="seat"
-      :class="[ 'seat', { booked: bookedSeats.includes(seat), selected: selectedSeats.includes(seat) } ]"
-      @click="toggleSeat(seat)"
-    >
-      {{ seat }}
+  <div class="title">
+    <h1>Seat Selection</h1>
+  </div>
+  <div class="page-container">
+    <!-- Seat Grid Section -->
+    <div class="seat-section">
+      <div class="seat-layout">
+        <div class="row-labels">
+          <div v-for="row in rows" :key="row" class="row-label">
+            {{ String.fromCharCode(65 + row - 1) }}
+          </div>
+        </div>
+        <div class="seat-column">
+          <h3>Left Section</h3>
+          <div class="seat-grid">
+            <div
+              v-for="seat in seats.left"
+              :key="seat"
+              :class="[ 'seat', { booked: bookedSeats.includes(seat), selected: selectedSeats.includes(seat) } ]"
+              @click="toggleSeat(seat)"
+            >
+              {{ seat }}
+            </div>
+          </div>
+        </div>
+        <div class="seat-column">
+          <h3>Centre Section</h3>
+          <div class="seat-grid">
+            <div
+              v-for="seat in seats.center"
+              :key="seat"
+              :class="[ 'seat', { booked: bookedSeats.includes(seat), selected: selectedSeats.includes(seat) } ]"
+              @click="toggleSeat(seat)"
+            >
+              {{ seat }}
+            </div>
+          </div>
+        </div>
+        <div class="seat-column">
+          <h3>Right Section</h3>
+          <div class="seat-grid">
+            <div
+              v-for="seat in seats.right"
+              :key="seat"
+              :class="[ 'seat', { booked: bookedSeats.includes(seat), selected: selectedSeats.includes(seat) } ]"
+              @click="toggleSeat(seat)"
+            >
+              {{ seat }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ticket Options Section -->
+    <div class="ticket-section">
+      <h1>Theatre Seat Booking</h1>
+
+      <!-- Summary -->
+      <div class="summary">
+        <h2>Selected Seats:</h2>
+        <p class="selected-seats">{{ selectedSeats.join(', ') || 'None' }}</p>
+      </div>
+
+      <!-- Ticket Options -->
+      <div class="ticket-options">
+        <h2>Ticket Selection</h2>
+        <div class="ticket-input">
+          <label>Student Tickets:</label>
+          <input
+            type="number"
+            min="0"
+            :max="selectedSeats.length"
+            v-model.number="studentTickets"
+            @input="adjustTickets('student', $event.target.value)"
+          />
+        </div>
+        <div class="ticket-input">
+          <label>Public Tickets:</label>
+          <input
+            type="number"
+            min="0"
+            :max="selectedSeats.length"
+            v-model.number="publicTickets"
+            @input="adjustTickets('public', $event.target.value)"
+          />
+        </div>
+      </div>
+
+      <!-- Total Price -->
+      <p class="total-price">Total Price: RM {{ totalPrice }}</p>
+
+      <!-- Complete Purchase Button -->
+      <button class="complete-btn" @click="completePurchase">Complete Purchase</button>
     </div>
   </div>
-
-  <!-- Summary of Selected Seats -->
-  <div class="summary">
-    <h3>Selected Seats:</h3>
-    <p>{{ selectedSeats.join(', ') || 'None' }}</p>
-  </div>
-
-  <!-- Ticket Options -->
-  <div class="ticket-options">
-    <label>
-      Student Tickets:
-      <input
-        type="number"
-        min="0"
-        :max="selectedSeats.length"
-        v-model.number="studentTickets"
-        @input="adjustTickets('student', $event.target.value)"
-      />
-    </label>
-    <label>
-      Public Tickets:
-      <input
-        type="number"
-        min="0"
-        :max="selectedSeats.length"
-        v-model.number="publicTickets"
-        @input="adjustTickets('public', $event.target.value)"
-      />
-    </label>
-  </div>
-
-  <!-- Display Total Price -->
-  <p>Total Price: RM {{ totalPrice }}</p>
-
-  <!-- Complete Purchase Button -->
-  <button @click="completePurchase">Complete Purchase</button>
 </template>
 
 <style scoped>
+/* Layout */
+.title{
+  text-align: center;
+  padding-top: 1.5%;
+  height: 25px;
+}
+
+.page-container {
+  display: flex;
+  gap: 20px;
+  min-width: 1600px;
+  max-width: 1600px;
+  margin: auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background: none;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Seat Section */
+.seat-section {
+  flex: 2;
+  align-items: center;
+}
+
+.seat-layout {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.seat-column {
+  flex: 1;
+  text-align: center;
+}
+
 .seat-grid {
   display: grid;
-  grid-template-columns: repeat(8, 50px);
-  gap: 10px;
+  grid-template-columns: repeat(8, 25px); /* Adjust for smaller seat size */
+  gap: 5px;
+  margin-top: 10px;
+  align-items: center;
+  justify-content: center;
 }
 
 .seat {
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   border: 1px solid #ccc;
   text-align: center;
-  line-height: 50px;
+  line-height: 20px;
+  font-size: 10px;
   cursor: pointer;
-  user-select: none;
+  background-color: #fff;
+  border-radius: 3px;
+  transition: all 0.3s ease;
 }
 
 .seat.booked {
   background-color: #ff4d4f;
+  color: white;
   cursor: not-allowed;
 }
 
 .seat.selected {
   background-color: #4caf50;
   color: white;
+}
+
+.row-labels {
+  display: grid;
+  grid-template-rows: repeat(15, 30px); /* Adjust height for rows */
+  gap: 5px;
+  margin-right: 10px;
+  padding-top: 35px;
+  padding-left: 15px;
+  align-items: center;
+}
+
+.row-label {
+  font-size: 12px;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Ticket Section */
+.ticket-section {
+  display: inline-block;
+  flex: 1;
+  padding: 20px;
+  max-width: 400px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Additional Styles */
+.ticket-options {
+  margin: 20px 0;
+}
+
+.total-price {
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 </style>

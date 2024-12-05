@@ -1,11 +1,12 @@
 <script setup lang="ts">
   import CountdownTimer from "@/components/countdownTimer.vue"; // Include if using the timer component
   import { Icon } from "@iconify/vue";
+  import Footer from "../components/Footer.vue";
 </script>
 
 <template>
   <div class="body">
-    <div class="hero">
+    <div class="hero" id="hero">
       <!-- Left Side: Title and Buttons -->
       <div class="hero-content left">
         <p class="date">01 JUNE, 2024</p>
@@ -31,32 +32,32 @@
       </div>
     </div>
     <!-- Event Details Section -->
-  <div class="event-details">
-      <!-- About Section -->
-      <section id="about" class="details-section about">
-        <div class="content-wrapper">
-    <!-- Text Content -->
-    <div class="text-content">
-      <button class="venue">ABOUT</button>
-      <p>
-        Malam Citra Bayu (MCB) is one of the largest annual cultural events at Universiti Sains Malaysia
-        (USM) organized by the Sabah Student Organization (PERSIS USM). MCB is a national-level creative
-        traditional dance competition conceptualized to appreciate the arts and culture of the community
-        in Sabah. For this year's event, the 16th edition of Malam Citra Bayu returns with a new theme
-        and fresh perspective, inviting 9 public universities in Malaysia to compete on the stage of
-        Dewan Tuanku Syed Putra with their own choreography.
-      </p>
-    </div>
-    <!-- Image Content -->
-    <div class="image-content">
-      <div class="image-wrapper">
-        <div class="gradient-overlay">
-          <img src="@/assets/images/usmdancers.png" alt="USM Dancers" />
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+    <div class="event-details">
+        <!-- About Section -->
+        <section id="about" class="details-section about">
+          <div class="content-wrapper">
+            <!-- Text Content -->
+            <div class="text-content">
+              <button class="venue">ABOUT</button>
+              <p>
+                Malam Citra Bayu (MCB) is one of the largest annual cultural events at Universiti Sains Malaysia
+                (USM) organized by the Sabah Student Organization (PERSIS USM). MCB is a national-level creative
+                traditional dance competition conceptualized to appreciate the arts and culture of the community
+                in Sabah. For this year's event, the 16th edition of Malam Citra Bayu returns with a new theme
+                and fresh perspective, inviting 9 public universities in Malaysia to compete on the stage of
+                Dewan Tuanku Syed Putra with their own choreography.
+              </p>
+            </div>
+            <!-- Image Content -->
+            <div class="image-content">
+              <div class="image-wrapper">
+                <div class="gradient-overlay">
+                  <img src="@/assets/images/usmdancers.png" alt="USM Dancers" />
+                </div>
+              </div>
+            </div>
+          </div>
+      </section>
 
 
       <!-- History Section -->
@@ -86,15 +87,95 @@
       </section>
 
       <!-- Agenda Section -->
-      <section id="agenda">
+      <!-- <section id="agenda">
         <h2>Agenda</h2>
-        <ul>
-          <li>6:00 PM - Registration</li>
-          <li>7:00 PM - Opening Ceremony</li>
-          <li>7:30 PM - Cultural Performances</li>
-          <li>9:30 PM - Closing Ceremony</li>
-        </ul>
-      </section>
+        <h2>01 June, Saturday</h2>
+        <div class="agendaWrapper">
+          <div class="agenda-detail">
+            <h3>07:30 PM - 07:45 PM</h3>
+            <h3>1</h3>
+            <h3>Registration and Wristband</h3>
+            <p>Register your personal data in customer service and take wristband before entering the room</p>
+          </div>
+
+          <div class="agenda-detail">
+            <h3>07:45 PM - 08:00 PM</h3>
+            <h3>2</h3>
+            <h3>Welcoming Speech</h3>
+            <p>Hearing speech from our deputy vice chancellor. An opening speech to open the ceremony and expose the student about the whole picture of MCB event in USM.</p>
+          </div>
+
+          <div class="agenda-detail">
+            <h3>08:00 PM - 10:30 PM</h3>
+            <h3>3</h3>
+            <h3>Night Citra Performances</h3>
+            <p>Stay for entertaining performance from our invited celebrities from Sabah and also students that perform their traditional dance which originated from Sabah. </p>
+          </div>
+
+          <div class="agenda-detail">
+            <h3>10:30 PM - 11:00 PM</h3>
+            <h3>4</h3>
+            <h3>Award Giving Ceremony</h3>
+            <p>Giving the award based on the category that has finalised and annoucing the winner of MCB 16th edition.</p>
+          </div>
+
+
+          <div class="agenda-detail">
+            <h3>11:00 PM - 11:30 PM</h3>
+            <h3>5</h3>
+            <h3>Closing Ceremony & Event Dismissal</h3>
+            <p>Students and Guest may dismiss. Photography session with our guest may be available subjected to celebrities’ approval.</p>
+          </div>
+        </div>
+      </section> -->
+
+    <section id="agenda">
+    <!-- Left Side -->
+      <div class="agenda-container">
+        <div class="agenda-title">
+          <h2>Agenda</h2>
+          <h2>01 June, Saturday</h2>
+        </div>
+    <!-- Right Side -->
+      <div class="agendaWrapper">
+        <div class="agenda-detail">
+              <h3>07:30 PM - 07:45 PM</h3>
+              <h3>1</h3>
+              <h3>Registration and Wristband</h3>
+              <p>Register your personal data in customer service and take wristband before entering the room</p>
+            </div>
+
+            <div class="agenda-detail">
+              <h3>07:45 PM - 08:00 PM</h3>
+              <h3>2</h3>
+              <h3>Welcoming Speech</h3>
+              <p>Hearing speech from our deputy vice chancellor. An opening speech to open the ceremony and expose the student about the whole picture of MCB event in USM.</p>
+            </div>
+
+            <div class="agenda-detail">
+              <h3>08:00 PM - 10:30 PM</h3>
+              <h3>3</h3>
+              <h3>Night Citra Performances</h3>
+              <p>Stay for entertaining performance from our invited celebrities from Sabah and also students that perform their traditional dance which originated from Sabah. </p>
+            </div>
+
+            <div class="agenda-detail">
+              <h3>10:30 PM - 11:00 PM</h3>
+              <h3>4</h3>
+              <h3>Award Giving Ceremony</h3>
+              <p>Giving the award based on the category that has finalised and annoucing the winner of MCB 16th edition.</p>
+            </div>
+
+            <div class="agenda-detail">
+              <h3>11:00 PM - 11:30 PM</h3>
+              <h3>5</h3>
+              <h3>Closing Ceremony & Event Dismissal</h3>
+              <p>Students and Guest may dismiss. Photography session with our guest may be available subjected to celebrities’ approval.</p>
+            </div>
+      </div>
+  </div>
+</section>
+
 
       <!-- Performers Section
       <section id="performers">
@@ -106,45 +187,44 @@
       </section> -->
 
       <!-- Ticket and Merchandise Section -->
-    <section id="tickets-merchandise">
-      <h2>Ticket & Merchandise</h2>
-      <p>
-        Get your tickets and explore exclusive merchandise for the event!
-        <RouterLink to="/merchandise"><button class="btn-merchandise">Shop Merchandise</button></RouterLink>
-      </p>
-      <div class="ticket-card">
-        <div class="card-content">
-          <h3>Event Ticket - 01 January 2025</h3>
-          <ul>
-            <li>One night pass access all entertainment</li>
-            <li>Wristband and Snack</li>
-            <li>Meet Event Performers</li>
-            <li>Pick Seat</li>
-          </ul>
-          <div class="price">
-            <span>MYR 15</span>
-            <RouterLink to="/ticket"><button>BUY NOW</button></RouterLink>
+      <section id="tickets-merchandise">
+        <h2>Ticket & Merchandise</h2>
+        <p>
+          Get your tickets and explore exclusive merchandise for the event!
+          <RouterLink to="/merchandise"><button class="btn-merchandise">Shop Merchandise</button></RouterLink>
+        </p>
+        <div class="ticket-card">
+          <div class="card-content">
+            <h3>Event Ticket - 01 January 2025</h3>
+            <ul>
+              <li>One night pass access all entertainment</li>
+              <li>Wristband and Snack</li>
+              <li>Meet Event Performers</li>
+              <li>Pick Seat</li>
+            </ul>
+            <div class="price">
+              <span>MYR 15</span>
+              <RouterLink to="/ticket"><button>BUY NOW</button></RouterLink>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="ticket-card">
-        <div class="card-content">
-          <h3>Event Ticket - 01 June 2025 (Student)</h3>
-          <ul>
-            <li>One night pass access all entertainment</li>
-            <li>Wristband and Snack</li>
-            <li>Meet Event Performers</li>
-            <li>Pick Seat</li>
-          </ul>
-          <div class="price">
-            <span>MYR 12</span>
-            <RouterLink to="/ticket"><button>BUY NOW</button></RouterLink>
+        <div class="ticket-card">
+          <div class="card-content">
+            <h3>Event Ticket - 01 June 2025 (Student)</h3>
+            <ul>
+              <li>One night pass access all entertainment</li>
+              <li>Wristband and Snack</li>
+              <li>Meet Event Performers</li>
+              <li>Pick Seat</li>
+            </ul>
+            <div class="price">
+              <span>MYR 12</span>
+              <RouterLink to="/ticket"><button>BUY NOW</button></RouterLink>
+            </div>
           </div>
-        </div>
-      </div>
-</section>
-
+          </div>
+      </section>
 
       <!-- Past Winner Section -->
       <section id="past-events">
@@ -206,7 +286,7 @@
       <section id="location">
         <h2>Location</h2>
         <p>Dewan Tuanku Syed Putra, Universiti Sains Malaysia, Penang.</p>
-        <iframe
+        <iframe 
           src="https://www.google.com/maps/embed?pb=!1m18..."
           width="600"
           height="450"
@@ -215,18 +295,13 @@
         ></iframe>
       </section>
     </div>
+    <footer class="footer">
+      <Footer />
+    </footer>
   </div>
 </template>
 
 <style scoped>
-html,
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-}
-
 .title {
   font-family: 'EB Garamond', serif; /* Use EB Garamond */
   font-size: 4.5rem; /* Adjust the font size for emphasis */
@@ -237,7 +312,6 @@ body {
 }
 
 .body {
-  position: relative;
   background-color: #ffc8dd; /* Full opacity background color */
   height: 100vh;
   width: 100%;
@@ -280,7 +354,6 @@ h1 {
 }
 
 .hero {
-  position: relative;
   display: flex; /* Enable flexbox layout */
   justify-content: space-between; /* Space items apart */
   align-items: center; /* Align items vertically centered */
@@ -392,7 +465,6 @@ h1 {
   text-align: justify;
   background-color: rgba(255, 200, 221, 0.2); /* Light pink overlay */
   border-radius: 10px;
-  overflow: hidden; /* Prevent content from spilling out */
   margin: 2rem 0;
 }
 
@@ -471,7 +543,7 @@ h1 {
 /* Styling for History */
 #history {
   padding: 50px 20px;
-  background-color: #ffc8dd;
+  background-color: #ffc8dd !important;
   display: flex;
   justify-content: center;
 }
@@ -480,8 +552,10 @@ h1 {
 .history-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
-  gap: 30px; /* Space between grid items */
-  max-width: 1200px; /* Optional: max width for the container */
+
+  gap: 30px;  
+  max-width: 1200px; 
+
   width: 100%;
   padding: 20px;
 }
@@ -495,7 +569,9 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start; /* Align content to the left */
+
+  align-items: flex-start; 
+
 }
 
 /* Headings styling */
@@ -526,11 +602,13 @@ h1 {
 
 /* Agenda styling */
 #agenda {
-  background-color: #f8e8f0; /* Light pink background */
+  background-color: #f2cbde;
   padding: 50px;
   text-align: center;
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
+
+
 
 #agenda h2:first-of-type {
   font-size: 36px;
@@ -544,6 +622,24 @@ h1 {
   font-weight: 600;
   color: #666;
   margin-bottom: 40px;
+
+} 
+
+.agenda-container {
+  display: flex;
+  align-items: flex-start; /* Align content at the top */
+  justify-content: space-between; /* Title on left, content on right */
+  width: 80%; /* Adjust width as needed */
+}
+
+.agenda-title {
+  flex: 1; /* Allow the title to take up left side */
+  text-align: left;
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+
+
 }
 
 /* Agenda Wrapper */
@@ -551,6 +647,7 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 20px;
+
 }
 
 /* Individual Agenda Details */

@@ -58,11 +58,7 @@ onMounted(() => {
       <!-- Navigation Links -->
       <ul class="nav-links" :class="{ open: isMenuOpen }">
         <li><RouterLink to="/">HOME</RouterLink></li>
-<<<<<<< Updated upstream
-        <li><RouterLink to="/event">EVENT</RouterLink></li>
-=======
         <li><a href="#about">EVENT</a></li>
->>>>>>> Stashed changes
         <li><RouterLink to="/ticket">TICKET</RouterLink></li>
         <li><RouterLink to="/merchandise">MERCHANDISE</RouterLink></li>
         <li><RouterLink to="/contact">CONTACT</RouterLink></li>
@@ -91,12 +87,8 @@ onMounted(() => {
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
-<<<<<<< Updated upstream
-    align-items: center; 
-=======
     flex-shrink: 0;
     align-items: center;
->>>>>>> Stashed changes
     width: 100%;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   }

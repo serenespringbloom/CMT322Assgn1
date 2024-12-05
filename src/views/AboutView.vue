@@ -275,8 +275,17 @@
             ></iframe>
           </div>
 
-          <div class
-          
+          <div class="call-info">
+            <!-- Put Icon -->
+            <h2>Call Us</h2>
+            <p>Dewan Tuanku Syed Putra, Universiti Sains Malaysia, Penang.</p>
+          </div>
+
+          <div class="email-info">
+            <!-- Put Icon -->
+            <h2>Email Us</h2>
+            <p>Dewan Tuanku Syed Putra, Universiti Sains Malaysia, Penang.</p>
+          </div>
         </div>
       </section>
     </div>
@@ -605,6 +614,7 @@ h1 {
   text-align: center;
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
+
 
 
 /* #agenda h2:first-of-type {

@@ -286,7 +286,7 @@
       <section id="location">
         <h2>Location</h2>
         <p>Dewan Tuanku Syed Putra, Universiti Sains Malaysia, Penang.</p>
-        <iframe
+        <iframe 
           src="https://www.google.com/maps/embed?pb=!1m18..."
           width="600"
           height="450"

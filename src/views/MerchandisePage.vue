@@ -1,46 +1,52 @@
 <script setup>
   import { RouterLink, RouterView } from 'vue-router'
   import { computed } from 'vue';
-  import { useRoute } from 'vue-router';    
-  
+  import { useRoute } from 'vue-router';
+
 </script>
 
 <template>
-    <body>
-        <div class="a">
-        <h1>MERCHANDISE</h1>
+  <body>
+    <div class="header">
+      <h1>MERCHANDISE</h1>
+    </div>
+    <!-- Merchandise Section -->
+    <section class="merchant-list">
+      <!-- First Merchant -->
+      <div class="merchant-card">
+        <img src="@/assets/images/merchant1.png" alt="Black Pink Cotton Tee" />
+        <div class="card-content">
+          <h2>Black Pink Cotton Tee</h2>
+          <p>RM 38</p>
+          <RouterLink to="/merchandise-detail">
+            <button class="button">Buy Now</button>
+          </RouterLink>
         </div>
-        <!-- Section -->
-        <section class="merchant-list">
-        <!-- First Merchant -->
-            <div class="bajusatu">
-            <img src="@/assets/images/merchant1.png" alt="" />
-              <div class="card-satu">
-                <h2>Black Pink Cotton Tee</h2>
-                <p>RM 38</p>
-                <RouterLink to="/merchandise-detail"><button class="button">Buy Now</button></RouterLink>
-              </div>
-            </div>
-        <!-- Second Merchant -->
-            <div class="bajusatu">
-            <img src="@/assets/images/merchant2.png" alt="" />
-              <div class="card-satu">
-                <h2>White Pink Cotton Tee</h2>
-                <p>RM 38</p>
-                <RouterLink to="/merchandise-detail2"><button class="button">Buy Now</button></RouterLink>
-              </div>
-            </div>
-        <!-- Third Merchant -->
-            <div class="bajusatu">
-            <img src="@/assets/images/merchant3.png" alt="" />
-              <div class="card-satu">
-                <h2>White Blue Cotton Tee</h2>
-                <p>RM 38</p>
-                <RouterLink to="/merchandise-detail3"><button class="button">Buy Now</button></RouterLink>
-              </div>
-            </div>
-        </section>
-        </body>
+      </div>
+      <!-- Second Merchant -->
+      <div class="merchant-card">
+        <img src="@/assets/images/merchant2.png" alt="White Pink Cotton Tee" />
+        <div class="card-content">
+          <h2>White Pink Cotton Tee</h2>
+          <p>RM 38</p>
+          <RouterLink to="/merchandise-detail2">
+            <button class="button">Buy Now</button>
+          </RouterLink>
+        </div>
+      </div>
+      <!-- Third Merchant -->
+      <div class="merchant-card">
+        <img src="@/assets/images/merchant3.png" alt="White Blue Cotton Tee" />
+        <div class="card-content">
+          <h2>White Blue Cotton Tee</h2>
+          <p>RM 38</p>
+          <RouterLink to="/merchandise-detail3">
+            <button class="button">Buy Now</button>
+          </RouterLink>
+        </div>
+      </div>
+    </section>
+  </body>
 </template>
 
 <style>
@@ -59,49 +65,98 @@
   }
 }
 
-.merchant-list{
+/* Header */
+.header {
+  text-align: center;
+  letter-spacing: .9rem;
+  font-family: "Plus Jakarta Sans", serif;
+  margin-top: 2rem;
+}
+
+.header h1 {
+  font-size: 2.3rem;
+  letter-spacing: 2rem;
+  color: #554149;
+  text-transform: uppercase;
+}
+
+/* Merchandise Section */
+.merchant-list {
   display: flex;
-  padding: 3rem;
-  column-gap: 30px;
-  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
   justify-content: center;
+  align-items: center;
+  flex-wrap: wrap; /* Ensures responsiveness */
 }
 
-.bajusatu img{
-  display: flex;
-  position: relative;
-  flex-direction: row;
-  height: 320px;
-  width: 400px;
-  min-width: 250px;
+/* Merchant Card */
+.merchant-card {
+  background: linear-gradient(135deg, #fff, #f9f9f9);
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
   padding: 1.5rem;
-  column-gap: 30px;
-  border-radius: 16px;
-  background: aliceblue;
-  box-shadow: -1rem 0 3rem #f4d0d6;
+  width: 320px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.card-satu{
-  padding-top: 2%;
-  top: 75px;
-  right: 300px;
-  font-size: medium;
+.merchant-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
 
+/* Merchant Image */
+.merchant-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Card Content */
+.card-content h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #554149;
+  margin-bottom: 0.5rem;
+}
+
+.card-content p {
+  font-size: 1rem;
+  color: #777;
+  margin-bottom: 1rem;
+}
+
+/* Button */
 .button {
-  margin-top: 4%;
-  padding: 3%;
-  background-color: #DCC39C;
-  font-size: 0.95rem;
-  width:130px;
-  border-radius: 8px;
+  background-color: #dcc39c;
+  color: #000;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.75rem 1.5rem;
   border: none;
-  color: black;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .button:hover {
   background-color: #f0f0f0;
-  border-color: #b5b5b5;
-  cursor: pointer;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .merchant-list {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .merchant-card {
+    width: 90%; /* Adjust card width for smaller screens */
+  }
 }
 </style>

@@ -7,8 +7,8 @@ export default {
         { id: 3, name: "White Blue Cotton Tee", price: 38, image: "../assets/images/merchant3.png" }
       ],
       // Selected size and quantity state
-      selectedSize: "", 
-      quantity: 1, 
+      selectedSize: "",
+      quantity: 1,
     };
   },
   methods: {
@@ -62,134 +62,148 @@ export default {
 <template>
   <div>
     <!-- Header -->
-    <div class="head-three">
+    <div class="header">
       <h1>{{ merchandise[0].name.toUpperCase() }}</h1>
     </div>
 
     <!-- Product Section -->
-    <section>
-      <div class="product-three">
-        <!-- Product Image -->
-        <div class="product-media">
-          <img src="../assets/images/merchant3.png" alt="Product Image" />
-        </div>
+    <section class="product-container">
+      <!-- Product Image -->
+      <div class="product-image">
+        <img src="../assets/images/merchant3.png" alt="White Blue Cotton Tee" />
+      </div>
 
-        <!-- Product Info -->
-        <div class="product-infothree">
-          <section>
-            <p>Malam Citra Bayu</p>
-            <div class="product-titlethree">{{ merchandise[0].name }}</div>
-            <div>RM {{ merchandise[0].price }}</div>
+      <!-- Product Info -->
+      <div class="product-details">
+        <p class="brand">Malam Citra Bayu</p>
+        <h2 class="product-name">{{ merchandise[0].name }}</h2>
+        <p class="price">RM {{ merchandise[0].price }}</p>
 
-            <!-- Size Selection -->
-            <fieldset class="product-size">
-              <div class="size-group">
-                <label>Shirt Size:</label>
-                <div
-                  v-for="(size, index) in ['S', 'M', 'L', 'XL']"
-                  :key="index"
-                  class="size-button"
-                >
-                  <input
-                    type="radio"
-                    :id="'type' + index"
-                    name="type"
-                    :value="size.toLowerCase()"
-                    v-model="selectedSize"
-                  />
-                  <label :for="'type' + index" class="size-label">
-                    <p>{{ size }}</p>
-                  </label>
-                </div>
-              </div>
-            </fieldset>
-
-            <!-- Quantity Selection -->
-            <div class="quantity">
-              <label>Quantity</label>
-              <div class="counter">
-                <button class="btn minus" type="button" @click="decrement">-</button>
-                <input type="text" v-model="quantity" id="qtyInput" readonly />
-                <button class="btn plus" type="button" @click="increment">+</button>
-              </div>
-            </div>
-
-            <!-- Add to Cart -->
-            <button
-              class="button-cart"
-              @click="addToCart(merchandise[0])"
+        <!-- Size Selector -->
+        <div class="size-selector">
+          <label class="label">Shirt Size:</label>
+          <div class="size-options">
+            <div
+              v-for="(size, index) in ['S', 'M', 'L', 'XL']"
+              :key="index"
+              class="size-option"
             >
-              Add to Cart
-            </button>
-          </section>
+              <input
+                type="radio"
+                :id="'size' + index"
+                name="size"
+                :value="size.toLowerCase()"
+                v-model="selectedSize"
+              />
+              <label :for="'size' + index" class="size-label">{{ size }}</label>
+            </div>
+          </div>
         </div>
+
+        <!-- Quantity Selector -->
+        <div class="quantity-selector">
+          <label class="label">Quantity:</label>
+          <div class="quantity-controls">
+            <button class="btn" @click="decrement">-</button>
+            <input type="text" v-model="quantity" readonly />
+            <button class="btn" @click="increment">+</button>
+          </div>
+        </div>
+
+        <!-- Add to Cart -->
+        <button
+          class="add-to-cart"
+          @click="addToCart(merchandise[0])"
+        >
+          Add to Cart
+        </button>
       </div>
     </section>
   </div>
 </template>
 
 <style scoped>
-.head-three {
-  top: 20;
-  min-height: 10vh;
+/* Header */
+.header {
+  text-align: center;
+  margin: 2rem 0;
+  font-family: "Plus Jakarta Sans", serif;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  letter-spacing: 2rem;
+  color: #554149;
+  text-transform: uppercase;
+}
+
+
+
+/* Product Container */
+.product-container {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  letter-spacing: 0.9rem;
-  font-family: 'Plus Jakarta Sans', serif;
-  font-size: 1.0rem;
-  margin-top: 4%;
-  margin-bottom: 30px;
+  gap: 3rem;
+  padding: 2rem;
 }
 
-.product-three {
+.product-image img {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.product-details {
+  max-width: 400px;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 2rem;
-  padding-top: 1%;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.product-media {
-  display: block;
-  position: relative;
-  background: transparent;
-  box-sizing: inherit;
-  border-style: double;
+/* Brand and Name */
+.brand {
+  font-size: 1rem;
+  color: #888;
 }
 
-.product-infothree {
-  display: block;
-  padding: 0 0 0 4rem;
-  max-width: 35%;
+.product-name {
+  font-size: 2rem;
+  color: #554149;
+  font-weight: bold;
 }
 
-.product-titlethree {
+.price {
   font-size: 1.5rem;
-  letter-spacing: 0.06rem;
+  color: #de1919;
+  font-weight: bold;
 }
 
-.product-size {
-  margin-top: 20px;
-}
-
-.size-group {
+/* Size Selector */
+.size-selector {
   display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-  margin-bottom: 15px;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-.size-button {
+.label {
+  font-size: 1rem;
+  color: #554149;
+  font-weight: bold;
+}
+
+.size-options {
+  display: flex;
+  gap: 1rem;
+}
+
+.size-option {
   position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 60px;
-  cursor: pointer;
-  text-align: center;
 }
 
-.size-button input[type="radio"] {
+.size-option input {
   display: none;
 }
 
@@ -197,78 +211,85 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
-  border: 2px solid #de1919;
-  border-radius: 30px;
+  width: 50px;
+  height: 50px;
+  border: 2px solid #dcc39c;
+  border-radius: 50%;
+  background-color: #fff;
   font-weight: bold;
-  text-transform: uppercase;
-  background-color: #dcc39c;
-  color: #333;
+  cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.size-label:hover {
-  background-color: #f0f0f0;
-  border-color: #b5b5b5;
+.size-option input:checked + .size-label {
+  background: linear-gradient(108deg, #a48e69 -50%, #dcc39c 100%);
+  color: #fff;
 }
 
-.size-button input[type="radio"]:checked + .size-label {
-  background-color: #e0e0e0;
-  border-color: #b5b5b5;
-}
-
-.counter {
-  width: 200px;
-  height: 70px;
-  background-color: #edeefa;
-  padding: 15px;
-  margin-top: 20px;
-  margin-left: 20px;
-  display: inline-flex;
-  overflow: hidden;
-  align-items: center;
-  border-radius: 20px;
-}
-
-.btn {
+/* Quantity Selector */
+.quantity-selector {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.quantity-controls {
+  display: flex;
   align-items: center;
-  text-align: center;
-  border: none;
-  width: 50px;
-  height: 50px;
-  font-size: 1rem;
-  cursor: pointer;
+  gap: 0.5rem;
 }
 
-#qtyInput {
-  width: 100%;
-  border: none;
-  font-size: 1rem;
-  font-family: 'Courier New', Courier, monospace;
-  text-align: center;
-  color: #000;
-  background: 0 0;
-  font-weight: 700;
-}
-
-#qtyInput:focus-visible {
-  outline: none;
-}
-
-.button-cart {
+.quantity-controls .btn {
+  width: 40px;
+  height: 40px;
   background-color: #dcc39c;
-  padding: 16px 30px;
-  margin-top: 20px;
   border: none;
-  color: black;
+  border-radius: 5px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.button-cart:hover {
-  background-color: #f0f0f0;
-  border-color: #b5b5b5;
+.quantity-controls .btn:hover {
+  background-color: #e0b987;
+}
+
+.quantity-controls input {
+  width: 50px;
+  height: 40px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Add to Cart Button */
+.add-to-cart {
+  background: linear-gradient(108deg, #a48e69 -50%, #dcc39c 100%);
+  color: #554149;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 20px;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.add-to-cart:hover {
+  background-color: #e0b987;
+  transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .product-container {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .product-details {
+    max-width: 90%;
+  }
 }
 </style>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import CountdownTimer from "@/components/countdownTimer.vue"; // Include if using the timer component
+  import { Icon } from "@iconify/vue";
 </script>
 
 <template>
@@ -30,7 +31,7 @@
       </div>
     </div>
     <!-- Event Details Section -->
-    <div class="event-details">
+  <div class="event-details">
       <!-- About Section -->
       <section id="about" class="details-section about">
         <div class="content-wrapper">
@@ -57,13 +58,31 @@
   </div>
 </section>
 
+
       <!-- History Section -->
       <section id="history">
-        <h2>History</h2>
-        <p>
-          Since its inception, Malam Citra Bayu has brought together talented
-          performers to promote cultural appreciation and artistic expression.
-        </p>
+        <div class="history-container">
+          <div>
+            <Icon icon="mingcute:certificate-line" width="55" height="55"  style="color: #ec9910" />
+            <h2>Established Event</h2>
+            <p>Now in its 16th edition since 2008, continue its legacy as premier cultural event</p>
+          </div>
+          <div>
+            <Icon icon="arcticons:pass-culture" width="55" height="55" style="color: #ec9910" />
+            <h2>Iconic culture</h2>
+            <p>Present apa" yang ada hihaa</p>
+          </div>
+          <div>
+            <Icon icon="mdi:dance-ballroom" width="55" height="55"  style="color: #ec9910" />
+            <h2>Multiple Performers</h2>
+            <p>Banyak penari-penari mantap</p>
+          </div>
+          <div>
+            <Icon icon="fluent:people-checkmark-24-filled" width="55" height="55"  style="color: #ec9910" />
+            <h2>Engaging Vibe</h2>
+            <p>Dengar lagu Naratu tu pasti layan</p>
+          </div>
+        </div>
       </section>
 
       <!-- Agenda Section -->
@@ -77,43 +96,111 @@
         </ul>
       </section>
 
-      <!-- Performers Section -->
+      <!-- Performers Section
       <section id="performers">
         <h2>Performers</h2>
         <p>
           Featuring renowned artists and talented performers from across the
           country.
         </p>
-      </section>
+      </section> -->
 
       <!-- Ticket and Merchandise Section -->
-      <section id="tickets-merchandise">
-        <h2>Ticket & Merchandise</h2>
-        <p>
-          Get your tickets and explore exclusive merchandise for the event!
-          <a href="#">Buy Tickets</a> | <a href="#">Shop Merchandise</a>
-        </p>
-      </section>
+    <section id="tickets-merchandise">
+      <h2>Ticket & Merchandise</h2>
+      <p>
+        Get your tickets and explore exclusive merchandise for the event!
+        <RouterLink to="/merchandise"><button class="btn-merchandise">Shop Merchandise</button></RouterLink>
+      </p>
+      <div class="ticket-card">
+        <div class="card-content">
+          <h3>Event Ticket - 01 January 2025</h3>
+          <ul>
+            <li>One night pass access all entertainment</li>
+            <li>Wristband and Snack</li>
+            <li>Meet Event Performers</li>
+            <li>Pick Seat</li>
+          </ul>
+          <div class="price">
+            <span>MYR 15</span>
+            <RouterLink to="/ticket"><button>BUY NOW</button></RouterLink>
+          </div>
+        </div>
+      </div>
 
-      <!-- Past Events Section -->
+      <div class="ticket-card">
+        <div class="card-content">
+          <h3>Event Ticket - 01 June 2025 (Student)</h3>
+          <ul>
+            <li>One night pass access all entertainment</li>
+            <li>Wristband and Snack</li>
+            <li>Meet Event Performers</li>
+            <li>Pick Seat</li>
+          </ul>
+          <div class="price">
+            <span>MYR 12</span>
+            <RouterLink to="/ticket"><button>BUY NOW</button></RouterLink>
+          </div>
+        </div>
+      </div>
+</section>
+
+
+      <!-- Past Winner Section -->
       <section id="past-events">
-        <h2>Past Event Highlights</h2>
-        <p>Check out photos and feedback from our previous events!</p>
-        <img src="https://via.placeholder.com/600x300" alt="Past Event Photos" />
+        <h2>Past MCB Highlights</h2>
+        <p>Lists of Winner in the past MCB</p>
+        <h3> Overall Winner:</h3>
+        <div class="slider-wrapper">
+          <div class="swiper-slide">
+            <img src="@/assets/images/mcb-winner.jpg" alt="UKM">
+            <p>Universiti Kebangsaan Malaysia (UKM)</p>
+          </div>
+          <div class="swiper-slide">
+            <img src="@/assets/images/mcb-secondplace.jpg" alt="USM">
+            <p>Universiti Sains Malaysia (USM)</p>
+          </div>
+          <div class="swiper-slide">
+            <img src="@/assets/images/mcb-thirdplace.jpg" alt="UPSI">
+            <p>Universiti Pendidikan Sultan Idris (UPSI)</p>
+          </div>
+        </div>
+
+        <h3> Photo Moments</h3>
+        <div class="slider-wrapper">
+          <div class="swiper-slide">
+            <img src="@/assets/images/moment-1.png" alt="">
+          </div>
+          <div class="swiper-slide">
+            <img src="@/assets/images/moment-2.jpg" alt="">
+          </div>
+          <div class="swiper-slide">
+            <img src="@/assets/images/moment-3.jpg" alt="">
+          </div>
+          <div class="swiper-slide">
+            <img src="@/assets/images/moment-4.jpg" alt="">
+          </div>
+          <div class="swiper-slide">
+            <img src="@/assets/images/moment-5.jpg" alt="">
+          </div>
+          <div class="swiper-slide">
+            <img src="@/assets/images/moment-6.jpg" alt="">
+          </div>
+        </div>
       </section>
 
       <!-- Sponsors Section -->
       <section id="sponsors">
-        <h2>Sponsors & Special Thanks</h2>
-        <p>
-          A big thank you to our sponsors for making this event possible.
-        </p>
-        <ul>
-          <li>Sponsor 1</li>
-          <li>Sponsor 2</li>
-          <li>Sponsor 3</li>
+        <h2>Our Event Partners</h2>
+        <ul class="sponsor-list">
+          <li><img src="@/assets/images/ikrar.png" alt="ikrar"></li>
+          <li><img src="@/assets/images/smj-logo.avif" alt="smj"></li>
+          <li><img src="@/assets/images/MDDNPP-logo.png" alt="MDDNPP"></li>
+          <li><img src="@/assets/images/bhepa-usm.png" alt="BHEPA"></li>
+          <li><img src="@/assets/images/ZusCoffee-logo.png" alt="ZusCoffee"></li>
         </ul>
       </section>
+
 
       <!-- Google Maps Section -->
       <section id="location">
@@ -201,7 +288,7 @@ h1 {
   width: 100%;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 85%);
   background-color: rgba(255, 240, 240, 0.3);
-  z-index: 2; /* Content above the background image */
+  z-index: 1; /* Content above the background image */
   color: #554149;
   text-align: left;
   padding: 0 2rem;
@@ -318,6 +405,7 @@ h1 {
 
 .text-content {
   flex: 1; /* Take equal space */
+  z-index: 5;
 }
 
 .image-content {
@@ -380,4 +468,447 @@ h1 {
   }
 }
 
+/* Styling for History */
+#history {
+  padding: 50px 20px;
+  background-color: #ffc8dd;
+  display: flex;
+  justify-content: center;
+}
+
+/* History Container using Grid */
+.history-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
+  gap: 30px; /* Space between grid items */
+  max-width: 1200px; /* Optional: max width for the container */
+  width: 100%;
+  padding: 20px;
+}
+
+/* Individual div styling with Flexbox */
+.history-container > div {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start; /* Align content to the left */
+}
+
+/* Headings styling */
+.history-container h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Paragraphs styling */
+.history-container p {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Optional: Responsive typography */
+@media (max-width: 768px) {
+  .history-container h2 {
+    font-size: 1.25rem;
+  }
+
+  .history-container p {
+    font-size: 0.95rem;
+  }
+}
+
+/* Agenda styling */
+#agenda {
+  background-color: #f8e8f0; /* Light pink background */
+  padding: 50px;
+  text-align: center;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+#agenda h2:first-of-type {
+  font-size: 36px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+#agenda h2:nth-of-type(2) {
+  font-size: 20px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+/* Agenda Wrapper */
+.agendaWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Individual Agenda Details */
+.agenda-detail {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: left;
+  position: relative;
+}
+
+/* Styling for Time */
+.agenda-detail h3:first-of-type {
+  font-size: 16px;
+  color: #555;
+  margin: 0 0 10px 0;
+}
+
+/* Styling for Step Number */
+.agenda-detail h3:nth-of-type(2) {
+  font-size: 36px;
+  font-weight: 700;
+  color: #c49b61; /* Gold for step numbers */
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+/* Styling for Title */
+.agenda-detail h3:nth-of-type(3) {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 10px 0;
+}
+
+/* Styling for Description */
+.agenda-detail p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #666;
+}
+
+/* Button Style */
+#agenda button {
+  background-color: #c49b61; /* Gold Button */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+#agenda button:hover {
+  background-color: #b38d55;
+}
+
+/* Optional Media Query for Mobile */
+@media (max-width: 768px) {
+  .agendaWrapper {
+    flex-direction: column;
+  }
+}
+
+/* Ticket and Merchandise Styling */
+#tickets-merchandise {
+  background-color: #ffc8dd;
+  padding: 50px 20px;
+  text-align: center;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  z-index: 5;
+}
+
+#tickets-merchandise h2 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+}
+
+#tickets-merchandise p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 30px;
+  z-index: 5;
+}
+
+.btn-merchandise {
+  background: linear-gradient(108deg, #a48e69 -50%, #dcc39c 100%);
+  color: #000;
+  text-decoration: none;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  z-index: 10;
+  position: relative;
+}
+
+#tickets-merchandise a:hover {
+  text-decoration: underline;
+}
+
+/* Ticket Card Styling */
+.ticket-card {
+  display: flex;
+  flex-direction: row;
+  background-color: #fff;
+  color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 20px auto;
+  max-width: 800px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* .card-image img {
+  width: 300px;
+  height: 200px;
+  object-fit: cover;
+} */
+
+.card-content {
+  padding: 20px;
+  text-align: left;
+  flex-grow: 1;
+}
+
+.card-content h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #f0c14b;
+  margin-bottom: 10px;
+}
+
+.card-content li {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.price {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.price span {
+  font-size: 24px;
+  font-weight: bold;
+  color: #f0c14b;
+}
+
+.price button {
+  background: linear-gradient(108deg, #a48e69 -50%, #dcc39c 100%);
+  color: #000;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 0px;
+  padding: 0.85rem 1.5rem;
+  margin-right: 1rem;
+  cursor: pointer;
+  z-index: 5;
+  position: relative;
+  transition: background 0.3s ease;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.price button:hover {
+  background-color: #dba51d;
+}
+
+/* Past Winner Styling */
+#past-events {
+  background-color: #ffc8dd;
+  padding: 50px 20px;
+  text-align: center;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  z-index: 5;
+}
+
+#past-events h2 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+}
+
+#past-events h3 {
+  font-size: 26px;
+  font-weight: 400;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+}
+
+#past-events p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 30px;
+}
+.slider-wrapper {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  overflow: hidden; 
+  gap: 20px; 
+  padding: 20px;
+  max-width: 100%;
+  width: 500vw;
+  transition: all 1.5s ease-in-out;
+}
+
+/* Style for each slide */
+.swiper-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center text and images */
+  text-align: center;
+  width: 300px; /* Adjust width of each slide */
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for gallery effect */
+  background-color: #fff;
+}
+
+/* Image style */
+.swiper-slide img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-bottom: 5px solid #ffc8dd; /* Border below the image */
+}
+
+/* Paragraph text style */
+.swiper-slide p {
+  margin: 10px 0 0 0;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #554149;
+  padding: 10px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: #f8f1f1;
+}
+
+/* Sponsors Section Styling */
+#sponsors {
+  background-color: #f8e8f0; /* Dark background */
+  text-align: center;
+  padding: 50px 20px;
+}
+
+#sponsors h2 {
+  font-size: 2rem;
+  color: #1a1a1a; /* Yellow heading */
+  margin-bottom: 20px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+#sponsors p {
+  font-size: 1.2rem;
+  color: #ffffff;
+  margin-bottom: 40px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Sponsor List */
+.sponsor-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Sponsor Images */
+.sponsor-list li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 150px; 
+}
+
+.sponsor-list li img {
+  width: 100%;
+  height: auto;
+  filter: grayscale(100%); /* Optional: grayscale effect */
+  opacity: 0.9;
+  transition: all 0.3s ease;
+}
+
+.sponsor-list li img:hover {
+  filter: grayscale(0%);
+  opacity: 1;
+  transform: scale(1.1); /* Scale effect on hover */
+}
+
+
+/* Styling for History */
+#history {
+  padding: 50px 20px;
+  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+}
+
+/* History Container using Grid */
+.history-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
+  gap: 30px; /* Space between grid items */
+  max-width: 1200px; /* Optional: max width for the container */
+  width: 100%;
+  padding: 20px;
+}
+
+/* Individual div styling with Flexbox */
+.history-container > div {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start; /* Align content to the left */
+}
+
+/* Headings styling */
+.history-container h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Paragraphs styling */
+.history-container p {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Optional: Responsive typography */
+@media (max-width: 768px) {
+  .history-container h2 {
+    font-size: 1.25rem;
+  }
+
+  .history-container p {
+    font-size: 0.95rem;
+  }
+}
 </style>

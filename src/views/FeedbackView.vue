@@ -1,5 +1,5 @@
 <template>
-  <main class="feedback-page">
+  <body class="feedback-page">
     <!-- Header Section -->
     <section class="header">
       <h1>FEEDBACK</h1>
@@ -12,109 +12,108 @@
       <div class="left-content">
         <!-- Main Testimonial -->
         <transition name="fade">
-  <div class="testimonial-card" v-if="activeItem">
-    <img :src="activeItem.image" alt="Profile" class="profile-image" />
-    <div class="testimonial-content">
-      <h3>{{ activeItem.name }}</h3>
+          <div class="testimonial-card" v-if="activeItem">
+            <img :src="activeItem.image" alt="Profile" class="profile-image" />
+            <div class="testimonial-content">
+              <h3>{{ activeItem.name }}</h3>
 
-      <p class="subtitle">{{ activeItem.programme }}</p>
-      <div class="testimonial-stars">
-        <span
-          v-for="star in 5"
-          :key="star"
-          :class="{ filled: star <= activeItem.rating }"
-        >
-          ★
-        </span>
-      </div>
-      <p class="testimonial-text">{{ activeItem.text }}</p>
+              <p class="subtitle">{{ activeItem.programme }}</p>
+              <div class="testimonial-stars">
+                <span
+                  v-for="star in 5"
+                  :key="star"
+                  :class="{ filled: star <= activeItem.rating }"
+                >
+                  ★
+                </span>
+              </div>
+              <p class="testimonial-text">{{ activeItem.text }}</p>
 
-    </div>
-  </div>
-</transition>
+            </div>
+          </div>
+        </transition>
 
         <!-- Feedback Form -->
         <section class="feedback-form">
-  <h3>Give Your Feedback!</h3>
-  <!-- Interactive Stars -->
-  <div class="stars">
-    <span
-      v-for="star in 5"
-      :key="star"
-      @click="selectRating(star)"
-      @mouseover="hoverRating(star)"
-      @mouseleave="resetHover"
-      :class="{ filled: star <= (hover || rating) }"
-    >
-      ★
-    </span>
-  </div>
-  <!-- Form -->
-  <form @submit.prevent="handleSubmit">
-    <div class="form-group">
-      <!-- Ticket ID -->
-      <div class="form-item">
-        <label for="ticket-id">Ticket ID</label>
-        <input
-          id="ticket-id"
-          type="text"
-          v-model="ticketId"
-          placeholder="Enter your Ticket ID"
-        />
+          <h3>Give Your Feedback!</h3>
+          <!-- Interactive Stars -->
+          <div class="stars">
+            <span
+              v-for="star in 5"
+              :key="star"
+              @click="selectRating(star)"
+              @mouseover="hoverRating(star)"
+              @mouseleave="resetHover"
+              :class="{ filled: star <= (hover || rating) }"
+            >
+              ★
+            </span>
+          </div>
+          <!-- Form -->
+          <form @submit.prevent="handleSubmit">
+            <div class="form-group">
+              <!-- Ticket ID -->
+              <div class="form-item">
+                <label for="ticket-id">Ticket ID</label>
+                <input
+                  id="ticket-id"
+                  type="text"
+                  v-model="ticketId"
+                  placeholder="Enter your Ticket ID"
+                />
+              </div>
+
+              <!-- Full Name -->
+              <div class="form-item">
+                <label for="full-name">Full Name</label>
+                <input
+                  id="full-name"
+                  type="text"
+                  v-model="fullName"
+                  placeholder="Enter your Full Name"
+                />
+              </div>
+
+              <!-- Programme -->
+              <div class="form-item">
+                <label for="programme">Programme</label>
+                <select id="programme" v-model="programme">
+                  <option disabled selected>Choose Programme</option>
+                  <option>Programme A</option>
+                  <option>Programme B</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Feedback Text -->
+            <div class="form-item">
+              <label for="feedback-text">Feedback</label>
+              <textarea
+                id="feedback-text"
+                v-model="feedbackText"
+                placeholder="Write your feedback here!"
+              ></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn-submit">SUBMIT</button>
+          </form>
+        </section>
       </div>
-
-      <!-- Full Name -->
-      <div class="form-item">
-        <label for="full-name">Full Name</label>
-        <input
-          id="full-name"
-          type="text"
-          v-model="fullName"
-          placeholder="Enter your Full Name"
-        />
-      </div>
-
-      <!-- Programme -->
-      <div class="form-item">
-        <label for="programme">Programme</label>
-        <select id="programme" v-model="programme">
-          <option disabled selected>Choose Programme</option>
-          <option>Programme A</option>
-          <option>Programme B</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- Feedback Text -->
-    <div class="form-item">
-      <label for="feedback-text">Feedback</label>
-      <textarea
-        id="feedback-text"
-        v-model="feedbackText"
-        placeholder="Write your feedback here!"
-      ></textarea>
-    </div>
-
-    <!-- Submit Button -->
-    <button type="submit" class="btn-submit">SUBMIT</button>
-  </form>
-</section>
-</div>
-
       <!-- Right Section: Participant Names -->
       <div class="right-content">
-  <div
-    class="participant-card"
-    v-for="(item, index) in feedbackData"
-    :key="index"
-    @click="setActiveItem(item)"
-  >
-    <img :src="item.image" alt="Profile" />
-    <p>{{ item.name }}</p>
-  </div>
-</div>
+        <div
+          class="participant-card"
+          v-for="(item, index) in feedbackData"
+          :key="index"
+          @click="setActiveItem(item)"
+        >
+          <img :src="item.image" alt="Profile" />
+          <p>{{ item.name }}</p>
+        </div>
+      </div>
     </section>
-  </main>
+  </body>
 </template>
 
 <script setup>
@@ -209,7 +208,10 @@ const resetHover = () => {
   font-family: "Plus Jakarta Sans", serif;
   padding: 2rem;
   background-color: #ffc8dd;
+  align-items: center;
+  justify-content: top;
   color: #333;
+  height:auto;
 }
 
 /* Header Section */
@@ -217,11 +219,11 @@ const resetHover = () => {
   text-align: center;
   letter-spacing: .9rem;
   font-family: "Plus Jakarta Sans", serif;
-  margin-top: 1rem;
+  margin-top: 0rem;
 }
 
 .header h1 {
-  font-size: 2.3rem;
+  font-size: 2.5rem;
   letter-spacing: 2rem;
   margin-bottom: 1.5rem;
   color: #554149;
@@ -234,13 +236,6 @@ const resetHover = () => {
   letter-spacing: 0.1rem;
   margin: 20px;
   font-weight: bold;
-}
-/* General Styles */
-.feedback-page {
-  font-family: "Arial", sans-serif;
-  padding: 2rem;
-  background-color: #ffc8dd;
-  color: #333;
 }
 
 /* Main Content Section */

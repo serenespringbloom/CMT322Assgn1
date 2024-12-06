@@ -157,7 +157,6 @@ const completePurchase = () => {
     phone.value = '';
     showCheckoutPopup.value = false;
     selectedBank.value = ''; // Reset selected bank
-    showCheckoutPopup.value = false;
     alert(`Purchase complete!`);
   } else {
     alert('Please provide valid email and phone number and select a bank.');
@@ -278,66 +277,66 @@ loadFromSessionStorage();
   </button>
     </div>
   </div>
-  <!-- Popup Overlay -->
-<div v-if="showCheckoutPopup" class="popup-overlay"></div>
+    <!-- Popup Overlay -->
+  <div v-if="showCheckoutPopup" class="popup-overlay"></div>
 
-<!-- Enhanced Checkout Popup -->
-<div v-if="showCheckoutPopup" class="checkout-popup">
-  <div class="popup-content">
-    <!-- Header -->
-    <h2>Checkout Summary</h2>
+  <!-- Enhanced Checkout Popup -->
+  <div v-if="showCheckoutPopup" class="checkout-popup">
+    <div class="popup-content">
+      <!-- Header -->
+      <h2>Checkout Summary</h2>
 
-    <!-- Summary Section -->
-    <p><strong>Selected Seats:</strong> <span>{{ selectedSeats.join(', ') || 'None' }}</span></p>
-    <p><strong>Number of Student Tickets:</strong> <span>{{ studentTickets }}</span></p>
-    <p><strong>Number of Public Tickets:</strong> <span>{{ publicTickets }}</span></p>
-    <p class="total-price">Total Price: RM {{ totalPrice }}</p>
+      <!-- Summary Section -->
+      <p><strong>Selected Seats:</strong> <span>{{ selectedSeats.join(', ') || 'None' }}</span></p>
+      <p><strong>Number of Student Tickets:</strong> <span>{{ studentTickets }}</span></p>
+      <p><strong>Number of Public Tickets:</strong> <span>{{ publicTickets }}</span></p>
+      <p class="total-price">Total Price: RM {{ totalPrice }}</p>
 
-      <!-- Email and Phone Inputs -->
-      <div class="checkout-inputs">
-        <input
-          type="email"
-          v-model="email"
-          placeholder="Enter your email"
-          :class="{ invalid: !isEmailValid && email }"
-        />
-        <span v-if="email && !isEmailValid" class="error-message">
-          Please enter a valid email address.
-        </span>
-        <input
-          type="text"
-          v-model="phone"
-          placeholder="Enter your phone number"
-          :class="{ invalid: !isPhoneValid && phone }"
-        />
-        <span v-if="phone && !isPhoneValid" class="error-message">
-          Please enter a valid Malaysian phone number.
-        </span>
-      </div>
-
-       <!-- FPX Bank Selection -->
-    <div class="checkout-inputs">
-      <label for="bank-select">Choose Your Bank (FPX):</label>
-      <div class="bank-dropdown">
-        <select id="bank-select" v-model="selectedBank">
-          <option disabled value="">Select a Bank</option>
-          <option
-            v-for="bank in banks"
-            :key="bank.name"
-            :value="bank.name"
-          >
-            {{ bank.name }}
-          </option>
-        </select>
-        <div class="bank-icon">
-          <img
-            v-if="selectedBankIcon"
-            :src="selectedBankIcon"
-            alt="Bank Icon"
+        <!-- Email and Phone Inputs -->
+        <div class="checkout-inputs">
+          <input
+            type="email"
+            v-model="email"
+            placeholder="Enter your email"
+            :class="{ invalid: !isEmailValid && email }"
           />
+          <span v-if="email && !isEmailValid" class="error-message">
+            Please enter a valid email address.
+          </span>
+          <input
+            type="text"
+            v-model="phone"
+            placeholder="Enter your phone number"
+            :class="{ invalid: !isPhoneValid && phone }"
+          />
+          <span v-if="phone && !isPhoneValid" class="error-message">
+            Please enter a valid Malaysian phone number.
+          </span>
+        </div>
+
+        <!-- FPX Bank Selection -->
+      <div class="checkout-inputs">
+        <label for="bank-select">Choose Your Bank (FPX):</label>
+        <div class="bank-dropdown">
+          <select id="bank-select" v-model="selectedBank">
+            <option disabled value="">Select a Bank</option>
+            <option
+              v-for="bank in banks"
+              :key="bank.name"
+              :value="bank.name"
+            >
+              {{ bank.name }}
+            </option>
+          </select>
+          <div class="bank-icon">
+            <img
+              v-if="selectedBankIcon"
+              :src="selectedBankIcon"
+              alt="Bank Icon"
+            />
+          </div>
         </div>
       </div>
-    </div>
 
       <!-- Complete Purchase Button -->
       <button
@@ -345,7 +344,7 @@ loadFromSessionStorage();
         :disabled="!isEmailValid || !isPhoneValid || !selectedBank"
         @click="completePurchase"
       >
-        Complete Purchase
+      Complete Purchase
       </button>
       <button class="close-btn" @click="showCheckoutPopup = false">Close</button>
     </div>
@@ -356,16 +355,18 @@ loadFromSessionStorage();
 /* Layout */
 
 .title{
-  top: 20;
-  min-height: 10vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  text-align: center;
   letter-spacing: .9rem;
-  font-family: 'Plus Jakarta Sans', serif;
-  font-weight: bold;
-  font-size: 1rem;
-  margin-top: 4%;
+  font-family: "Plus Jakarta Sans", serif;
+  margin-top: 2rem;
+}
+
+.title{
+  font-size: 1.2rem;
+  letter-spacing: 2rem;
+  margin-bottom: 1.5rem;
+  color: #554149;
+  text-transform: uppercase;
 }
 
 .page-container {

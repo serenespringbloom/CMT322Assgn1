@@ -9,7 +9,7 @@
     <div class="hero" id="hero">
       <!-- Left Side: Title and Buttons -->
       <div class="hero-content left">
-        <p class="date">01 JUNE, 2024</p>
+        <p class="date">01 JUNE, 2025</p>
         <h1 class="title">Malam Citra Bayu 16th</h1>
         <p class="tagline">Megar Karya, Remangi Persona Bayu</p>
         <div class="buttons">
@@ -31,37 +31,8 @@
         </section>
       </div>
     </div>
-    <!-- Event Details Section -->
-    <div class="event-details">
-        <!-- About Section -->
-        <section id="about" class="details-section about">
-          <div class="content-wrapper">
-            <!-- Text Content -->
-            <div class="text-content">
-              <button class="venue">ABOUT</button>
-              <p>
-                Malam Citra Bayu (MCB) is one of the largest annual cultural events at Universiti Sains Malaysia
-                (USM) organized by the Sabah Student Organization (PERSIS USM). MCB is a national-level creative
-                traditional dance competition conceptualized to appreciate the arts and culture of the community
-                in Sabah. For this year's event, the 16th edition of Malam Citra Bayu returns with a new theme
-                and fresh perspective, inviting 9 public universities in Malaysia to compete on the stage of
-                Dewan Tuanku Syed Putra with their own choreography.
-              </p>
-            </div>
-            <!-- Image Content -->
-            <div class="image-content">
-              <div class="image-wrapper">
-                <div class="gradient-overlay">
-                  <img src="@/assets/images/usmdancers.png" alt="USM Dancers" />
-                </div>
-              </div>
-            </div>
-          </div>
-      </section>
-
-
-      <!-- History Section -->
-      <section id="history">
+    <!-- History Section -->
+    <section id="history">
         <div class="history-container">
           <div>
             <Icon icon="mingcute:certificate-fill" class="icon-size"  style="color: #ec9910" />
@@ -88,6 +59,33 @@
           </div>
         </div>
   </section>
+    <!-- Event Details Section -->
+    <div class="event-details">
+        <!-- About Section -->
+        <section id="about" class="details-section about">
+          <div class="content-wrapper">
+            <!-- Text Content -->
+            <div class="text-content">
+              <button class="venue">ABOUT</button>
+              <p class="about-text">
+                Malam Citra Bayu (MCB) is one of the largest annual cultural events at Universiti Sains Malaysia
+                (USM) organized by the Sabah Student Organization (PERSIS USM). MCB is a national-level creative
+                traditional dance competition conceptualized to appreciate the arts and culture of the community
+                in Sabah. For this year's event, the 16th edition of Malam Citra Bayu returns with a new theme
+                and fresh perspective, inviting 9 public universities in Malaysia to compete on the stage of
+                Dewan Tuanku Syed Putra with their own choreography.
+              </p>
+            </div>
+            <!-- Image Content -->
+            <div class="image-content">
+              <div class="image-wrapper">
+                <div class="gradient-overlay">
+                  <img src="@/assets/images/usmdancers.png" alt="USM Dancers" />
+                </div>
+              </div>
+            </div>
+          </div>
+      </section>
 
       <!-- Agenda Section -->
 
@@ -162,7 +160,7 @@
         </p>
         <div class="ticket-card">
           <div class="card-content">
-            <h3>Event Ticket - 01 January 2025</h3>
+            <h3>Event Ticket - 01 June 2025</h3>
             <ul>
               <li>One night pass access all entertainment</li>
               <li>Wristband and Snack</li>
@@ -349,10 +347,10 @@ h1 {
   display: flex; /* Enable flexbox layout */
   justify-content: space-between; /* Space items apart */
   align-items: center; /* Align items vertically centered */
-  height: 100%;
+  height: 80%;
   width: 100%;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 85%);
-  background-color: rgba(255, 240, 240, 0.3);
+  background-color: rgba(255, 234, 234, 0.3);
   z-index: 1; /* Content above the background image */
   color: #554149;
   text-align: left;
@@ -388,7 +386,6 @@ h1 {
   border: none;
   border-radius: 0px;
   padding: 0.85rem 1.5rem;
-  margin-right: 1rem;
   cursor: pointer;
   transition: background 0.3s ease;
   font-family: 'Plus Jakarta Sans', sans-serif;
@@ -406,6 +403,7 @@ h1 {
   transition: color 0.3s ease;
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: bold;
+  margin-left: 1.2rem;
 }
 
 .teaser-link:hover {
@@ -443,11 +441,13 @@ h1 {
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-.venue:hover {
-  background: linear-gradient(108deg, #dcc39c -50%, #a48e69 100%);
+/* General Styling for Event Details */
+#about{
+  background-color: rgba(255, 234, 234, 0.3);
+  clip-path: polygon(0 15%, 100% 0, 100% 100%, 0% 100%);
+  padding-top:100px;
 }
 
-/* General Styling for Event Details */
 .details-section {
   display: flex;
   flex-direction: column;
@@ -457,7 +457,7 @@ h1 {
   text-align: justify;
   background-color: rgba(255, 200, 221, 0.2); /* Light pink overlay */
   border-radius: 10px;
-  margin: 2rem 0;
+  margin: 2rem 0 0 0;
 }
 
 .details-section.about .content-wrapper {
@@ -470,6 +470,7 @@ h1 {
 .text-content {
   flex: 1; /* Take equal space */
   z-index: 5;
+
 }
 
 .image-content {
@@ -512,7 +513,8 @@ h1 {
 .details-section p {
   font-size: 1rem;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  line-height: 1.6;
+  line-height: 2.2;
+  margin: 1rem 2rem 2rem 0.3rem;
 }
 
 
@@ -612,8 +614,6 @@ h1 {
   text-align: center;
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
-
-
 
 /* #agenda h2:first-of-type {
   font-size: 36px;
@@ -771,7 +771,9 @@ h1 {
   text-decoration: none;
   font-weight: 600;
   border: none;
+  padding: 0.4rem;
   border-radius: 10px;
+  margin-left:0.8rem;
   cursor: pointer;
   z-index: 10;
   position: relative;

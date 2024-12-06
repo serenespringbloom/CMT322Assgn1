@@ -8,7 +8,8 @@ const router = createRouter({
       name: 'home',
       component: () => import('../views/AboutView.vue'),
       meta: { showHeader: true,
-              showFooter: false
+              showFooter: false,
+              home: true
             },
     },
     {
@@ -16,7 +17,8 @@ const router = createRouter({
       name: 'ticket',
       component: () => import('../views/TicketView.vue'),
       meta: { showHeader: true,
-              showFooter: true
+              showFooter: true,
+              home: false
             },
     },
     {
@@ -25,7 +27,8 @@ const router = createRouter({
       name: 'merchandise',
       component: () => import('../views/MerchandisePage.vue'),
       meta: { showHeader: true,
-              showFooter: true
+              showFooter: true,
+              home: false
             },
     },
     {
@@ -34,7 +37,8 @@ const router = createRouter({
       name: 'merchandise-detail',
       component: () => import('../views/MerchandiseDetail1.vue'),
       meta: { showHeader: true,
-              showFooter: true
+              showFooter: true,
+              home: false
             },
     },
     {
@@ -43,7 +47,8 @@ const router = createRouter({
       name: 'merchandise-detail2',
       component: () => import('../views/MerchandiseDetail2.vue'),
       meta: { showHeader: true,
-              showFooter: true
+              showFooter: true,
+              home: false
             },
     },
     {
@@ -52,7 +57,8 @@ const router = createRouter({
       name: 'merchandise-detail3',
       component: () => import('../views/MerchandiseDetail3.vue'),
       meta: { showHeader: true,
-              showFooter: true
+              showFooter: true,
+              home: false
             },
     },
     {
@@ -60,7 +66,8 @@ const router = createRouter({
       name: 'feedback',
       component: () => import('../views/FeedbackView.vue'),
       meta: { showHeader: true,
-              showFooter: true
+              showFooter: true,
+              home: false
             },
     },
     {
@@ -68,7 +75,8 @@ const router = createRouter({
       name: 'cart',
       component: () => import('../views/Cart.vue'),
       meta: { showHeader: true,
-              showFooter: true
+              showFooter: true,
+              home: false
             },
     },
     {
@@ -76,7 +84,8 @@ const router = createRouter({
       name: 'refund',
       component: () => import('../views/RefundView.vue'),
       meta: { showHeader: true,
-              showFooter: true
+              showFooter: true,
+              home: false
             },
     },
     {
@@ -84,7 +93,8 @@ const router = createRouter({
       name: 'login',
       component: () => import('../views/LoginView.vue'),
       meta: { showHeader: false,
-              showFooter: false
+              showFooter: false,
+              home: false
             },
     },
     {
@@ -93,7 +103,8 @@ const router = createRouter({
       component: () => import('../views/AdminView.vue'),
       meta: { showHeader: false,
               showFooter: false,
-              requiresAuth: true },
+              requiresAuth: true,
+              home: false },
       children: [
         { path: '/dashboard', component: () => import('../views/DashboardView.vue') },
         { path: '/form', component: () => import('../views/FormView.vue') },

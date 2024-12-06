@@ -14,8 +14,7 @@
         <h2>MCB</h2>
         <nav>
           <ul class="footer-links">
-            <li><a href="#hero">HOME</a></li>
-            <li><a href="#about">EVENT</a></li>
+            <li><RouterLink to="/">HOME</RouterLink></li>
             <li><RouterLink to="/ticket">TICKET</RouterLink></li>
             <li><RouterLink to="/merchandise">MERCHANDISE</RouterLink></li>
             <li><RouterLink to="/feedback">FEEDBACK</RouterLink></li>

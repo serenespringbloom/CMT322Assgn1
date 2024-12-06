@@ -6,7 +6,6 @@
 </script>
 
 <template>
-  <body>
     <div class="header">
       <h1>MERCHANDISE</h1>
     </div>
@@ -46,7 +45,6 @@
         </div>
       </div>
     </section>
-  </body>
 </template>
 
 <style>

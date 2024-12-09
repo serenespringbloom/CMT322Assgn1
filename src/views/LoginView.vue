@@ -13,7 +13,7 @@ const handleLogin = () => {
 
   if (username.value === adminUsername && password.value === adminPassword) {
     sessionStorage.setItem('isAuthenticated', 'true');
-    router.push('/dashboard');
+    router.push('/admin');
   } else {
     error.value = 'Invalid username or password';
   }

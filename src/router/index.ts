@@ -1,4 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import Billing from "../views/Billing.vue";
+import Dashboard from "../views/Dashboard.vue";
+import Profile from "../views/Profile.vue";
+import Signin from "../views/Signin.vue";
+import Event from  "../views/Event.vue";
+import Feedback from "../views/Feedback.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -98,8 +104,46 @@ const router = createRouter({
         { path: '/dashboard', component: () => import('../views/DashboardView.vue') },
         { path: '/form', component: () => import('../views/FormView.vue') },
         { path: '/table', component: () => import('../views/TableView.vue') },
+        
       ]
-    } 
+    },
+    {
+      path: "/dashboard-default",
+      name: "Dashboard",
+      component: () => import('../views/Dashboard.vue'),
+      meta: { showHeader: false,
+              showFooter: false,
+              requiresAuth: true
+            },
+    },
+    {
+      path: "/admin-feedback",
+      name: "Feedback",
+      component: Feedback,
+    },
+    {
+      path: "/billing",
+      name: "Billing",
+      component: Billing,
+    },
+    {
+      path: "/event",
+      name: "Event",
+      component: Event,
+    },
+  
+    {
+      path: "/profile",
+      name: "Profile",
+      component: Profile,
+    },
+    {
+      path: "/signin",
+      name: "Signin",
+      component: Signin,
+    },
+  
+    
   ],
 })
 

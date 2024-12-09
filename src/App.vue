@@ -66,7 +66,7 @@ onMounted(() => {
         <li><a href="#location">CONTACT</a></li>
         <li><RouterLink to="/feedback">FEEDBACK</RouterLink></li>
         <li><RouterLink to="/refund">REFUND</RouterLink></li>
-        <li><RouterLink to="/dashboard">ADMIN</RouterLink></li>
+        <li><RouterLink to="/dashboard-default">ADMIN</RouterLink></li>
       </ul>
 
       <!-- Cart Total -->

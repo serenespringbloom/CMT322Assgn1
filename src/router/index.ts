@@ -101,21 +101,15 @@ const router = createRouter({
               showFooter: false,
               requiresAuth: true },
       children: [
-        { path: '/dashboard', component: () => import('../views/DashboardView.vue') },
-        { path: '/form', component: () => import('../views/FormView.vue') },
-        { path: '/table', component: () => import('../views/TableView.vue') },
+        { path: '/home', component: () => import('../views/Firstpage.vue') },
+        { path: '/event', component: () => import('../views/Event.vue') },
+        { path: '/billing', component: () => import('../views/Billing.vue') },
+        { path: '/feedback-admin', component: () => import('../views/Feedback.vue') },
         
       ]
     },
-    {
-      path: "/dashboard-default",
-      name: "Dashboard",
-      component: () => import('../views/Dashboard.vue'),
-      meta: { showHeader: false,
-              showFooter: false,
-              requiresAuth: true
-            },
-    },
+
+    
     {
       path: "/admin-feedback",
       name: "Feedback",

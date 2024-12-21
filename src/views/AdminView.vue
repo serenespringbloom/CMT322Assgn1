@@ -2,6 +2,7 @@
 import { RouterLink, RouterView } from 'vue-router'
 import { useRouter } from 'vue-router';
 
+
 const router = useRouter();
 
 const handleLogout = () => {
@@ -23,21 +24,24 @@ const handleLogout = () => {
       <div class="sidebar">
         <div class="side-logo">Admin Dashboard</div>
         <ul class="side-nav-links">
-          <li><RouterLink to="/dashboard">Home</RouterLink></li>
-          <li><RouterLink to="/form">Form</RouterLink></li>
-          <li><RouterLink to="/table">Table</RouterLink></li>
-          <li><RouterLink to="/">Back To Main Page</RouterLink></li>
-          <button @click="handleLogout">Logout</button>
-        </ul>
+      <li><RouterLink to="/home">Home</RouterLink></li>
+      <li><RouterLink to="/event">Event</RouterLink></li>
+      <li><RouterLink to="/billing">Billing</RouterLink></li>
+      <li><RouterLink to="/feedback-admin">Feedback</RouterLink></li>
+      <li><RouterLink to="/">Back To Main Page</RouterLink></li>
+      <button @click="handleLogout">Logout</button>
+    </ul>
+
       </div>
       <div class="admin-content">
         <RouterView />
       </div>
+
     </div>
   </body>
 </template>
 
-<style scoped>
+<style >
   #admin {
     display: flex;
     height: 100vh;
@@ -47,7 +51,8 @@ const handleLogout = () => {
   .admin-content {
     flex: 1;
     padding: 1rem;
-    background-color: #f5f7fa;
+            background: rgba(255, 200, 221, 0.8);
+            background-color: ;
     overflow-y: auto;
   }
 

@@ -1,18 +1,20 @@
 <script setup>
 import AuthorsTable from "./components/AuthorsTable.vue";
-
+import CardContainer from "./components/CardContainer.vue";
 </script>
 <template>
-  <div class="py-4 container-fluid">
-    <div class="row">
-      <div class="col-12">
-        <authors-table />
+  <div class="py-1 container-fluid">
+    <div style="background-image: linear-gradient(to right, rgba(164, 142, 105, 1), rgba(220, 195, 156, 1));margin-top: 5px;"
+      >
+     
+      <div style="background-image: linear-gradient(to right, rgba(164, 142, 105, 1), rgba(220, 195, 156, 1));" 
+      class="text-white p-4 text-xl font-bold flex item-center justify-center">
+         <h2>Feedback</h2> 
+        </div>
       </div>
-    </div>
-    <div class="mt-4 row">
-      <div class="col-12">
-        <projects-table />
-      </div>
-    </div>
+   
+    <CardContainer/>
+    
+  
   </div>
 </template>

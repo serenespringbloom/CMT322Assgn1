@@ -1,3 +1,5 @@
+
+
 <template>
   <div class="card card-carousel overflow-hidden h-100 p-0">
     <div
@@ -94,3 +96,7 @@
     </div>
   </div>
 </template>
+<script setup>
+
+
+</script>

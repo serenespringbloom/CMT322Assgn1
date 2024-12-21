@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import logo from "@/assets/MCBLogo.png";
 import Footer from "./components/Footer.vue";
+import { RouterView } from "vue-router";
 
 // Navigation state
 const isMenuOpen = ref(false);
@@ -66,7 +67,7 @@ onMounted(() => {
         <li><a href="#location">CONTACT</a></li>
         <li><RouterLink to="/feedback">FEEDBACK</RouterLink></li>
         <li><RouterLink to="/refund">REFUND</RouterLink></li>
-        <li><RouterLink to="/dashboard-default">ADMIN</RouterLink></li>
+        <li><RouterLink to="/admin">ADMIN</RouterLink></li>
       </ul>
 
       <!-- Cart Total -->

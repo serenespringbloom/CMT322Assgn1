@@ -21,23 +21,25 @@ const handleLogout = () => {
 
   <body>
     <div id="admin">
-      <div class="sidebar">
+        <div class="sidebar ">
         <div class="side-logo">Admin Dashboard</div>
         <ul class="side-nav-links">
       <li><RouterLink to="/home">Home</RouterLink></li>
       <li><RouterLink to="/event">Event</RouterLink></li>
       <li><RouterLink to="/billing">Billing</RouterLink></li>
       <li><RouterLink to="/feedback-admin">Feedback</RouterLink></li>
-      <li><RouterLink to="/">Back To Main Page</RouterLink></li>
+      <li><RouterLink to="/">Back To<br> Main Page</RouterLink></li>
       <button @click="handleLogout">Logout</button>
     </ul>
 
       </div>
+    
       <div class="admin-content">
         <RouterView />
       </div>
 
     </div>
+    
   </body>
 </template>
 
@@ -45,7 +47,7 @@ const handleLogout = () => {
   #admin {
     display: flex;
     height: 100vh;
-    font-family: Arial, sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
   }
   
   .admin-content {
@@ -57,10 +59,13 @@ const handleLogout = () => {
   }
 
   .sidebar {
-    width: 250px;
-    background-color: #2c3e50;
+    width: 300px;
+    background-color: #d058d0;
     color: white;
     padding: 1rem;
+    border-color:#9c0f9c;
+    border-width: 12px;
+    
   }
   
   .side-logo {
@@ -72,20 +77,21 @@ const handleLogout = () => {
   
   .side-nav-links {
     list-style: none;
-    padding: 0;
+    padding-left: 50px;
   }
   
   .side-nav-links li {
-    margin: 1rem 0;
+    margin: 2rem 0;
   }
   
   .side-nav-links a {
     color: white;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 800; 
+    font-size: 16px;
   }
   
   .side-nav-links a.router-link-active {
-    color: #3498db;
+    color: black;
   }
 </style>

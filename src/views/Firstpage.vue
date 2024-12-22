@@ -31,8 +31,8 @@
   <gradient-line-chart
                 id="chart-line"
                 title="Sales Overview"
-                description="<i class='fa fa-arrow-up text-success'></i>
-      <span class='font-weight-bold'>4% more</span> in 2021"
+                description="
+      <span class='font-weight-bold'>4% more</span> in 2024"
                 :chart="{
                   labels: [
                     'April 2020',
@@ -121,8 +121,12 @@ const newcards = [
     color: white;
             padding: 10px 20px;
             border-radius: 12px;
+            border-color: #a2a465;
+            border-width: 5px;
             font-size: 1.2rem;
-          width:500px
+          width:1350px;
+          margin-bottom: 20px;
+         
            
         }
 .card-container {

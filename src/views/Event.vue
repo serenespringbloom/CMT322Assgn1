@@ -28,7 +28,7 @@ const loadFromSessionStorage = () => {
 // Handle form submission
 const handleSubmit = () => {
   if (userInput.value.trim() !== '') {
-    modalMessage.value = `Hello, ${userInput.value}!`;
+    modalMessage.value = `You have submitted event named :-, ${userInput.value}!`;
   } else {
     modalMessage.value = 'Please enter your name.';
   }
@@ -52,8 +52,14 @@ loadFromSessionStorage();
     <div class="form-container">
     <!-- Form -->
     <form @submit.prevent="handleSubmit">
-      <label for="textbox">Enter Your Name:</label>
+      <label for="textbox">Enter Event headline:</label>
       <input type="text" v-model="userInput" id="textbox" required>
+      <label for="textbox">Enter Event details:</label>
+      <input type="text" v-model="userInput" id="textbox" required>
+      <label for="textbox">Enter Event tags:</label>
+      <input type="text" v-model="userInput" id="textbox" required>
+      <label for="textbox">Input Event image :</label>
+      <input type="file" id="imagefile" required>
       <button type="submit">Submit</button>
     </form>
 

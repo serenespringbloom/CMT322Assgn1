@@ -1,6 +1,6 @@
 <template>
     <div class="container mx-auto p-4">
-      <h1 class="text-3xl font-bold text-center mb-6">Card Container</h1>
+
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         <!-- Card 1 -->
         <div class="bg-white border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">

@@ -6,6 +6,8 @@ const email = ref(""); // User email
 const phone = ref(""); // User phone number
 const isEmailValid = ref(false);
 const isPhoneValid = ref(false);
+const selectedBank = ref("");
+const fpxIcon = "/src/assets/images/fpx-icon.png";
 
 // Load cart from localStorage on page load
 onMounted(() => {
@@ -85,6 +87,25 @@ const validatePhone = (phone) => {
   isPhoneValid.value = phoneRegex.test(phone);
 };
 
+const banks = ref([
+  { name: "Maybank", icon: "/src/assets/images/maybank-icon.png" },
+  { name: "CIMB Bank", icon: "/src/assets/images/cimb-icon.png" },
+  { name: "RHB Bank", icon: "/src/assets/images/rhb-icon.png" },
+  { name: "Public Bank", icon: "/src/assets/images/publicbank-icon.png" },
+  { name: "Bank Rakyat", icon: "/src/assets/images/bankrakyat-icon.png" }
+]);
+
+// Computed for Selected Bank Icon
+const selectedBankIcon = computed(() => {
+  if (!selectedBank.value) {
+    // Show the FPX icon when no bank is selected
+    return fpxIcon;
+  }
+  const bank = banks.value.find((b) => b.name === selectedBank.value);
+  return bank ? bank.icon : fpxIcon; // Fallback to FPX icon
+});
+
+
 // Simulate checkout process
 const checkout = () => {
   if (!cart.value.length) {
@@ -99,13 +120,16 @@ const checkout = () => {
 
   alert("Checkout successful! Thank you for your purchase.");
   cart.value = [];
+  selectedBank.value = ''; // Reset selected bank
   saveCartToLocalStorage();
 };
 </script>
 
 <template>
   <div class="cart-page">
-    <h1>YOUR CART</h1>
+    <div id="cart-title">
+      <h1>YOUR CART</h1>
+    </div>
     <div class="cart-container">
       <!-- Cart Items Section -->
       <div class="cart-items">
@@ -162,11 +186,33 @@ const checkout = () => {
           <span v-if="phone && !isPhoneValid" class="error-message">
             Please enter a valid Malaysian phone number (e.g., +60123456789).
           </span>
+
+          <label for="bank-select">Choose Your Bank (FPX):</label>
+          <div class="bank-dropdown">
+            <select id="bank-select" v-model="selectedBank">
+              <option disabled value="">Select a Bank</option>
+              <option
+                v-for="bank in banks"
+                :key="bank.name"
+                :value="bank.name"
+              >
+                {{ bank.name }}
+              </option>
+            </select>
+            <div class="bank-icon">
+              <img
+                v-if="selectedBankIcon"
+                :src="selectedBankIcon"
+                alt="Bank Icon"
+              />
+            </div>
+          </div>
         </div>
+        
         <button
           @click="checkout"
           class="checkout-button"
-          :disabled="!isEmailValid || !isPhoneValid"
+          :disabled="!isEmailValid || !isPhoneValid || !selectedBank" 
         >
           Proceed to Checkout
         </button>
@@ -176,24 +222,28 @@ const checkout = () => {
 </template>
 
 <style scoped>
+
 .cart-page {
   font-family: "Plus Jakarta Sans", serif;
-  padding: 20px;
-  padding-bottom: 10%;
-  margin: 3%;
+  padding: 0 20px 20px 20px;
+  padding-bottom: 5%;
+  margin: 0 3% 3% 3%;
   border-radius: 10px;
 }
 
-h1 {
-  top: 20;
-  min-height: 10vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+#cart-title{
+  text-align: center;
   letter-spacing: .9rem;
-  font-family: 'Plus Jakarta Sans', serif;
-  font-size: 2.0rem;
-  margin-bottom: 30px;
+  font-family: "Plus Jakarta Sans", serif;
+  margin-top: 2rem;
+}
+
+#cart-title h1 {
+  font-size: 2.3rem;
+  letter-spacing: 2rem;
+  margin-bottom: 1.5rem;
+  color: #554149;
+  text-transform: uppercase;
 }
 
 .cart-container {
@@ -438,6 +488,38 @@ h1 {
   color: #555;
   font-size: 1.2rem;
   font-weight: bold;
+}
+
+/* FPX Bank Selection Styling */
+.bank-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: -0.3rem;
+}
+
+.bank-dropdown select {
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.bank-dropdown select:hover {
+  border-color: #ffc8dd;
+  background-color: #fff6f8;
+}
+
+.bank-dropdown .bank-icon img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  display: inline-block;
 }
 
 @keyframes fadeIn {

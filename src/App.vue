@@ -15,6 +15,7 @@ const toggleMenu = () => {
 const route = useRoute();
 const hideHeader = computed(() => route.meta.showHeader === false);
 const hideFooter = computed(() => route.meta.showFooter === false);
+const hideHomeLinks = computed(() => route.meta.home === false);
 
 // Cart-related logic
 const cart = ref([]);
@@ -47,6 +48,7 @@ onMounted(() => {
   </head>
 
   <body>
+    <div class="backgroundImage" v-if="hideHomeLinks"></div>
     <nav v-if="!hideHeader" id="navTop">
       <!-- Brand/Logo -->
       <div class="brand">
@@ -60,20 +62,20 @@ onMounted(() => {
 
       <!-- Navigation Links -->
       <ul class="nav-links" :class="{ open: isMenuOpen }">
-        <li><RouterLink to="/">HOME</RouterLink></li>
-        <li><a href="#about">EVENT</a></li>
-        <li><RouterLink to="/ticket">TICKET</RouterLink></li>
-        <li><RouterLink to="/merchandise">MERCHANDISE</RouterLink></li>
-        <li><a href="#location">CONTACT</a></li>
-        <li><RouterLink to="/feedback">FEEDBACK</RouterLink></li>
-        <li><RouterLink to="/refund">REFUND</RouterLink></li>
-        <li><RouterLink to="/admin">ADMIN</RouterLink></li>
+        <li><RouterLink to="/">🏠 HOME</RouterLink></li>
+        <li v-if="!hideHomeLinks"><a href="#about">🎉 EVENT</a></li>
+        <li v-if="!hideHomeLinks"><a href="#location">📞 CONTACT</a></li>
+        <li><RouterLink to="/ticket">🎫 TICKET</RouterLink></li>
+        <li><RouterLink to="/merchandise">🛍️ MERCHANDISE</RouterLink></li>
+        <li><RouterLink to="/feedback">🗣️ FEEDBACK</RouterLink></li>
+        <li><RouterLink to="/refund">💸 REFUND</RouterLink></li>
+        <li><RouterLink to="/dashboard">🛠️ ADMIN</RouterLink></li>
       </ul>
 
       <!-- Cart Total -->
       <div class="cart">
         <span class="cart-icon">🛒</span>
-        <RouterLink to="/cart">RM {{ totalPrice }}</RouterLink>
+        <p><RouterLink to="/cart">CART RM {{ totalPrice }}</RouterLink></p>
       </div>
     </nav>
     <main><RouterView /></main>
@@ -146,16 +148,17 @@ onMounted(() => {
   }
 
   .cart {
-  display: flex;
-  align-items: center;
-  background: #DCC39C;
-  color: #554149;
-  font-size: 1rem;
-  font-weight: bold;
-  padding: 0.5rem 1rem;
-  border-radius: 0px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, background 0.3s ease;
+    display: flex;
+    align-items: center;
+    background: #DCC39C;
+    color: #554149;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 0px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background 0.3s ease;
+    margin-left: -20px;
 }
 
 .cart:hover {
@@ -163,6 +166,20 @@ onMounted(() => {
   transform: translateY(-3px);
   cursor: pointer;
 }
+
+.cart p a{
+  text-decoration: none;
+  font-weight: 500;
+  color: #333; /* Dark text for links */
+  transition: color 0.3s, background-color 0.3s;
+}
+
+.cart p a:hover{
+  color: #007bff; /* Change color on hover */
+  background-color: rgba(0, 123, 255, 0.1); /* Subtle hover background */
+  border-radius: 4px; /* Rounded corners for hover effect */
+}
+
 
 .cart-icon {
   margin-right: 0.5rem;

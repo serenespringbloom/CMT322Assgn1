@@ -19,7 +19,7 @@ const handleLogout = () => {
     <title>Malam Citra Bayu Admin</title>
   </head>
 
-  <body>
+  <body class="body">
     <div id="admin">
         <div class="sidebar ">
         <div class="side-logo">Admin Dashboard</div>

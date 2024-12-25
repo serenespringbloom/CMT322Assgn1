@@ -106,9 +106,10 @@ const router = createRouter({
               requiresAuth: true,
               home: false },
       children: [
-        { path: '/dashboard', component: () => import('../views/DashboardView.vue') },
-        { path: '/form', component: () => import('../views/FormView.vue') },
-        { path: '/table', component: () => import('../views/TableView.vue') },
+        { path: '/dashboard', component: () => import('../views/Firstpage.vue') },
+        { path: '/feedback-admin', component: () => import('../views/Feedback.vue') },
+        { path: '/event', component: () => import('../views/Event.vue') },
+        { path: '/billing', component: () => import('../views/Billing.vue') },
       ]
     } 
   ],

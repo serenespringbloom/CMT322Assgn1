@@ -28,31 +28,7 @@
             </div>
    
     </div>
-    <gradient-line-chart
-                  id="chart-line"
-                  title="Sales Overview"
-                  description="
-        <span class='font-weight-bold'>4% more</span> in 2024"
-                  :chart="{
-                    labels: [
-                      'April 2020',
-                      'May 2020',
-                      'April 2021',
-                      'May 2021',
-                      'April 2022',
-                      'May 2022',
-                      'April 2023',
-                      'May 2023',
-                      
-                    ],
-                    datasets: [
-                      {
-                        label: 'Mobile Apps',
-                        data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
-                      },
-                    ],
-                  }"
-                />
+  
       
   </template>
   
@@ -64,7 +40,7 @@
   import totalSales from '../assets/images/totalSales.png';
   import studentSales from '../assets/images/flags/studentic.png';
   import guestSales from '../assets/images/flags/guestic.png';
-  import GradientLineChart from "../components/Charts/GradientLineChart.vue";
+
   const cards = [
     {
       id: 1,

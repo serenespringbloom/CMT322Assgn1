@@ -1,6 +1,6 @@
 <script setup>
 
-import CardContainer from "./components/CardContainer.vue";
+import CardContainer from "../components/CardContainer.vue";
 </script>
 <template>
   <div class="py-1 container-fluid">

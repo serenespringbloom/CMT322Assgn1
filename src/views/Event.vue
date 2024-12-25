@@ -40,7 +40,7 @@ const closeModal = () => {
   showModal.value = false; // Hide the modal
 };
 
-import EventCard from "./components/EventCard.vue";
+import EventCard from "../components/EventCard.vue";
 
 
 loadFromSessionStorage();

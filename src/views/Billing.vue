@@ -1,10 +1,10 @@
 <script setup>
 
 
-import TableBox from "./components/TableBox.vue";
-import TableBox2 from "./components/TableBox2.vue";
-import TableBox3 from "./components/TableBox3.vue";
-import TableBox4 from "./components/TableBox4.vue";
+import TableBox from "../components/TableBox.vue";
+import TableBox2 from "../components/TableBox2.vue";
+import TableBox3 from "../components/TableBox3.vue";
+import TableBox4 from "../components/TableBox4.vue";
 </script>
 <template>
   <div class="container-fluid">

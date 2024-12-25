@@ -62,9 +62,9 @@
   import clientImage from '../assets/images/client.png';
   import feedbackImage from '../assets/images/feedback.png';
   import totalSales from '../assets/images/totalSales.png';
-  import studentSales from '../assets/images/icons/flags/studentic.png';
-  import guestSales from '../assets/images/icons/flags/guestic.png';
-  import GradientLineChart from "@/examples/Charts/GradientLineChart.vue";
+  import studentSales from '../assets/images/flags/studentic.png';
+  import guestSales from '../assets/images/flags/guestic.png';
+  import GradientLineChart from "../components/Charts/GradientLineChart.vue";
   const cards = [
     {
       id: 1,

@@ -134,7 +134,10 @@
     </div>
   </template>
   
-  <style>
+  <style scoped >
+  @import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
   body {
     background-color: #f9fafb;
   }

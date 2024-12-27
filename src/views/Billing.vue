@@ -56,3 +56,9 @@ import TableBox4 from "../components/TableBox4.vue";
 </div>
  
 </template>
+
+<style scoped>
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+</style>

@@ -48,4 +48,8 @@
     { ticketID: '182793', entrance: '7 April 2024', email: 'RM200',phone:'01392339293' },
   ];
   </script>
-  
+   <style scoped>
+   @import "tailwindcss/base";
+   @import "tailwindcss/components";
+   @import "tailwindcss/utilities";
+   </style>

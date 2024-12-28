@@ -179,7 +179,7 @@
           <div class="card-content">
             <h3>Event Ticket - 01 June 2025 (Student)</h3>
             <ul>
-              <li>One night pass access all entertainment</li>
+              <li>One night pass access all entertainment</li>  
               <li>Wristband and Snack</li>
               <li>Meet Event Performers</li>
               <li>Pick Seat</li>

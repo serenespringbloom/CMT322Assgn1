@@ -14,7 +14,13 @@ use App\Http\Controllers\ImageUploadController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::get('/images', [ImageUploadController::class, 'listImages']);
+Route::delete('/images/{id}', [ImageUploadController::class, 'deleteImage']);
+Route::put('/images/{id}', [ImageUploadController::class, 'updateImage']);
+
 Route::post('/upload-image', [ImageUploadController::class, 'uploadImage']);
+
 // Default user route for authenticated API requests
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

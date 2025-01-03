@@ -1,74 +1,84 @@
 
 <script setup>
-
-import { ref } from 'vue';
-
-// Reactive data
-const userInput = ref(''); // Bind to the input field
-const showModal = ref(false); // Control modal visibility
-const modalMessage = ref(''); // Message to display in the modal
-
-
-
-
-const loadFromSessionStorage = () => {
-  const saveduserInput = JSON.parse(sessionStorage.getItem('userInput')) || [];
-
-
-  userInput.value = saveduserInput;
-};
-
-// const saveToSessionStorage = () => {
-//   sessionStorage.setItem('userInput', JSON.stringify(userInput.value));
-
-// };
-
-
-
-// Handle form submission
-const handleSubmit = () => {
-  if (userInput.value.trim() !== '') {
-    modalMessage.value = `You have submitted event named :-, ${userInput.value}!`;
-  } else {
-    modalMessage.value = 'Please enter your name.';
-  }
-  showModal.value = true; // Show the modal
-};
-
-// Close the modal
-const closeModal = () => {
-  showModal.value = false; // Hide the modal
-};
-
 import EventCard from "../components/EventCard.vue";
 
-
-loadFromSessionStorage();
 </script>
-
+<script>
+  import axios from 'axios';
+  
+  export default {
+    data() {
+      return {
+        headline: '',
+        details: '',
+        tags: '',
+        file: null,
+        uploadedImageUrl: null,
+      };
+    },
+    methods: {
+      handleFileUpload(event) {
+        this.file = event.target.files[0]; // Capture the selected file
+      },
+      async uploadFile() {
+        if (!this.file) {
+          alert('Please select a file');
+          return;
+        }
+  
+        const formData = new FormData();
+        formData.append('file', this.file);
+        formData.append('headline', this.headline);
+        formData.append('details', this.details);
+        formData.append('tags', this.tags);
+  
+        try {
+          const response = await axios.post('http://127.0.0.1:8000/api/upload-image', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+  
+          console.log('File uploaded successfully:', response.data);
+          this.uploadedImageUrl = response.data.url;
+        } catch (error) {
+          console.error('Error uploading file:', error.response?.data || error.message);
+        }
+      },
+    },
+  };
+  </script>
 <template>
   <div class="container-fluid">
  
-    <div class="form-container">
-    <!-- Form -->
-    <form @submit.prevent="handleSubmit">
-      <label for="textbox">Enter Event headline:</label>
-      <input type="text" v-model="userInput" id="textbox" required>
-      <label for="textbox">Enter Event details:</label>
-      <input type="text" v-model="userInput" id="textbox" required>
-      <label for="textbox">Enter Event tags:</label>
-      <input type="text" v-model="userInput" id="textbox" required>
-      <label for="textbox">Input Event image :</label>
-      <input type="file" id="imagefile" required>
-      <button type="submit">Submit</button>
+    <div>
+    <form @submit.prevent="uploadFile">
+      <div>
+        <label>Headline:</label>
+        <input v-model="headline" type="text" placeholder="Enter headline" required />
+      </div>
+      
+      <div>
+        <label>Details:</label>
+        <textarea v-model="details" placeholder="Enter details" required></textarea>
+      </div>
+
+      <div>
+        <label>Tags (comma-separated):</label>
+        <input v-model="tags" type="text" placeholder="e.g., nature, travel, sunset" />
+      </div>
+
+      <div>
+        <label>Image:</label>
+        <input type="file" @change="handleFileUpload" accept="image/*" required />
+      </div>
+
+      <button type="submit">Upload</button>
     </form>
 
-    <!-- Modal -->
-    <div v-if="showModal" class="modal" @click.self="closeModal">
-      <div class="modal-content">
-        <span class="close-button" @click="closeModal">&times;</span>
-        <p>{{ modalMessage }}</p>
-      </div>
+    <div v-if="uploadedImageUrl">
+      <h3>Uploaded Image:</h3>
+      <img :src="uploadedImageUrl" alt="Uploaded Image" style="max-width: 300px; margin-top: 10px;" />
     </div>
   </div>
 

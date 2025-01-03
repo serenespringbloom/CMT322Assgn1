@@ -26,6 +26,7 @@ const returnHome = () => {
 
 <template>
   <div class="login-page">
+   
     <!-- Sidebar -->
     <div class="sidebar">
       <a class="home-link" @click="returnHome">Return to Home</a>

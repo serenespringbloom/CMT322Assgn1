@@ -1,9 +1,9 @@
 <?php
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
-
+use App\Models\Item;
+use App\Http\Controllers\ImageUploadController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+Route::post('/upload-image', [ImageUploadController::class, 'uploadImage']);
 // Default user route for authenticated API requests
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -22,21 +22,29 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Example test route to verify API functionality
 Route::get('/test', function () {
-    return response()->json(['message' => 'API is working']);
+    // Fetch data from your table (replace 'your_table_name' with your actual table name)
+    return DB::table('users')->get();
 });
 
 // Add your additional API routes below
 Route::get('/example', function () {
     return response()->json(['message' => 'This is an example route']);
 });
-
-Route::get('/items', function () {
-    return response()->json([
-        ['id' => 1, 'name' => 'Item 1'],
-        ['id' => 2, 'name' => 'Item 2'],
-    ]);
+Route::get("/test-me", function () {
+    return 'Hello from Laravel!';
 });
 
-Route::get('/test', function () {
-    return DB::table('users')->get();
+Route::post('/store-item', function (Request $request) {
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'nullable|string',
+    ]);
+
+    $item = Item::create($validated);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Item stored successfully!',
+        'data' => $item,
+    ], 201);
 });

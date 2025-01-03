@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Item;
+use App\Http\Controllers\ImageUploadController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,7 +14,7 @@ use App\Models\Item;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+Route::post('/upload-image', [ImageUploadController::class, 'uploadImage']);
 // Default user route for authenticated API requests
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

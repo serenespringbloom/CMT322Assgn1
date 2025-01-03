@@ -80,7 +80,7 @@ export default {
   methods: {
     async storeItem() {
       try {
-        const response = await axios.post('http://127.0.0.1:8000/api/store-item', this.form);//post data to database
+        const response = await axios.post('http://hazimazman.xyz/backend/api/store-item', this.form);//post data to database
         this.responseMessage = response.data.message;
         this.form.name = '';
         this.form.description = '';

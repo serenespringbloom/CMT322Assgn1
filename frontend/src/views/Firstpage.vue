@@ -28,10 +28,70 @@
             </div>
    
     </div>
-  
+    <div>
+        <h2>HOME</h2>
+        <p>Take me to Test page</p>
+        <button @click.prevent="triggerEndpoint">Trigger Endpoint</button>
+        <p v-if="response">{{ response }}</p>
+    </div>
+   <p>This for get data</p>   
+    <div>
+    <h2>Add New Item</h2>
+    <form @submit.prevent="storeItem">
+      <label for="name">Name:</label>
+      <input type="text" v-model="form.name" required />
       
+      <label for="description">Description:</label>
+      <textarea v-model="form.description"></textarea>
+      
+      <button type="submit">Save</button>
+    </form>
+    <p v-if="responseMessage">{{ responseMessage }}</p>
+  </div>
+  <p>This for post data</p> 
   </template>
-  
+  <script>
+import axios from 'axios';
+import { ref } from 'vue';
+
+// Define reactive state for response
+const response = ref(null);
+
+// Define the API call function
+const triggerEndpoint = async () => {
+    try {
+        const res = await  axios.get('http://127.0.0.1:8000/api/test');//get data from database
+        response.value = res.data; // Assign API response
+    } catch (error) {
+        console.error('Error:', error);
+        response.value = 'Failed to fetch data from the endpoint.';
+    }
+};
+export default {
+  data() {
+    return {
+      form: {
+        name: '',
+        description: ''
+      },
+      responseMessage: ''
+    };
+  },
+  methods: {
+    async storeItem() {
+      try {
+        const response = await axios.post('http://hazimazman.xyz/backend/api/store-item', this.form);//post data to database
+        this.responseMessage = response.data.message;
+        this.form.name = '';
+        this.form.description = '';
+      } catch (error) {
+        console.error('Error:', error.response.data);
+        this.responseMessage = 'Failed to store item!';
+      }
+    }
+  }
+};
+  </script>
   <script setup>
   
   import salesImage from '../assets/images/sales.jpg';

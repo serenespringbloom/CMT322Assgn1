@@ -4,20 +4,20 @@
       <table>
         <thead>
           <tr>
-            <th>User</th>
-            <th>Order ID</th>
-            <th>Amount</th>
+            
+            <th>Transaction ID</th>
+           
             <th>Status</th>
             <th>Reason</th>
-            <th>Admin Notes</th>
+            <th>Processing Comments</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="refund in refunds" :key="refund.id">
-            <td>{{ refund.user.name }}</td>
-            <td>{{ refund.order_id }}</td>
-            <td>${{ refund.amount }}</td>
+          <tr v-for="refund in refunds" :key="refund.refund_id">
+    
+            <td>{{ refund.transaction_id }}</td>
+           
             <td>
               <select v-model="refund.status">
                 <option value="pending">Pending</option>
@@ -28,7 +28,7 @@
             <td>{{ refund.reason }}</td>
             <td>
               <input
-                v-model="refund.admin_notes"
+                v-model="refund.processing_comments"
                 placeholder="Add notes"
               />
             </td>
@@ -53,7 +53,7 @@
     methods: {
       async fetchRefunds() {
         try {
-          const response = await axios.get('/api/admin/refunds');
+          const response = await axios.get('http://127.0.0.1:8000/api/admin/refunds');
           this.refunds = response.data;
         } catch (error) {
           console.error('Error fetching refunds:', error);
@@ -61,9 +61,9 @@
       },
       async updateRefund(refund) {
         try {
-          await axios.put(`/api/admin/refunds/${refund.id}`, {
+          await axios.put(`http://127.0.0.1:8000/api/admin/refunds/${refund.refund_id}`, {
             status: refund.status,
-            admin_notes: refund.admin_notes
+            processing_comments: refund.processing_comments,
           });
           alert('Refund updated successfully!');
           this.fetchRefunds();

@@ -20,7 +20,7 @@ class ImageUploadController extends Controller
         if ($request->hasFile('file')) {
             // Retrieve file
             $file = $request->file('file');
-            $filename = time() . '_' . $file->getClientOriginalName();
+            $filename =  $file->getClientOriginalName();
             $file->move(public_path('images'), $filename);
 
             // Save to database
@@ -32,6 +32,7 @@ class ImageUploadController extends Controller
             $image->save();
 
             return response()->json([
+                'testing'=>'test',
                 'message' => 'Image uploaded successfully',
                 'filename' => $filename,
                 'url' => asset('images/' . $filename),

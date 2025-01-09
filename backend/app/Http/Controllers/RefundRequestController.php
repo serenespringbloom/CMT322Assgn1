@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Transaction;
 use App\Models\RefundRequest;
 use Illuminate\Http\Request;
 
@@ -16,14 +16,15 @@ class RefundRequestController extends Controller
 
     public function validatePid($pid)
     {
-        $isValid = RefundRequest::where('transaction_id', $pid)->exists();
+        $isValid = Transaction::where('transaction_id', $pid)->exists();
     
         return response()->json(['isValid' => $isValid]);
     }
 
     public function store( Request $request)
     {
-       
+        $isValid = RefundRequest::where('transaction_id', $request->input('transaction_id'))->exists();
+        if(!$isValid){
         $refunds = new RefundRequest();
         
         $refunds->transaction_id = $request->input('transaction_id');
@@ -36,7 +37,13 @@ class RefundRequestController extends Controller
           
         ], 200);
     
-        
+    }
+    return response()->json([
+        'testing'=>'test',
+        'message' => 'Refund uploaded failed',
+      
+    ], 404);
+
     }
 
     public function update(Request $request, $id)

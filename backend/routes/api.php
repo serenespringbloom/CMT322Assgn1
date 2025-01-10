@@ -6,6 +6,8 @@ use App\Models\Item;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\RefundRequestController;
 use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\SeatController;
+use App\Http\Controllers\TransactionController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -67,3 +69,9 @@ Route::post('/store-item', function (Request $request) {
 
 //Feedback API
 Route::post('/hello/feedback', [FeedbackController::class, 'store']);
+Route::get('/admin/feedback', [FeedbackController::class, 'index']);
+
+//Ticket API
+
+Route::post('/purchase', [TransactionController::class, 'store']);
+Route::get('/seats', [SeatController::class, 'index']);

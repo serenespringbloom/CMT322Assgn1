@@ -1,171 +1,129 @@
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
+import axios from 'axios';
 
-const rows = 15; // Number of rows
-const columns = 24; // Number of seats per row
+const rows = 15;
+const columns = 24;
 const seatsPerSection = 8;
-const bookedSeats = ref(['A1', 'B3', 'C5']); // Pre-booked seats
 
-// Divide seats into three sections
-const seats = computed(() => {
-  const grid = { left: [], center: [], right: [] };
-  const splitPoint = Math.floor(columns / 3);
-
-  for (let i = 0; i < rows; i++) {
-    const row = String.fromCharCode(65 + i); // A, B, C...
-    for (let j = 1; j <= columns; j++) {
-      const seat = `${row}${j}`;
-      if (j <= splitPoint) {
-        grid.left.push(seat);
-      } else if (j <= splitPoint * 2) {
-        grid.center.push(seat);
-      } else {
-        grid.right.push(seat);
-      }
-    }
-  }
-  return grid;
-});
-
-// Reactive refs for selected seats and ticket counts
+const bookedSeats = ref([]);
 const selectedSeats = ref([]);
 const studentTickets = ref(0);
 const publicTickets = ref(0);
-const showCheckoutPopup = ref(false); // State for showing the popup
-const email = ref(''); // User email
-const phone = ref(''); // User phone number
+const showCheckoutPopup = ref(false);
+const email = ref('');
+const phone = ref('');
 const selectedBank = ref("");
 const fpxIcon = "/src/assets/images/fpx-icon.png";
-
-// Validation for email
-const isEmailValid = computed(() => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email.value);
-});
-
-// Validation for Malaysian phone number
-const isPhoneValid = computed(() => {
-  const phoneRegex = /^(\+60|0)[1-9][0-9]{7,9}$/;
-  return phoneRegex.test(phone.value);
-});
-
+const seats = {
+  left: Array.from({ length: rows * (seatsPerSection / 3) }, (_, i) => `L${i + 1}`),
+  center: Array.from({ length: rows * (seatsPerSection / 3) }, (_, i) => `C${i + 1}`),
+  right: Array.from({ length: rows * (seatsPerSection / 3) }, (_, i) => `R${i + 1}`),
+};
 // Banks Data
 const banks = ref([
   { name: "Maybank", icon: "/src/assets/images/maybank-icon.png" },
   { name: "CIMB Bank", icon: "/src/assets/images/cimb-icon.png" },
   { name: "RHB Bank", icon: "/src/assets/images/rhb-icon.png" },
   { name: "Public Bank", icon: "/src/assets/images/publicbank-icon.png" },
-  { name: "Bank Rakyat", icon: "/src/assets/images/bankrakyat-icon.png" }
+  { name: "Bank Rakyat", icon: "/src/assets/images/bankrakyat-icon.png" },
 ]);
-
-// Computed for Selected Bank Icon
-const selectedBankIcon = computed(() => {
-  if (!selectedBank.value) {
-    // Show the FPX icon when no bank is selected
-    return fpxIcon;
-  }
-  const bank = banks.value.find((b) => b.name === selectedBank.value);
-  return bank ? bank.icon : fpxIcon; // Fallback to FPX icon
-});
-
-
-// Load data from sessionStorage
-const loadFromSessionStorage = () => {
-  const savedSeats = JSON.parse(sessionStorage.getItem('selectedSeats')) || [];
-  const savedStudentTickets = Number(sessionStorage.getItem('studentTickets')) || 0;
-  const savedPublicTickets = Number(sessionStorage.getItem('publicTickets')) || 0;
-
-  selectedSeats.value = savedSeats;
-  studentTickets.value = savedStudentTickets;
-  publicTickets.value = savedPublicTickets;
-};
-
-// Save data to sessionStorage whenever changes occur
-const saveToSessionStorage = () => {
-  sessionStorage.setItem('selectedSeats', JSON.stringify(selectedSeats.value));
-  sessionStorage.setItem('studentTickets', studentTickets.value);
-  sessionStorage.setItem('publicTickets', publicTickets.value);
-};
-
-// Watch for changes to synchronize with sessionStorage
-watch([selectedSeats, studentTickets, publicTickets], saveToSessionStorage, {
-  deep: true,
-});
-
-// Toggle seat selection
-const toggleSeat = (seat) => {
-  if (bookedSeats.value.includes(seat)) return; // Ignore booked seats
-
-  if (selectedSeats.value.includes(seat)) {
-    // Remove the seat if already selected
-    selectedSeats.value = selectedSeats.value.filter((s) => s !== seat);
-
-    // Decrease ticket count, prioritize public tickets first
-    if (publicTickets.value > 0) {
-      publicTickets.value -= 1;
-    } else if (studentTickets.value > 0) {
-      studentTickets.value -= 1;
-    }
-  } else {
-    // Add the seat to selected seats
-    selectedSeats.value.push(seat);
-
-    // Increase ticket count, prioritize public tickets by default
-    const totalSeats = selectedSeats.value.length;
-    const currentTotal = studentTickets.value + publicTickets.value;
-
-    if (currentTotal < totalSeats) {
-      publicTickets.value += 1;
-    }
-  }
-};
-
-// Adjust ticket counts to maintain total equal to selectedSeats
+//adjust ticket methods
 const adjustTickets = (type, value) => {
-  value = Math.max(0, Math.min(value, selectedSeats.value.length)); // Prevent invalid values
-  const otherType = type === 'student' ? publicTickets : studentTickets;
-
-  const remainingSeats = selectedSeats.value.length - value;
-  otherType.value = Math.max(0, Math.min(remainingSeats, otherType.value));
-
   if (type === 'student') {
-    studentTickets.value = value;
-  } else {
-    publicTickets.value = value;
+    studentTickets.value = Math.min(value, selectedSeats.value.length - publicTickets.value);
+  } else if (type === 'public') {
+    publicTickets.value = Math.min(value, selectedSeats.value.length - studentTickets.value);
+  }
+};
+const isEmailValid = computed(() => /\S+@\S+\.\S+/.test(email.value));
+const isPhoneValid = computed(() => 
+  /^(?:01[0-46-9]-?\d{7,8}|0[2-9]-?\d{7,8})$/.test(phone.value)
+);
+
+
+// Fetch booked seats from the database
+const fetchBookedSeats = async () => {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/seats`,);
+    bookedSeats.value = response.data; // Assuming the API returns an array of booked seats
+  } catch (error) {
+    console.error('Error fetching booked seats:', error);
   }
 };
 
-// Ticket pricing logic
-const prices = {
-  student: 15,
-  public: 20,
-};
-
-// Compute total price based on ticket counts
-const totalPrice = computed(() => {
-  return studentTickets.value * prices.student + publicTickets.value * prices.public;
-});
-
-// Complete the purchase and update booked seats
-const completePurchase = () => {
-  if (isEmailValid.value && isPhoneValid.value) {
-    bookedSeats.value.push(...selectedSeats.value);
+// Save purchase data to the database
+const savePurchase = async () => {
+  const payload = {
+    selected_seats: selectedSeats.value,
+    student_tickets: studentTickets.value,
+    public_tickets: publicTickets.value,
+    total_price: totalPrice.value,  // Access the computed value here
+    
+    email: email.value,
+    phone: phone.value,
+    selected_bank: selectedBank.value,
+  };
+ 
+  
+  try {
+    console.log(totalPrice.value);
+    const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/purchase`, payload);
+    alert('Purchase complete!');
+    bookedSeats.value.push(...selectedSeats.value); // Update local booked seats
     selectedSeats.value = [];
     studentTickets.value = 0;
     publicTickets.value = 0;
     email.value = '';
     phone.value = '';
+    selectedBank.value = '';
     showCheckoutPopup.value = false;
-    selectedBank.value = ''; // Reset selected bank
-    alert(`Purchase complete!`);
+  } catch (error) {
+    console.error('Error saving purchase:', error);
+    alert('Failed to complete purchase. Please try again.');
+  }
+};
+const selectedBankIcon = computed(() => {
+  const bank = banks.value.find((b) => b.name === selectedBank.value);
+  return bank ? bank.icon : '';
+});
+watch(showCheckoutPopup, (value) => {
+  document.body.style.overflow = value ? 'hidden' : 'auto';
+});
+watch([selectedSeats, studentTickets, publicTickets], ([newSeats, newStudents, newPublic]) => {
+  console.log('Selected Seats:', newSeats);
+  console.log('Student Tickets:', newStudents);
+  console.log('Public Tickets:', newPublic);
+});
+
+// Load booked seats on component mount
+onMounted(fetchBookedSeats);
+
+// Remaining logic for handling seats, tickets, and UI...
+const toggleSeat = (seat) => {
+  if (bookedSeats.value.includes(seat)) return;
+  if (selectedSeats.value.includes(seat)) {
+    selectedSeats.value = selectedSeats.value.filter((s) => s !== seat);
+    if (publicTickets.value > 0) publicTickets.value -= 1;
+    else if (studentTickets.value > 0) studentTickets.value -= 1;
   } else {
-    alert('Please provide valid email and phone number and select a bank.');
+    selectedSeats.value.push(seat);
+    const totalSeats = selectedSeats.value.length;
+    const currentTotal = studentTickets.value + publicTickets.value;
+    if (currentTotal < totalSeats) publicTickets.value += 1;
   }
 };
 
-// Load data when the component is mounted
-loadFromSessionStorage();
+const prices = { student: 15, public: 20 };
+const totalPrice = computed(() => 
+  Number(studentTickets.value) * prices.student + 
+  Number(publicTickets.value) * prices.public
+ 
+);
+
+
 </script>
+
 
 <template>
   <div class="title">
@@ -342,7 +300,7 @@ loadFromSessionStorage();
       <button
         class="complete-btn"
         :disabled="!isEmailValid || !isPhoneValid || !selectedBank"
-        @click="completePurchase"
+        @click="savePurchase"
       >
       Complete Purchase
       </button>

@@ -9,8 +9,8 @@ class FeedbackController extends Controller
 {
     public function index()
     {
-        $refunds = Feedback::all();
-        return response()->json($refunds);
+        $feedback = Feedback::all();
+        return response()->json($feedback);
     }
 
 

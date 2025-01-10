@@ -15,9 +15,10 @@ class Transaction extends Model
 
     protected $fillable = [
         'total_price',
-        'transaction_type',
-        'payment_status',
-        'payment_method',
-        'cust_email',
+        'student_tickets',
+        'public_tickets',
+        'total_price',
+        'selected_bank',
+
     ];
 }

@@ -41,6 +41,7 @@
   </template>
   
   <script>
+    import axios from 'axios';
   export default {
     data() {
       return {
@@ -54,10 +55,21 @@
       };
     },
     methods: {
-      validatePid() {
-        this.isPidValid = this.refundRequest.pid === "PID12345";
-      },
-      submitRefund() {
+      async validatePid() {
+  try {
+    const response = await axios.get(`http://127.0.0.1:8000/api/validate-pid/${this.refundRequest.pid}`);
+    this.isPidValid = response.data.isValid;
+    if (this.isPidValid) {
+      alert('PID is valid!');
+    } else {
+      alert('PID is invalid!');
+    }
+  } catch (error) {
+    console.error('Error validating PID:', error);
+    alert('An error occurred while validating the PID.');
+  }
+},
+      async submitRefund() {
         if (!this.refundRequest.pid || !this.refundRequest.reason) {
           this.message = "All fields are required!";
           this.success = false;
@@ -69,7 +81,16 @@
           this.success = false;
           return;
         }
-  
+        const formData = new FormData();
+        formData.append('transaction_id', this.refundRequest.pid);
+        formData.append('reason', this.refundRequest.reason);
+        
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/user/refunds`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+          console.log('File uploaded successfully:', response.data);
         // Simulate sending refund request to the backend
         this.message = `Refund request for Purchase ID ${this.refundRequest.pid} submitted successfully!`;
         this.success = true;

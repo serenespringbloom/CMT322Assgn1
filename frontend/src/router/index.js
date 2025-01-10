@@ -119,6 +119,7 @@ const router = createRouter({
         { path: '/feedback-admin', component: () => import('../views/Feedback.vue') },
         { path: '/event', component: () => import('../views/Event.vue') },
         { path: '/billing', component: () => import('../views/Billing.vue') },
+        { path: '/refunding', component: () => import('../views/Refund.vue') },
       ]
     } 
   ],

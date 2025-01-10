@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Item;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\RefundRequestController;
+use App\Http\Controllers\FeedbackController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -58,8 +59,11 @@ Route::post('/store-item', function (Request $request) {
 
 
 
-
+//Refund API
     Route::get('/admin/refunds', [RefundRequestController::class, 'index']);
     Route::put('/admin/refunds/{refund_id}', [RefundRequestController::class, 'update']);
     Route::post('/user/refunds', [RefundRequestController::class, 'store']);
     Route::get('/validate-pid/{pid}', [RefundRequestController::class, 'validatePid']);
+
+//Feedback API
+Route::post('/hello/feedback', [FeedbackController::class, 'store']);

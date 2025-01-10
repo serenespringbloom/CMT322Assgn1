@@ -1,25 +1,61 @@
 <script setup lang="ts">
-  import CountdownTimer from "@/components/countdownTimer.vue"; // Include if using the timer component
-  import { Icon } from '@iconify/vue';
-  import Footer from "../components/Footer.vue";
+import { ref, onMounted } from "vue";
+import apiClient from "@/api"; // Axios instance configuration
+import CountdownTimer from "@/components/countdownTimer.vue";
+import Footer from "../components/Footer.vue";
+
+// State for event data
+const event = ref({
+  event_title: "",
+  event_subtitle: "",
+  event_venue: "",
+  event_datetime: "",
+  event_about: "",
+  event_email: "",
+  event_phone: "",
+});
+
+// Fetch event data
+const fetchEvent = async () => {
+  try {
+    const response = await apiClient.get("/events");
+    // Assuming the API returns an array of events, take the first event
+    const fetchedEvent = response.data[0];
+    if (fetchedEvent) {
+      event.value = fetchedEvent;
+    } else {
+      console.error("No event data available.");
+    }
+  } catch (error) {
+    console.error("Error fetching event data:", error);
+  }
+};
+
+// Fetch data when the component mounts
+onMounted(fetchEvent);
 </script>
+
+
+
 
 <template>
   <div class="body">
     <div class="hero" id="hero">
       <!-- Left Side: Title and Buttons -->
       <div class="hero-content left">
-        <p class="date">01 JUNE, 2025</p>
-        <h1 class="title">Malam Citra Bayu 16th</h1>
-        <p class="tagline">Megar Karya, Remangi Persona Bayu</p>
+        <p class="date">{{ new Date(event.event_datetime).toLocaleDateString("en-US", { day: "2-digit", month: "long", year: "numeric" }) }}</p>
+        <h1 class="title">{{ event.event_title }}</h1>
+        <p class="tagline">{{ event.event_subtitle }}</p>
         <div class="buttons">
-          <a href="#tickets-merchandise"><button class="btn-primary">BOOK NOW</button></a>
+          <a href="#tickets-merchandise">
+            <button class="btn-primary">BOOK NOW</button>
+          </a>
           <a href="https://www.youtube.com/watch?v=bGMYtLEpnfA" class="teaser-link">🎥 Watch The Teaser</a>
         </div>
       </div>
 
-      <!-- Right Side: Countdown -->
-      <div class="hero-content right">
+     <!-- Right Side: Countdown -->
+     <div class="hero-content right">
         <section class="countdown">
           <h2 class="countdown-title">COUNTDOWN 🕒</h2>
           <div class="timer-container">
@@ -27,10 +63,11 @@
               <CountdownTimer />
             </div>
           </div>
-          <button class="venue">Dewan Tuanku Syed Putra, USM</button>
+          <button class="venue">{{ event.event_venue }}</button>
         </section>
       </div>
     </div>
+
     <!-- History Section -->
     <section id="history">
         <div class="history-container">
@@ -59,32 +96,27 @@
           </div>
         </div>
   </section>
-    <!-- Event Details Section -->
+     <!-- Event Details Section -->
     <div class="event-details">
-        <!-- About Section -->
-        <section id="about" class="details-section about">
-          <div class="content-wrapper">
-            <!-- Text Content -->
-            <div class="text-content">
-              <button class="venue">ABOUT</button>
-              <p class="about-text">
-                Malam Citra Bayu (MCB) is one of the largest annual cultural events at Universiti Sains Malaysia
-                (USM) organized by the Sabah Student Organization (PERSIS USM). MCB is a national-level creative
-                traditional dance competition conceptualized to appreciate the arts and culture of the community
-                in Sabah. For this year's event, the 16th edition of Malam Citra Bayu returns with a new theme
-                and fresh perspective, inviting 9 public universities in Malaysia to compete on the stage of
-                Dewan Tuanku Syed Putra with their own choreography.
-              </p>
-            </div>
-            <!-- Image Content -->
-            <div class="image-content">
-              <div class="image-wrapper">
-                <div class="gradient-overlay">
-                  <img src="@/assets/images/usmdancers.png" alt="USM Dancers" />
-                </div>
+      <!-- About Section -->
+      <section id="about" class="details-section about">
+        <div class="content-wrapper">
+          <!-- Text Content -->
+          <div class="text-content">
+            <button class="venue">ABOUT</button>
+            <p class="about-text">
+              {{ event.event_about }}
+            </p>
+          </div>
+          <!-- Image Content -->
+          <div class="image-content">
+            <div class="image-wrapper">
+              <div class="gradient-overlay">
+                <img src="@/assets/images/usmdancers.png" alt="USM Dancers" />
               </div>
             </div>
           </div>
+        </div>
       </section>
 
       <!-- Agenda Section -->
@@ -251,39 +283,40 @@
       </section>
 
 
+      <!-- Location Section -->
       <section id="location">
-  <div class="location-container">
-    <h2 class="location-title">Contact and Find Us</h2>
+        <div class="location-container">
+          <h2 class="location-title">Contact and Find Us</h2>
 
-    <!-- Map Section -->
-    <div class="map-wrapper">
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12345.67890123!2d100.3028544!3d5.3616547!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x304acb0000000000%3A0x1234567890abcdef!2sDewan+Tuanku+Syed+Putra%2C+Universiti+Sains+Malaysia!5e0!3m2!1sen!2smy!4v1700000000000"
-        width="600"
-        height="350"
-        style="border:0;"
-        loading="lazy"
-      ></iframe>
-      <!-- Overlay Text -->
-      <div class="location-overlay">
-        <h3>Our Location</h3>
-        <p>Dewan Tuanku Syed Putra, Universiti Sains Malaysia, Penang.</p>
-      </div>
-    </div>
+          <!-- Map Section -->
+          <div class="map-wrapper">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12345.67890123!2d100.3028544!3d5.3616547!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x304acb0000000000%3A0x1234567890abcdef!2sDewan+Tuanku+Syed+Putra%2C+Universiti+Sains+Malaysia!5e0!3m2!1sen!2smy!4v1700000000000"
+              width="600"
+              height="350"
+              style="border:0;"
+              loading="lazy"
+            ></iframe>
+            <!-- Overlay Text -->
+            <div class="location-overlay">
+              <h3>Our Location</h3>
+              <p>{{ event.event_venue }}</p>
+            </div>
+          </div>
 
-    <!-- Contact Info Section -->
-    <div class="contact-info">
-      <div class="info-item">
-        <span class="icon">📧</span>
-        <p>mcb@usm.my</p>
-      </div>
-      <div class="info-item">
-        <span class="icon">📞</span>
-        <p>01X-XXXXXXX</p>
-      </div>
-    </div>
-  </div>
-</section>
+          <!-- Contact Info Section -->
+          <div class="contact-info">
+            <div class="info-item">
+              <span class="icon">📧</span>
+              <p>{{ event.event_email }}</p>
+            </div>
+            <div class="info-item">
+              <span class="icon">📞</span>
+              <p>{{ event.event_phone }}</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
     <footer class="footer">
       <Footer />

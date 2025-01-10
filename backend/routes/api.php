@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Item;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\RefundRequestController;
 use App\Http\Controllers\FeedbackController;
@@ -57,7 +58,8 @@ Route::post('/store-item', function (Request $request) {
     ], 201);
 });
 
-
+// Event API
+    Route::get('/events', [EventController::class, 'index']);
 
 //Refund API
     Route::get('/admin/refunds', [RefundRequestController::class, 'index']);

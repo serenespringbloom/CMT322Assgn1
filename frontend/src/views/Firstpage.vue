@@ -1,55 +1,105 @@
 <template>
-    <div class="container">
-      <div class="card" v-for="card in cards" :key="card.id">
-        <div class="card-content">
-          <img :src="card.image" alt="Card image" class="card-image" />
-          <div class="card-text">
-            <h3>{{ card.title }}</h3>
-            <p>{{ card.description }}</p>
+  <div class="flex flex-wrap justify-center gap-4 p-4 w-full">
+    <div
+      v-for="card in cards"
+      :key="card.id"
+      class="flex flex-wrap md:flex-col bg-gray-100 border border-gray-300 rounded-lg shadow p-4  w-[20%]"
+    >
+      <div class="flex flex-wrap md:flex-row items-center align-middle gap-4 justify-center md:gap-20">
+        <img
+          :src="card.image"
+          alt="Card image"
+          class="w-[80px] h-[80px] object-cover rounded-lg"
+        />
+        <div class="text-left">
+          <h3 class="text-lg font-semibold text-gray-800">{{ card.title }}</h3>
+          <p class="text-gray-600">{{ card.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white w-4/5 mx-auto p-8 rounded-lg shadow relative text-center mt-10">
+    <div
+      class="   bg-gradient-to-r from-yellow-700 to-yellow-400 text-white py-2 px-6 rounded-md border-4 border-yellow-600 text-lg w-full "
+    >
+      Sales by Entrance Category
+    </div>
+    <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div
+        v-for="newcard in newcards"
+        :key="newcard.id"
+        class="bg-gray-100 border border-gray-300 rounded-lg shadow p-4"
+      >
+        <div class="flex items-start gap-4">
+          <img
+            :src="newcard.image"
+            alt="Card image"
+            class="w-24 h-24 object-cover rounded-lg"
+          />
+          <div class="flex flex-col justify-between">
+            <h3 class="text-lg font-semibold text-gray-800">{{ newcard.title }}</h3>
+            <div class="flex gap-4 text-gray-700">
+              <strong>Sales:</strong>
+              <p>{{ newcard.description }}</p>
+            </div>
+            <div class="flex gap-4 text-gray-700">
+              <strong>Values:</strong>
+              <p>{{ newcard.description1 }}</p>
+            </div>
           </div>
         </div>
       </div>
-  
     </div>
-    <div class="card-container">
-            <div class="container-title"> Sales by Entrance Category</div>
-             
-              <div class="card1" v-for="newcard in newcards" :key="newcard.id">
-                <div class="card-content">
-                  <img :src="newcard.image" alt="Card image" class="card-image" />
-                      <div class="card-text">
-                      <h3>{{ newcard.title }}</h3>
-                      <strong><h4>  Sales</h4></strong>
-                         <p>{{ newcard.description }}</p>
-                         <strong><h4>  Values</h4></strong>
-                          <p>{{ newcard.description1 }}</p>
-                </div>
-               </div>
-            </div>
-   
-    </div>
-    <div>
-        <h2>HOME</h2>
-        <p>Take me to Test page</p>
-        <button @click.prevent="triggerEndpoint">Trigger Endpoint</button>
-        <p v-if="response">{{ response }}</p>
-    </div>
-   <p>This for get data</p>   
-    <div>
-    <h2>Add New Item</h2>
-    <form @submit.prevent="storeItem">
-      <label for="name">Name:</label>
-      <input type="text" v-model="form.name" required />
-      
-      <label for="description">Description:</label>
-      <textarea v-model="form.description"></textarea>
-      
-      <button type="submit">Save</button>
-    </form>
-    <p v-if="responseMessage">{{ responseMessage }}</p>
   </div>
-  <p>This for post data</p> 
-  </template>
+
+  <div class="bg-white w-4/5 mx-auto p-8 rounded-lg shadow relative text-center mt-10">
+    <h2 class="text-2xl font-semibold">HOME</h2>
+    <p class="text-gray-600">Take me to Test page</p>
+    <button
+      @click.prevent="triggerEndpoint"
+      class="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
+    >
+      Trigger Endpoint
+    </button>
+    <p v-if="response" class="text-gray-700 mt-4">{{ response }}</p>
+  </div>
+
+  <div class="bg-white w-4/5 mx-auto p-8 rounded-lg shadow relative text-center mt-10">
+    <h2 class="text-2xl font-semibold">Add New Item</h2>
+    <form @submit.prevent="storeItem" class="space-y-4 max-w-lg mx-auto mt-6">
+      <div>
+        <label class="block text-gray-700 text-sm font-medium" for="name">Name:</label>
+        <input
+          type="text"
+          v-model="form.name"
+          required
+          class="mt-1 w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
+      <div>
+        <label
+          class="block text-gray-700 text-sm font-medium"
+          for="description"
+        >
+          Description:
+        </label>
+        <textarea
+          v-model="form.description"
+          class="mt-1 w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
+        ></textarea>
+      </div>
+      <button
+        type="submit"
+        class="w-full bg-green-500 text-white py-2 px-4 rounded-md shadow hover:bg-green-600"
+      >
+        Save
+      </button>
+    </form>
+    <p v-if="responseMessage" class="mt-4 text-green-600">{{ responseMessage }}</p>
+  </div>
+</template>
+
   <script>
 import axios from 'axios';
 import { ref } from 'vue';
@@ -80,7 +130,7 @@ export default {
   methods: {
     async storeItem() {
       try {
-        const response = await axios.post('http://hazimazman.xyz/backend/api/store-item', this.form);//post data to database
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/store-item`, this.form);//post data to database
         this.responseMessage = response.data.message;
         this.form.name = '';
         this.form.description = '';
@@ -147,104 +197,7 @@ export default {
   </script>
   
   <style >
-  
-  .container-title {
-              position: absolute;
-              top:5px;
-              left: 50%;
-              transform: translateX(-50%);
-              background-image: linear-gradient(to right, rgba(164, 142, 105, 1), rgba(220, 195, 156, 1));
-      color: white;
-              padding: 10px 20px;
-              border-radius: 12px;
-              border-color: #a2a465;
-              border-width: 5px;
-              font-size: 1.2rem;
-            width:1350px;
-            margin-bottom: 20px;
-           
-             
-          }
-  .card-container {
-    background: white;
-              width: 80%;
-              padding: 60px 20px;
-              border-radius: 10px;
-              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-              position: relative;
-              text-align: center;
-  
-  }
-  .container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: center;
-    padding: 1rem;
-  }
-  
-  .card {
-    flex: 1 1 calc(25% - 1rem);
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 1rem;
-    margin: 0.5rem 0;
-  }
-  
-  .card1 {
-    top:20px;
-    flex: 1 1 calc(50% - 1rem);
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 1rem;
-    margin: 0.5rem 0;
-  }
-  
-  .card2{
-   display:flex;
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 1rem;
-    margin: 0.5rem 0;
-  }
-  
-  .card-content {
-    display: flex;
-    align-items: center; /* Vertically align image and text */
-    gap: 1rem; /* Space between image and text */
-  }
-  
-  .card-image {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 8px; /* Optional: Make the image corners rounded */
-  }
-  
-  .card-text {
-    font-size: 20px;
-    font-family: 'freight-big-pro';
-    flex: 1; /* Allow text to take remaining space */
-  }
-  
-  .card-text h3 {
-    margin: 0.5rem 0;
-    color: #333;
-  }
-  
-  .card-text p {
-    color: #555;
-  }
-  
-  @media (max-width: 768px) {
-    .card {
-      flex: 1 1 100%;
-    }
-  }
+ @import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
   </style>

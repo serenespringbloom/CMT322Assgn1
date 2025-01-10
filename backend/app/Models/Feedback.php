@@ -15,8 +15,12 @@ class Feedback extends Model
 
     protected $fillable = [
         'ticket_id',
-        'event_id',
+        'name',
+        'programme',
         'feedback_text',
         'rating',
     ];
+
+    // Disable timestamps
+    public $timestamps = false;
 }

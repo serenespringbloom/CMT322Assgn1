@@ -96,7 +96,7 @@
             </div>
 
             <!-- Submit Button -->
-            <button type="submit" class="btn-submit">SUBMIT</button>
+            <button @click="submitRefund" type="submit" class="btn-submit">SUBMIT</button>
           </form>
         </section>
       </div>
@@ -116,9 +116,11 @@
   </body>
 </template>
 
-<script setup>
+<script setup >
+
 import { ref, onMounted } from "vue";
 import Papa from "papaparse";
+import axios from "axios";
 
 // Reactive variables
 const feedbackData = ref([]);
@@ -156,38 +158,65 @@ onMounted(() => {
     })
     .catch((error) => console.error("Error loading CSV:", error));
 });
+ 
 
 // Handle form submission
-const handleSubmit = () => {
+const handleSubmit = async () => {
   // Validation
   if (!ticketId.value || !fullName.value || !feedbackText.value || rating.value === 0) {
     alert("Please fill in all fields and select a rating.");
     return;
   }
 
-  // Create new feedback entry
-  const newFeedback = {
-    "Ticket ID": ticketId.value,
-    name: fullName.value,
-    programme: programme.value || "N/A", // Default to "N/A" if not selected
-    text: feedbackText.value,
-    image: "/src/assets/images/avatar.jpg", // Default avatar
-    rating: rating.value,
-  };
+  try {
+    // Create FormData object to send to the backend
+    const formData = new FormData();
+    formData.append("ticket_id", ticketId.value);
+    formData.append("programme", programme.value || "N/A"); // Default to "N/A" if not selected
+    formData.append("feedback_text", feedbackText.value);
+    formData.append("rating", rating.value);
+    formData.append("name", fullName.value);
 
-  // Add to feedback list
-  feedbackData.value.push(newFeedback);
+    // Send POST request
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_URL}/api/hello/feedback`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
 
-  // Reset form fields
-  ticketId.value = "";
-  fullName.value = "";
-  programme.value = "";
-  feedbackText.value = "";
-  rating.value = 0;
-  hover.value = 0;
+    console.log("Feedback uploaded successfully:", response.data);
 
-  alert("Thank you for your feedback!");
+    // Create new feedback entry locally
+    const newFeedback = {
+      "Ticket ID": ticketId.value,
+      name: fullName.value,
+      programme: programme.value || "N/A",
+      text: feedbackText.value,
+      image: "/src/assets/images/avatar.jpg", // Default avatar image
+      rating: rating.value,
+    };
+
+    feedbackData.value.push(newFeedback);
+
+    // Clear form fields
+    ticketId.value = "";
+    fullName.value = "";
+    programme.value = "";
+    feedbackText.value = "";
+    rating.value = 0;
+    hover.value = 0;
+
+    alert("Thank you for your feedback!");
+  } catch (error) {
+    console.error("Error uploading feedback:", error.response?.data || error.message);
+    alert("An error occurred while submitting your feedback. Please try again.");
+  }
 };
+
 
 // Star rating handlers
 const selectRating = (star) => {
@@ -202,6 +231,8 @@ const resetHover = () => {
   hover.value = 0;
 };
 </script>
+
+
 
 <style scoped>
 .feedback-page {

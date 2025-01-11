@@ -1,44 +1,63 @@
 <?php
+// app/Http/Controllers/AdminAuthController.php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Admin;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AdminAuthController extends Controller
 {
-    // Login Function
     public function login(Request $request)
     {
-        $request->validate([
-            'username' => 'required',
-            'password' => 'required',
-        ]);
-
-        $admin = Admin::where('username', $request->username)->first();
-
-        if (!$admin || !Hash::check($request->password, $admin->password_hash)) {
-            return response()->json(['error' => 'Invalid credentials'], 401);
+        header('Access-Control-Allow-Origin: http://localhost:5174');
+        header('Access-Control-Allow-Methods: POST, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type');
+        
+        if ($request->isMethod('OPTIONS')) {
+            return response()->json([], 200);
         }
 
-        $token = $admin->createToken('admin-token')->plainTextToken;
+        $credentials = $request->validate([
+            'username' => 'required',
+            'password' => 'required'
+        ]);
 
-        return response()->json(['token' => $token, 'message' => 'Login successful']);
+        $admin = Admin::where('username', $credentials['username'])->first();
+
+        if ($admin && Hash::check($credentials['password'], $admin->password_hash)) {
+            // Generate new token
+            $token = Str::random(60);
+            
+            // Store token
+            $admin->remember_token = $token;
+            $admin->save();
+
+            return response()->json([
+                'token' => $token,
+                'admin' => [
+                    'admin_id' => $admin->admin_id,
+                    'username' => $admin->username,
+                    'email' => $admin->email
+                ]
+            ]);
+        }
+
+        return response()->json([
+            'error' => 'Invalid credentials'
+        ], 401);
     }
 
-    // Logout Function
-    public function logout(Request $request)
+    public function dashboard(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
-
-        return response()->json(['message' => 'Logged out successfully']);
-    }
-
-    // Dashboard Function (Example Protected Endpoint)
-    public function dashboard()
-    {
-        return response()->json(['message' => 'Welcome to the admin dashboard']);
+        header('Access-Control-Allow-Origin: http://localhost:5174');
+        header('Access-Control-Allow-Headers: Authorization');
+        
+        return response()->json([
+            'message' => 'Welcome to dashboard',
+            'admin' => $request->admin
+        ]);
     }
 }

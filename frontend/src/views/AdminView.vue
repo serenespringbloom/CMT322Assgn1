@@ -1,8 +1,47 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import { useRouter } from 'vue-router';
-
+import { onMounted, ref } from 'vue';
 const router = useRouter();
+const dashboardData = ref(null);
+const error = ref('');
+const loading = ref(true);
+
+const fetchDashboard = async () => {
+  try {
+    const token = localStorage.getItem('admin_token');
+    if (!token) {
+      router.push('/login');
+      return;
+    }
+
+    const response = await fetch('http://127.0.0.1:8000/api/admin/dashboard', {
+      headers: {
+        'Authorization': token
+      }
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      dashboardData.value = data;
+    } else {
+      if (response.status === 401) {
+        localStorage.removeItem('admin_token');
+        router.push('/login');
+      }
+      throw new Error('Failed to fetch dashboard data');
+    }
+  } catch (err) {
+    error.value = 'Error loading dashboard data';
+    console.error('Dashboard error:', err);
+  } finally {
+    loading.value = false;
+  }
+};
+
+onMounted(() => {
+  fetchDashboard();
+});
 
 const handleLogout = () => {
   sessionStorage.removeItem('isAuthenticated');

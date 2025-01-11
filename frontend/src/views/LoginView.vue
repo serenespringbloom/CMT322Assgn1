@@ -20,19 +20,30 @@ const handleLogin = async () => {
   try {
     const response = await fetch('http://127.0.0.1:8000/api/admin/login', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: username.value, password: password.value }),
+      headers: { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      credentials: 'include',
+      body: JSON.stringify({ 
+        username: username.value, 
+        password: password.value 
+      }),
     });
 
-    if (response.ok) {
-      const data = await response.json();
-      sessionStorage.setItem('token', data.token); // Save the token
-      router.push('/dashboard'); // Redirect to dashboard
-    } else {
+    if (!response.ok) {
       const errorData = await response.json();
-      error.value = errorData.error || 'Login failed. Please try again.';
+      console.error('Login failed:', response.status, errorData);
+      error.value = errorData.message || 'Login failed. Please try again.';
+      return;
     }
+
+    const data = await response.json();
+    sessionStorage.setItem('token', data.token);
+    router.push('/dashboard');
   } catch (err) {
+    console.error('Login error:', err);
     error.value = 'Unable to connect to the server. Please check your connection.';
   } finally {
     loading.value = false;

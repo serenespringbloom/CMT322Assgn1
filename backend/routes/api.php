@@ -32,13 +32,13 @@ Route::post('/upload-image', [ImageUploadController::class, 'uploadImage']);
 use App\Http\Controllers\AdminAuthController;
 
 Route::post('/admin/login', [AdminAuthController::class, 'login']);
-Route::middleware('auth:sanctum')->group(function () {
+
+Route::middleware('admin.token')->group(function () {
     Route::post('/admin/logout', [AdminAuthController::class, 'logout']);
     Route::get('/admin/dashboard', [AdminAuthController::class, 'dashboard']);
 });
 
-
-// Default user route for authenticated API requests
+// // Default user route for authenticated API requests
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });

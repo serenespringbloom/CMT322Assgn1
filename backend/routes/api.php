@@ -59,7 +59,10 @@ Route::post('/store-item', function (Request $request) {
 });
 
 // Event API
-    Route::get('/events', [EventController::class, 'index']);
+    // Route::get('/events', [EventController::class, 'index']);
+    // Route::get('/events/{id}', [EventController::class, 'show']);
+    Route::get('/event/{id?}', [EventController::class, 'getEvent']);
+
 
 //Refund API
     Route::get('/admin/refunds', [RefundRequestController::class, 'index']);

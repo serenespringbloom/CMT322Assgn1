@@ -1,38 +1,22 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import apiClient from "@/api"; // Axios instance configuration
-import CountdownTimer from "@/components/countdownTimer.vue";
-import Footer from "../components/Footer.vue";
+import { ref, onMounted } from 'vue';
+import { getEventById } from '@/api'; // Import your API client
+import CountdownTimer from '@/components/countdownTimer.vue';
+import Footer from '../components/Footer.vue';
 
-// State for event data
-const event = ref({
-  event_title: "",
-  event_subtitle: "",
-  event_venue: "",
-  event_datetime: "",
-  event_about: "",
-  event_email: "",
-  event_phone: "",
-});
+// State to hold event data
+const event = ref(null);
+const eventId = 12; // Fetch event with ID 12
 
-// Fetch event data
-const fetchEvent = async () => {
+// Fetch event data on component mount
+onMounted(async () => {
   try {
-    const response = await apiClient.get("/events");
-    // Assuming the API returns an array of events, take the first event
-    const fetchedEvent = response.data[0];
-    if (fetchedEvent) {
-      event.value = fetchedEvent;
-    } else {
-      console.error("No event data available.");
-    }
+    const response = await getEventById(eventId); // Fetch data using updated API call
+    event.value = response.data; // Assign fetched event data
   } catch (error) {
-    console.error("Error fetching event data:", error);
+    console.error('Error fetching event data:', error); // Handle errors
   }
-};
-
-// Fetch data when the component mounts
-onMounted(fetchEvent);
+});
 </script>
 
 
@@ -43,14 +27,16 @@ onMounted(fetchEvent);
     <div class="hero" id="hero">
       <!-- Left Side: Title and Buttons -->
       <div class="hero-content left">
-        <p class="date">{{ new Date(event.event_datetime).toLocaleDateString("en-US", { day: "2-digit", month: "long", year: "numeric" }) }}</p>
-        <h1 class="title">{{ event.event_title }}</h1>
-        <p class="tagline">{{ event.event_subtitle }}</p>
+        <p class="date">{{ event?.event_datetime || 'Invalid Date' }}</p>
+        <h1 class="title">{{ event?.event_title|| 'Event Title' }}</h1>
+        <p class="tagline">{{ event?.event_subtitle || 'Event Subtitle' }}</p>
         <div class="buttons">
           <a href="#tickets-merchandise">
             <button class="btn-primary">BOOK NOW</button>
           </a>
-          <a href="https://www.youtube.com/watch?v=bGMYtLEpnfA" class="teaser-link">🎥 Watch The Teaser</a>
+          <a href="https://www.youtube.com/watch?v=bGMYtLEpnfA" class="teaser-link">
+            🎥 Watch The Teaser
+          </a>
         </div>
       </div>
 
@@ -63,7 +49,7 @@ onMounted(fetchEvent);
               <CountdownTimer />
             </div>
           </div>
-          <button class="venue">{{ event.event_venue }}</button>
+          <button class="venue">{{ event?.event_venue || 'Event Venue' }}</button>
         </section>
       </div>
     </div>
@@ -96,7 +82,7 @@ onMounted(fetchEvent);
           </div>
         </div>
   </section>
-     <!-- Event Details Section -->
+    <!-- Event Details Section -->
     <div class="event-details">
       <!-- About Section -->
       <section id="about" class="details-section about">
@@ -105,9 +91,10 @@ onMounted(fetchEvent);
           <div class="text-content">
             <button class="venue">ABOUT</button>
             <p class="about-text">
-              {{ event.event_about }}
+              {{ event?.event_about || 'Event About Text' }}
             </p>
           </div>
+
           <!-- Image Content -->
           <div class="image-content">
             <div class="image-wrapper">
@@ -287,8 +274,6 @@ onMounted(fetchEvent);
       <section id="location">
         <div class="location-container">
           <h2 class="location-title">Contact and Find Us</h2>
-
-          <!-- Map Section -->
           <div class="map-wrapper">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12345.67890123!2d100.3028544!3d5.3616547!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x304acb0000000000%3A0x1234567890abcdef!2sDewan+Tuanku+Syed+Putra%2C+Universiti+Sains+Malaysia!5e0!3m2!1sen!2smy!4v1700000000000"
@@ -297,27 +282,26 @@ onMounted(fetchEvent);
               style="border:0;"
               loading="lazy"
             ></iframe>
-            <!-- Overlay Text -->
             <div class="location-overlay">
               <h3>Our Location</h3>
-              <p>{{ event.event_venue }}</p>
+              <p>{{ event?.event_venue || 'Event Venue' }}</p>
             </div>
           </div>
 
-          <!-- Contact Info Section -->
           <div class="contact-info">
             <div class="info-item">
               <span class="icon">📧</span>
-              <p>{{ event.event_email }}</p>
+              <p>{{ event?.event_email || 'Email not available' }}</p>
             </div>
             <div class="info-item">
               <span class="icon">📞</span>
-              <p>{{ event.event_phone }}</p>
+              <p>{{ event?.event_phone || 'Phone not available' }}</p>
             </div>
           </div>
         </div>
       </section>
     </div>
+
     <footer class="footer">
       <Footer />
     </footer>

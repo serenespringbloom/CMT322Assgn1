@@ -7,15 +7,35 @@ const password = ref('');
 const error = ref('');
 const router = useRouter();
 
-const handleLogin = () => {   
-  const adminUsername = 'admin';
-  const adminPassword = 'password123';
+const loading = ref(false); // Track loading state
 
-  if (username.value === adminUsername && password.value === adminPassword) {
-    sessionStorage.setItem('isAuthenticated', 'true');
-    router.push('/dashboard');
-  } else {
-    error.value = 'Invalid username or password';
+const handleLogin = async () => {
+  loading.value = true;
+  error.value = ''; // Clear previous errors
+  if (!username.value || !password.value) {
+    error.value = 'Username and password are required.';
+    return;
+  }
+  
+  try {
+    const response = await fetch('http://127.0.0.1:8000/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: username.value, password: password.value }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      sessionStorage.setItem('token', data.token); // Save the token
+      router.push('/dashboard'); // Redirect to dashboard
+    } else {
+      const errorData = await response.json();
+      error.value = errorData.error || 'Login failed. Please try again.';
+    }
+  } catch (err) {
+    error.value = 'Unable to connect to the server. Please check your connection.';
+  } finally {
+    loading.value = false;
   }
 };
 
@@ -42,7 +62,10 @@ const returnHome = () => {
             <input id="password" v-model="password" type="password" placeholder="Enter your password" />
           </div>
 
-          <button type="submit" class="btn-login">Sign In</button>
+          <button type="submit" class="btn-login" :disabled="loading">
+            <span v-if="loading">Signing In...</span>
+            <span v-else>Sign In</span>
+          </button>
         </form>
 
         <p v-if="error" class="error">{{ error }}</p>
@@ -154,6 +177,11 @@ input:focus {
   background-color: #ff1493; /* Deep Pink */
 }
 
+.btn-login:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
 /* Error Message */
 .error {
   color: #ff4d4f;
@@ -178,4 +206,24 @@ input:focus {
   font-weight: bold;
   opacity: 0.8;
 }
+
+@media (max-width: 768px) {
+  .login-page {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    padding: 2rem;
+  }
+
+  .btn-login {
+    width: 100%; /* Full-width button for smaller screens */
+  }
+
+  .background {
+    display: none; /* Hide the background on small screens */
+  }
+}
+
 </style>

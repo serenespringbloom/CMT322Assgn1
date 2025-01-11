@@ -23,10 +23,29 @@ Route::put('/images/{id}', [ImageUploadController::class, 'updateImage']);
 
 Route::post('/upload-image', [ImageUploadController::class, 'uploadImage']);
 
-// Default user route for authenticated API requests
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+/*
+|--------------------------------------------------------------------------
+| Authentication
+|--------------------------------------------------------------------------
+*/
+use App\Http\Controllers\AdminAuthController;
+
+Route::post('/admin/login', [AdminAuthController::class, 'login']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/admin/logout', [AdminAuthController::class, 'logout']);
+    Route::get('/admin/dashboard', [AdminAuthController::class, 'dashboard']);
 });
+
+
+// Default user route for authenticated API requests
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+/*
+|--------------------------------------------------------------------------
+*/
 
 // Example test route to verify API functionality
 Route::get('/test', function () {

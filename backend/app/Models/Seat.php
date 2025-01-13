@@ -17,8 +17,8 @@ class Seat extends Model
         return $this->belongsTo(Transaction::class);
     }
 
-    public function bookings()
-    {
-        return $this->belongsTo(Booking::class);
-    }
+    // public function bookings()
+    // {
+    //     return $this->belongsTo(Booking::class);
+    // }
 }

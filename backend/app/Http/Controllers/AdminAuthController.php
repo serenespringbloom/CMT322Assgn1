@@ -1,23 +1,17 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\PersonalAccessToken;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class AdminAuthController extends Controller
 {
-    /**
-     * Show the login form for admins.
-     */
-    public function showLoginForm()
-    {
-        return view('admin.login'); // Return the login view
-    }
-
     /**
      * Handle admin login.
      */
@@ -27,55 +21,81 @@ class AdminAuthController extends Controller
             'username' => 'required|string',
             'password' => 'required|string',
         ]);
-    
-        $admin = DB::table('admins')->where('username', $request->username)->first();
-    
+
+        $admin = Admin::where('username', $request->username)->first();
+
         if ($admin && Hash::check($request->password, $admin->password_hash)) {
-            // Generate a token (you can use a library like JWT or a random string)
-            $token = Str::random(60);
-    
-            // Save the token in the database for the admin
-            DB::table('admins')->where('admin_id', $admin->admin_id)->update(['remember_token' => $token]);
-    
+            // Generate a token and set expiration (e.g., 1 hour from now)
+            $plainTextToken = Str::random(60);
+            $expiresAt = Carbon::now()->addHour();
+
+            // Save the token in the personal_access_tokens table
+            $token = PersonalAccessToken::create([
+                'tokenable_type' => Admin::class,
+                'tokenable_id' => $admin->admin_id,
+                'name' => 'admin-access-token',
+                'token' => hash('sha256', $plainTextToken),
+                'abilities' => json_encode(['*']),
+                'expires_at' => $expiresAt,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
             return response()->json([
                 'success' => true,
-                'token' => $token, // Return the token
-                'data' => $admin,
+                'token' => $plainTextToken,
+                'expires_at' => $token->expires_at,
+                'admin' => [
+                    'id' => $admin->admin_id,
+                    'username' => $admin->username,
+                    'email' => $admin->email,
+                ],
             ]);
         }
-    
+
         return response()->json(['success' => false, 'error' => 'Invalid credentials.'], 401);
     }
-    
+
     /**
      * Handle admin logout.
      */
     public function logout(Request $request)
     {
-        // Get the token from the request
         $token = $request->bearerToken();
-    
-        // Find the admin using the token and clear it
+
         if ($token) {
-            DB::table('admins')->where('remember_token', $token)->update(['remember_token' => null]);
+            PersonalAccessToken::where('token', hash('sha256', $token))->delete();
         }
-    
-        // Return a response
+
         return response()->json([
             'success' => true,
             'message' => 'Logged out successfully.',
         ]);
     }
-    
-    
 
     /**
-     * Admin dashboard.
+     * Middleware to check token validity and expiration.
      */
-    public function dashboard()
+    public function checkToken(Request $request)
     {
-        return response()->json([
-            'message' => 'Welcome to the Admin Dashboard',
-        ]);
-    }
+        $token = $request->bearerToken();
+    
+        if (!$token) {
+            return response()->json(['success' => false, 'error' => 'Token not provided.'], 401);
+        }
+    
+        $hashedToken = hash('sha256', $token);
+        $accessToken = PersonalAccessToken::where('token', $hashedToken)->first();
+    
+        if (!$accessToken) {
+            return response()->json(['success' => false, 'error' => 'Invalid token.'], 401);
+        }
+    
+        if ($accessToken->expires_at && $accessToken->expires_at->isPast()) {
+            $accessToken->delete(); // Delete expired token
+            return response()->json(['success' => false, 'error' => 'Token has expired.'], 401);
+        }
+    
+        return response()->json(['success' => true, 'message' => 'Token is valid.']);
+    }    
 }

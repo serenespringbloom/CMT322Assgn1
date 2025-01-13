@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import apiClient from '../api';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -133,27 +134,35 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const token = sessionStorage.getItem('token');
-  console.log('Token:', token); // Debugging
 
-  // Check if the user is already logged in and trying to access the login page
   if (to.path === '/login' && token) {
-    console.log('User already logged in, redirecting to /dashboard'); // Debugging
-    next('/dashboard'); // Redirect to the dashboard if logged in
+    next('/dashboard');
     return;
   }
 
-  console.log('Token:', token, '| to.meta.requiresAuth:', to.meta.requiresAuth); // Debug both values
+  if (to.meta.requiresAuth) {
+    if (!token) {
+      next('/login');
+      return;
+    }
 
-  if (to.meta.requiresAuth && !token) {
-    console.log('Not authenticated, redirecting to /login'); // Debugging
-    next('/login'); // Redirect to login if the user is not authenticated
+    try {
+      const response = await apiClient.post('/check-token', {}, { headers: { Authorization: `Bearer ${token}` } });
+      if (response.data.success) {
+        next();
+      } else {
+        throw new Error('Token expired');
+      }
+    } catch {
+      sessionStorage.removeItem('token');
+      alert('Your session has expired. You will be redirected to the login page.');      
+      next('/login');
+    }
   } else {
-    console.log('Authenticated, proceeding to', to.path); // Debugging
-    next(); // Proceed to the route
+    next();
   }
 });
-
 
 export default router

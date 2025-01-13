@@ -4,15 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class PersonalAccessToken extends Model
 {
     use HasFactory;
 
-    // Define the table name
     protected $table = 'personal_access_tokens';
 
-    // Define the fillable attributes
     protected $fillable = [
         'tokenable_type',
         'tokenable_id',
@@ -23,11 +22,20 @@ class PersonalAccessToken extends Model
         'expires_at',
     ];
 
-    // Cast attributes to their respective data types
     protected $casts = [
         'last_used_at' => 'datetime',
         'expires_at' => 'datetime',
     ];
+
+    /**
+     * Check if the token is expired.
+     *
+     * @return bool
+     */
+    public function isExpired()
+    {
+        return $this->expires_at && $this->expires_at->isPast();
+    }
 
     /**
      * Define the relationship to the tokenable model (polymorphic).

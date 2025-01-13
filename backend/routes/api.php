@@ -73,7 +73,7 @@ Route::get('/admin/feedback', [FeedbackController::class, 'index']);
 
 //Ticket API
 
-Route::post('/purchase', [TransactionController::class, 'store']);
+// Route::post('/purchase', [TransactionController::class, 'store']);
 Route::get('/seats', [SeatController::class, 'index']);
-Route::get('/bookings', [TransactionController::class, 'store']);
+Route::post('/bookings', [TransactionController::class, 'store']);
 

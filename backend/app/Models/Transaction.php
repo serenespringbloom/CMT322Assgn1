@@ -12,12 +12,12 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'customer_name',
-        'email',
-        'phone',
+        'cust_name',
+        'cust_email',
+        'cust_phone',
         'ticket_category',
-        'total_amount',
-        'status'
+        'total_price',
+        'status',
     ];
 
     public function seats():HasMany

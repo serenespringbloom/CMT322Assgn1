@@ -504,12 +504,17 @@ export default {
       return 'Available';
     },
     toggleSeatSelection(seat) {
+      // Don't allow selection of booked seats
       if (seat.is_booked) return;
-
-      const index = this.selectedSeats.findIndex(s => s.id === seat.id);
+      
+      // Find if seat is already selected
+      const index = this.selectedSeats.findIndex(selectedSeat => selectedSeat.seat_number === seat.seat_number);
+      
       if (index === -1) {
+        // Seat is not selected, add it to selections
         this.selectedSeats.push(seat);
       } else {
+        // Seat is already selected, remove it
         this.selectedSeats.splice(index, 1);
       }
     },
@@ -527,7 +532,7 @@ export default {
       try {
         const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/bookings`, {
           ...this.formData,
-          seat_ids: this.selectedSeats.map(seat => seat.id)
+          seat_ids: this.selectedSeats.map(seat => seat.seat_id)
         });
 
         alert('Booking successful!');

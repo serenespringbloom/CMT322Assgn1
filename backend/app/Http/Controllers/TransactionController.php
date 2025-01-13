@@ -21,14 +21,14 @@ class TransactionController extends Controller
             'email' => 'required|email',
             'phone' => 'required|string|max:20',
             'seat_ids' => 'required|array',
-            'seat_ids.*' => 'exists:seats,id',
+            'seat_ids.*' => 'exists:seats,seat_id',
             'ticket_category' => 'required|in:student,public'  // Add this validation
         ]);
     
         try {
-            DB::beginTransaction();
+          
     
-            $seats = Seat::whereIn('id', $request->seat_ids)
+            $seats = Seat::whereIn('seat_id', $request->seat_ids)
                         ->where('is_booked', false)
                         ->get();
     
@@ -40,28 +40,27 @@ class TransactionController extends Controller
             $pricePerTicket = $request->ticket_category === 'student' ? 16 : 20;
             $totalAmount = $seats->count() * $pricePerTicket;
     
-            $booking = Transaction::create([
-                'customer_name' => $request->customer_name,
-                'email' => $request->email,
-                'phone' => $request->phone,
+            $transaction = Transaction::create([
+                'cust_name' => $request->customer_name,
+                'cust_email' => $request->email,
+                'cust_phone' => $request->phone,
                 'ticket_category' => $request->ticket_category,
-                'total_amount' => $totalAmount,
+                'total_price' => $totalAmount,
                 'status' => 'completed',
-                'seat_number'=>$seats->seat_number,
+                
             ]);
-            $booking->seats()->update($request['seat_ids']);            // Update seats
-            foreach ($seats as $seat) {
-                $seat->update([
-                    'is_booked' => true,
-                    'booking_id' => $booking->id
-                ]);
-            }
+                   // Update seats
+                   foreach ($seats as $seat) {
+                    $seat->is_booked = true;
+                    $seat->transaction_id = $transaction->transaction_id;
+                    $seat->save();
+                }
     
             DB::commit();
     
             return response()->json([
                 'message' => 'Booking successful',
-                'booking' => $booking->load('seats')
+                'booking' => $transaction->load('seats')
             ], 201);
     
         } catch (\Exception $e) {

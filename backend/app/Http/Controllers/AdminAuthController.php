@@ -84,6 +84,11 @@ public function checkToken(Request $request)
         return response()->json(['success' => false, 'message' => 'Token not provided.'], 401);
     }
 
+    // Cleanup all expired tokens
+    DB::table('personal_access_tokens')
+    ->where('expires_at', '<', now())
+    ->delete();
+
     $personalAccessToken = PersonalAccessToken::where('token', hash('sha256', $token))->first();
 
     // If token doesn't exist or has expired

@@ -76,26 +76,28 @@ class AdminAuthController extends Controller
     /**
      * Middleware to check token validity and expiration.
      */
-    public function checkToken(Request $request)
-    {
-        $token = $request->bearerToken();
-    
-        if (!$token) {
-            return response()->json(['success' => false, 'error' => 'Token not provided.'], 401);
+public function checkToken(Request $request)
+{
+    $token = $request->bearerToken();
+
+    if (!$token) {
+        return response()->json(['success' => false, 'message' => 'Token not provided.'], 401);
+    }
+
+    $personalAccessToken = PersonalAccessToken::where('token', hash('sha256', $token))->first();
+
+    // If token doesn't exist or has expired
+    if (!$personalAccessToken || $personalAccessToken->expires_at < now()) {
+        // Clean up the expired token
+        if ($personalAccessToken) {
+            $personalAccessToken->delete();
         }
-    
-        $hashedToken = hash('sha256', $token);
-        $accessToken = PersonalAccessToken::where('token', $hashedToken)->first();
-    
-        if (!$accessToken) {
-            return response()->json(['success' => false, 'error' => 'Invalid token.'], 401);
-        }
-    
-        if ($accessToken->expires_at && $accessToken->expires_at->isPast()) {
-            $accessToken->delete(); // Delete expired token
-            return response()->json(['success' => false, 'error' => 'Token has expired.'], 401);
-        }
-    
-        return response()->json(['success' => true, 'message' => 'Token is valid.']);
-    }    
+
+        return response()->json(['success' => false, 'message' => 'Token is invalid or expired.'], 401);
+    }
+
+    // Token is valid
+    return response()->json(['success' => true, 'message' => 'Token is valid.']);
+}
+   
 }

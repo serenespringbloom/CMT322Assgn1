@@ -9,6 +9,7 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue'),
       meta: { showHeader: true,
               showFooter: false,
+              requiresAuth: false,
               home: true
             },
     },
@@ -18,6 +19,7 @@ const router = createRouter({
       component: () => import('../views/TicketView.vue'),
       meta: { showHeader: true,
               showFooter: true,
+              requiresAuth: false,
               home: false
             },
     },
@@ -28,6 +30,7 @@ const router = createRouter({
       component: () => import('../views/MerchandisePage.vue'),
       meta: { showHeader: true,
               showFooter: true,
+              requiresAuth: false,
               home: false
             },
     },
@@ -38,6 +41,7 @@ const router = createRouter({
       component: () => import('../views/MerchandiseDetail1.vue'),
       meta: { showHeader: true,
               showFooter: true,
+              requiresAuth: false,
               home: false
             },
     },
@@ -48,6 +52,7 @@ const router = createRouter({
       component: () => import('../views/MerchandiseDetail2.vue'),
       meta: { showHeader: true,
               showFooter: true,
+              requiresAuth: false,
               home: false
             },
     },
@@ -58,6 +63,7 @@ const router = createRouter({
       component: () => import('../views/MerchandiseDetail3.vue'),
       meta: { showHeader: true,
               showFooter: true,
+              requiresAuth: false,
               home: false
             },
     },
@@ -67,6 +73,7 @@ const router = createRouter({
       component: () => import('../views/FeedbackView.vue'),
       meta: { showHeader: true,
               showFooter: true,
+              requiresAuth: false,
               home: false
             },
     },
@@ -76,6 +83,7 @@ const router = createRouter({
       component: () => import('../views/Cart.vue'),
       meta: { showHeader: true,
               showFooter: true,
+              requiresAuth: false,
               home: false
             },
     },
@@ -85,6 +93,7 @@ const router = createRouter({
       component: () => import('../views/RefundView.vue'),
       meta: { showHeader: true,
               showFooter: true,
+              requiresAuth: false,
               home: false
             },
     },
@@ -94,6 +103,7 @@ const router = createRouter({
       component: () => import('../views/LoginView.vue'),
       meta: { showHeader: false,
               showFooter: false,
+              requiresAuth: false,
               home: false
             },
     },
@@ -103,6 +113,7 @@ const router = createRouter({
       component: () => import('../views/test.vue'),
       meta: { showHeader: false,
               showFooter: false,
+              requiresAuth: false,
               home: false
             },
     },
@@ -110,29 +121,39 @@ const router = createRouter({
       path: '/admin',
       name: 'admin',
       component: () => import('../views/AdminView.vue'),
-      meta: { showHeader: false,
-              showFooter: false,
-              requiresAuth: true,
-              home: false },
+      meta: { showHeader: false, showFooter: false, requiresAuth: true, home: false },
       children: [
-        { path: '/dashboard', component: () => import('../views/Firstpage.vue') },
-        { path: '/feedback-admin', component: () => import('../views/Feedback.vue') },
-        { path: '/event', component: () => import('../views/Event.vue') },
-        { path: '/billing', component: () => import('../views/Billing.vue') },
-        { path: '/refunding', component: () => import('../views/Refund.vue') },
-      ]
-    } 
+        { path: '/dashboard', name: 'admin-dashboard', component: () => import('../views/Firstpage.vue') },
+        { path: '/feedback-admin', name: 'feedback-admin', component: () => import('../views/Feedback.vue') },
+        { path: '/event', name: 'event', component: () => import('../views/Event.vue') },
+        { path: '/billing', name: 'billing', component: () => import('../views/Billing.vue') },
+        { path: '/refunding', name: 'refunding', component: () => import('../views/Refund.vue') },
+      ],
+    }      
   ],
 })
 
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = sessionStorage.getItem('isAuthenticated') === 'true';
+  const token = sessionStorage.getItem('token');
+  console.log('Token:', token); // Debugging
 
-  if (to.meta.requiresAuth && !isAuthenticated) {
-    next('/login'); // Redirect to login if not authenticated
+  // Check if the user is already logged in and trying to access the login page
+  if (to.path === '/login' && token) {
+    console.log('User already logged in, redirecting to /dashboard'); // Debugging
+    next('/dashboard'); // Redirect to the dashboard if logged in
+    return;
+  }
+
+  console.log('Token:', token, '| to.meta.requiresAuth:', to.meta.requiresAuth); // Debug both values
+
+  if (to.meta.requiresAuth && !token) {
+    console.log('Not authenticated, redirecting to /login'); // Debugging
+    next('/login'); // Redirect to login if the user is not authenticated
   } else {
-    next(); // Proceed to route
+    console.log('Authenticated, proceeding to', to.path); // Debugging
+    next(); // Proceed to the route
   }
 });
+
 
 export default router

@@ -13,7 +13,6 @@ class RefundRequestController extends Controller
         return response()->json($refunds);
     }
 
-
     public function validatePid($pid)
     {
         $isValid = Transaction::where('transaction_id', $pid)->exists();

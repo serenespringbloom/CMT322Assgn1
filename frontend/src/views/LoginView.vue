@@ -1,6 +1,33 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import apiClient from '../api.js'; // Adjust the import path as necessary
+
+/*---------------------------------
+TEST
+---------------------------------*/
+//import {onMounted } from 'vue';
+// const testAdmins = ref([]); // To store the fetched data
+// const errortest = ref('');
+
+// // Fetch data from the /test endpoint
+// const fetchTestAdmins = async () => {
+//   try {
+//     const response = await apiClient.get('/test'); // Call the /test API
+//     testAdmins.value = response.data; // Store the data in testAdmins
+//   } catch (err) {
+//     errortest.value = 'Error fetching admin data. Please check the server.';
+//     console.error(err); // Log for debugging
+//   }
+// };
+
+// // Fetch data when the component mounts
+// onMounted(() => {
+//   fetchTestAdmins();
+// });
+/*---------------------------------
+TEST
+---------------------------------*/
 
 const username = ref('');
 const password = ref('');
@@ -10,43 +37,33 @@ const router = useRouter();
 const loading = ref(false); // Track loading state
 
 const handleLogin = async () => {
-  loading.value = true;
+  loading.value = true; // Show "Signing In..."
   error.value = ''; // Clear previous errors
+
   if (!username.value || !password.value) {
     error.value = 'Username and password are required.';
+    loading.value = false; // Stop "Signing In..."
     return;
   }
-  
+
   try {
-    const response = await fetch('http://127.0.0.1:8000/api/admin/login', {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest'
-      },
-      credentials: 'include',
-      body: JSON.stringify({ 
-        username: username.value, 
-        password: password.value 
-      }),
+    const response = await apiClient.post('/admin/login', {
+      username: username.value,
+      password: password.value,
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Login failed:', response.status, errorData);
-      error.value = errorData.message || 'Login failed. Please try again.';
-      return;
+    if (response.data.success) {
+      // Successful login
+      sessionStorage.setItem('token', response.data.token); // Save the token
+      router.push('/dashboard'); // Redirect to the admin dashboard
+    } else {
+      error.value = response.data.error; // Show error message
     }
-
-    const data = await response.json();
-    sessionStorage.setItem('token', data.token);
-    router.push('/dashboard');
   } catch (err) {
-    console.error('Login error:', err);
-    error.value = 'Unable to connect to the server. Please check your connection.';
+    error.value = 'An unexpected error occurred. Please try again.';
+    console.error(err); // Debugging
   } finally {
-    loading.value = false;
+    loading.value = false; // Stop "Signing In..."
   }
 };
 
@@ -62,7 +79,7 @@ const returnHome = () => {
     <div class="sidebar">
       <a class="home-link" @click="returnHome">Return to Home</a>
       <div class="login-content">
-        <img src="https://via.placeholder.com/128" alt="Logo" class="logo" />
+        <img src="../assets/MCBLogo.png" alt="Logo" class="logo" />
         <h2>Admin Login</h2>
         <form @submit.prevent="handleLogin" class="login-form">
           <div class="form-group">
@@ -98,11 +115,12 @@ const returnHome = () => {
   font-family: Arial, sans-serif;
   background: linear-gradient(to right, #ffc0cb, #ff69b4); /* Light Pink to Hot Pink */
   color: #333;
+  flex-direction: row; /* Default row layout for larger screens */
 }
 
 /* Sidebar */
 .sidebar {
-  width: 40%; /* Increased width to emphasize sidebar content */
+  width: 40%; /* Emphasized sidebar for larger screens */
   background: #fff; /* White Sidebar */
   display: flex;
   flex-direction: column;
@@ -113,12 +131,11 @@ const returnHome = () => {
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Return Home Link */
 .home-link {
   position: absolute;
-  top: 20px; /* Adjusted for larger sidebar */
+  top: 20px;
   left: 20px;
-  font-size: 1rem; /* Slightly larger font */
+  font-size: 1rem;
   color: #ff69b4; /* Hot Pink */
   cursor: pointer;
   text-decoration: underline;
@@ -128,20 +145,19 @@ const returnHome = () => {
   text-decoration: none;
 }
 
-/* Login Content */
 .login-content {
   text-align: center;
 }
 
 .logo {
-  width: 128px; /* Enlarged logo */
-  height: 128px;
-  margin-bottom: 2rem;
+  width: 200px; /* Adjusted logo size for better responsiveness */
+  height: auto;
+  margin-bottom: 1rem;
 }
 
 h2 {
   margin-bottom: 2rem;
-  font-size: 1.75rem; /* Enlarged title */
+  font-size: 1.75rem;
   color: #ff69b4; /* Hot Pink */
 }
 
@@ -151,35 +167,33 @@ h2 {
 }
 
 .form-group {
-  margin-bottom: 2rem; /* Increased spacing between fields */
+  margin-bottom: 1.5rem; /* Adjust spacing for smaller screens */
 }
 
 input {
   width: 100%;
-  padding: 1rem; /* Enlarged input fields */
+  padding: 0.8rem; /* Reduced padding for smaller screens */
   border: 1px solid #ddd;
-  border-radius: 6px; /* Slightly rounded corners */
-  font-size: 1.2rem; /* Increased font size */
-  box-sizing: border-box;
+  border-radius: 6px;
+  font-size: 1rem;
 }
 
 input:focus {
   outline: none;
   border-color: #ff69b4; /* Hot Pink */
-  box-shadow: 0 0 5px rgba(255, 105, 180, 0.3); /* Pink Glow */
+  box-shadow: 0 0 5px rgba(255, 105, 180, 0.3);
 }
 
-/* Sign-In Button */
 .btn-login {
   background-color: #ff69b4; /* Hot Pink */
   color: #fff;
   border: none;
-  padding: 1rem 2rem; /* Larger button size */
-  font-size: 1.2rem; /* Increased font size */
+  padding: 1rem 2rem;
+  font-size: 1.1rem; /* Adjusted font size */
   font-weight: bold;
   border-radius: 6px;
   cursor: pointer;
-  width: 600px;
+  width: 100%;
   margin-top: 1.5rem;
   transition: background-color 0.3s ease;
 }
@@ -193,7 +207,6 @@ input:focus {
   cursor: not-allowed;
 }
 
-/* Error Message */
 .error {
   color: #ff4d4f;
   margin-top: 1.5rem;
@@ -207,34 +220,55 @@ input:focus {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(to right, #ffb6c1, #ff69b4); /* Gradient Pink Background */
+  background: linear-gradient(to right, #ffb6c1, #ff69b4);
   color: white;
   text-align: center;
 }
 
 .background h1 {
-  font-size: 2.5rem; /* Enlarged text */
+  font-size: 2rem;
   font-weight: bold;
   opacity: 0.8;
 }
 
+/* Responsive Design */
 @media (max-width: 768px) {
   .login-page {
-    flex-direction: column;
+    flex-direction: column; /* Stack the layout vertically */
   }
 
   .sidebar {
-    width: 100%;
+    width: 100%; /* Full width for smaller screens */
     padding: 2rem;
-  }
-
-  .btn-login {
-    width: 100%; /* Full-width button for smaller screens */
+    text-align: center;
   }
 
   .background {
     display: none; /* Hide the background on small screens */
   }
+
+  .btn-login {
+    width: 100%; /* Full-width button for smaller screens */
+  }
 }
 
+@media (max-width: 480px) {
+  .logo {
+    width: 150px; /* Smaller logo for very small screens */
+  }
+
+  h2 {
+    font-size: 1.5rem; /* Adjust header size */
+  }
+
+  input {
+    font-size: 0.9rem; /* Smaller input font */
+    padding: 0.6rem; /* Reduced padding */
+  }
+
+  .btn-login {
+    font-size: 1rem; /* Smaller button font */
+    padding: 0.8rem 1.5rem;
+  }
+}
 </style>

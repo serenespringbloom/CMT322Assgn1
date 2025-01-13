@@ -39,6 +39,10 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'admins',
+        ],  
+        'admin' => [ // Add this
+            'driver' => 'session',
+            'provider' => 'admins',
         ],
     ],
 
@@ -66,7 +70,7 @@ return [
         ],
         'admins' => [ // Add this provider for admins
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\Admin::class)
+            'model' => App\Models\Admin::class,
         ],
 
         // 'users' => [

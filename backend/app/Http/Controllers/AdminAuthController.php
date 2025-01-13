@@ -1,63 +1,81 @@
 <?php
-// app/Http/Controllers/AdminAuthController.php
-
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class AdminAuthController extends Controller
 {
-    public function login(Request $request)
+    /**
+     * Show the login form for admins.
+     */
+    public function showLoginForm()
     {
-        header('Access-Control-Allow-Origin: http://localhost:5174');
-        header('Access-Control-Allow-Methods: POST, OPTIONS');
-        header('Access-Control-Allow-Headers: Content-Type');
-        
-        if ($request->isMethod('OPTIONS')) {
-            return response()->json([], 200);
-        }
-
-        $credentials = $request->validate([
-            'username' => 'required',
-            'password' => 'required'
-        ]);
-
-        $admin = Admin::where('username', $credentials['username'])->first();
-
-        if ($admin && Hash::check($credentials['password'], $admin->password_hash)) {
-            // Generate new token
-            $token = Str::random(60);
-            
-            // Store token
-            $admin->remember_token = $token;
-            $admin->save();
-
-            return response()->json([
-                'token' => $token,
-                'admin' => [
-                    'admin_id' => $admin->admin_id,
-                    'username' => $admin->username,
-                    'email' => $admin->email
-                ]
-            ]);
-        }
-
-        return response()->json([
-            'error' => 'Invalid credentials'
-        ], 401);
+        return view('admin.login'); // Return the login view
     }
 
-    public function dashboard(Request $request)
+    /**
+     * Handle admin login.
+     */
+    public function login(Request $request)
     {
-        header('Access-Control-Allow-Origin: http://localhost:5174');
-        header('Access-Control-Allow-Headers: Authorization');
-        
+        $request->validate([
+            'username' => 'required|string',
+            'password' => 'required|string',
+        ]);
+    
+        $admin = DB::table('admins')->where('username', $request->username)->first();
+    
+        if ($admin && Hash::check($request->password, $admin->password_hash)) {
+            // Generate a token (you can use a library like JWT or a random string)
+            $token = Str::random(60);
+    
+            // Save the token in the database for the admin
+            DB::table('admins')->where('admin_id', $admin->admin_id)->update(['remember_token' => $token]);
+    
+            return response()->json([
+                'success' => true,
+                'token' => $token, // Return the token
+                'data' => $admin,
+            ]);
+        }
+    
+        return response()->json(['success' => false, 'error' => 'Invalid credentials.'], 401);
+    }
+    
+    /**
+     * Handle admin logout.
+     */
+    public function logout(Request $request)
+    {
+        // Get the token from the request
+        $token = $request->bearerToken();
+    
+        // Find the admin using the token and clear it
+        if ($token) {
+            DB::table('admins')->where('remember_token', $token)->update(['remember_token' => null]);
+        }
+    
+        // Return a response
         return response()->json([
-            'message' => 'Welcome to dashboard',
-            'admin' => $request->admin
+            'success' => true,
+            'message' => 'Logged out successfully.',
+        ]);
+    }
+    
+    
+
+    /**
+     * Admin dashboard.
+     */
+    public function dashboard()
+    {
+        return response()->json([
+            'message' => 'Welcome to the Admin Dashboard',
         ]);
     }
 }

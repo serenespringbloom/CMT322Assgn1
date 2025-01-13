@@ -32,11 +32,18 @@ Route::post('/upload-image', [ImageUploadController::class, 'uploadImage']);
 use App\Http\Controllers\AdminAuthController;
 
 Route::post('/admin/login', [AdminAuthController::class, 'login']);
+Route::post('/admin/logout', [AdminAuthController::class, 'logout']);
+// Route::middleware('auth:admin')->group(function () {
+//     Route::get('/admin/dashboard', [AdminAuthController::class, 'dashboard']);
+//     Route::post('/admin/logout', [AdminAuthController::class, 'logout']);
+// });
 
-Route::middleware('admin.token')->group(function () {
-    Route::post('/admin/logout', [AdminAuthController::class, 'logout']);
-    Route::get('/admin/dashboard', [AdminAuthController::class, 'dashboard']);
-});
+// Route::middleware(['verify.admin.token'])->group(function () {
+//     Route::get('/admin/dashboard', [AdminAuthController::class, 'dashboard']);
+//     Route::post('/admin/logout', [AdminAuthController::class, 'logout']);
+//     // Other admin routes
+// });
+
 
 // // Default user route for authenticated API requests
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -50,7 +57,7 @@ Route::middleware('admin.token')->group(function () {
 // Example test route to verify API functionality
 Route::get('/test', function () {
     // Fetch data from your table (replace 'your_table_name' with your actual table name)
-    return DB::table('users')->get();
+    return DB::table('admins')->get();
 });
 
 // Add your additional API routes below

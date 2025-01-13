@@ -1,7 +1,9 @@
-<script setup lang="ts">
+<script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import { useRouter } from 'vue-router';
 import { onMounted, ref } from 'vue';
+import apiClient from '../api.js'; 
+
 const router = useRouter();
 const dashboardData = ref(null);
 const error = ref('');
@@ -43,10 +45,31 @@ onMounted(() => {
   fetchDashboard();
 });
 
-const handleLogout = () => {
-  sessionStorage.removeItem('isAuthenticated');
-  router.push('/login'); // Redirect to login page
+const handleLogout = async () => {
+  try {
+    const token = sessionStorage.getItem('token'); // Get the token from sessionStorage
+
+    if (token) {
+      // Call the logout API
+      await apiClient.post('/admin/logout', {}, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Pass the token
+        },
+      });
+    }
+
+    // Remove the token from sessionStorage
+    sessionStorage.removeItem('token');
+
+    // Redirect to the login page
+    router.push('/login');
+  } catch (err) {
+    // console.error('Logout error:', err); // Log any errors
+  }
 };
+
+
+
 </script>
 
 <template>

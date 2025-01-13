@@ -11,7 +11,6 @@ class TicketType extends Model
 
     protected $table = 'ticket_types';
 
-    protected $primaryKey = 'ticket_types_id';
 
     protected $fillable = [
         'ticket_type_desc',

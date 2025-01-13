@@ -11,5 +11,9 @@ const apiClient = axios.create({
 
 // Function to fetch event data by ID
 export const getEventById = (id) => apiClient.get(`/event/${id}`);
+export const getAgendasByEvent = (eventId) => apiClient.get(`/events/${eventId}/agendas`);
+
+// Function to fetch ticket types
+export const getTicketTypes = () => apiClient.get('/ticket_types');
 
 export default apiClient;

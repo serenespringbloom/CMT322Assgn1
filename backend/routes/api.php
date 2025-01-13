@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Item;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\AgendaController;
+use App\Http\Controllers\TicketTypeController;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\RefundRequestController;
 use App\Http\Controllers\FeedbackController;
@@ -63,6 +65,11 @@ Route::post('/store-item', function (Request $request) {
     // Route::get('/events/{id}', [EventController::class, 'show']);
     Route::get('/event/{id?}', [EventController::class, 'getEvent']);
 
+// Agenda API
+    Route::get('/events/{id}/agendas', [AgendaController::class, 'getAgendasByEvent']);
+
+// Ticket Type API
+    Route::get('/ticket_types', [TicketTypeController::class, 'index']);
 
 //Refund API
     Route::get('/admin/refunds', [RefundRequestController::class, 'index']);

@@ -1,24 +1,45 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { getEventById } from '@/api'; // Import your API client
+import { getEventById, getAgendasByEvent, getTicketTypes } from '@/api'; // Import API functions
 import CountdownTimer from '@/components/countdownTimer.vue';
 import Footer from '../components/Footer.vue';
 
-// State to hold event data
+// State to hold event, agenda, and ticket types data
 const event = ref(null);
-const eventId = 12; // Fetch event with ID 12
+const agendas = ref([]);
+const ticketTypes = ref([]);
+const eventId = 12; // Event ID to fetch
 
-// Fetch event data on component mount
+// Fetch event and agenda data on component mount
 onMounted(async () => {
   try {
-    const response = await getEventById(eventId); // Fetch data using updated API call
-    event.value = response.data; // Assign fetched event data
+    const eventResponse = await getEventById(eventId);
+    console.log('Event data:', eventResponse.data); // Debug log for event data
+    event.value = eventResponse.data;
+
+    const agendaResponse = await getAgendasByEvent(eventId);
+    console.log('Agenda data:', agendaResponse.data); // Debug log for agenda data
+    agendas.value = agendaResponse.data;
+
+    // Fetch ticket types
+    const ticketResponse = await getTicketTypes();
+    console.log('Ticket types data:', ticketResponse.data); // Debug log for ticket types
+    ticketTypes.value = ticketResponse.data;
   } catch (error) {
-    console.error('Error fetching event data:', error); // Handle errors
+    console.error('Error fetching data:', error);
   }
 });
-</script>
 
+// Utility function to format time
+function formatTime(datetime: string) {
+  const date = new Date(datetime);
+  return date.toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  });
+}
+</script>
 
 
 
@@ -107,57 +128,30 @@ onMounted(async () => {
       </section>
 
       <!-- Agenda Section -->
-
-
       <section id="agenda">
-        <!-- Container for Agenda -->
-        <div class="agenda-container">
-          <!-- Left Side -->
-          <div class="agenda-title">
-            <h2>Agenda</h2>
-            <h2>01 June, Saturday</h2>
-            <div class="gradient-overlay2">
-              <img src="@/assets/images/background-agenda.jpg" alt="" />
-            </div>
-          </div>
-
-          <!-- Right Side -->
-          <div class="agendaWrapper">
-            <div class="agenda-detail">
-              <h3>07:30 PM - 07:45 PM</h3>
-              <h3>1</h3>
-              <h3>Registration and Wristband</h3>
-              <p>Register your personal data in customer service and take a wristband before entering the room.</p>
-            </div>
-
-            <div class="agenda-detail">
-              <h3>07:45 PM - 08:00 PM</h3>
-              <h3>2</h3>
-              <h3>Welcoming Speech</h3>
-              <p>Hearing speech from our deputy vice chancellor. An opening speech to open the ceremony and expose the student about the whole picture of MCB event in USM.</p>
-            </div>
-
-            <div class="agenda-detail">
-              <h3>08:00 PM - 10:30 PM</h3>
-              <h3>3</h3>
-              <h3>Night Citra Performances</h3>
-              <p>Stay for entertaining performance from our invited celebrities from Sabah and also students that perform their traditional dance which originated from Sabah. </p>
-            </div>
-
-            <div class="agenda-detail">
-              <h3>10:30 PM - 11:00 PM</h3>
-              <h3>4</h3>
-              <h3>Award Giving Ceremony</h3>
-              <p>Giving the award based on the category that has finalised and annoucing the winner of MCB 16th edition.</p>
-            </div>
-
-            <div class="agenda-detail">
-              <h3>11:00 PM - 11:30 PM</h3>
-              <h3>5</h3>
-              <h3>Closing Ceremony & Event Dismissal</h3>
-              <p>Students and Guest may dismiss. Photography session with our guest may be available subjected to celebrities’ approval.</p>
-            </div>
+  <div class="agenda-container">
+    <!-- Left Side -->
+    <div class="agenda-title">
+      <h2>Agenda</h2>
+      <h2>{{ event?.event_datetime || 'Event Date' }}</h2>
+      <div class="gradient-overlay2">
+        <img src="@/assets/images/background-agenda.jpg" alt="" />
       </div>
+    </div>
+
+    <!-- Right Side -->
+    <div class="agendaWrapper">
+      <div
+        v-for="(agenda, index) in agendas"
+        :key="agenda.agenda_id"
+        class="agenda-detail"
+      >
+        <h3>{{ formatTime(agenda.time_start) }} - {{ formatTime(agenda.time_end) }}</h3>
+        <h3>{{ index + 1 }}</h3>
+        <h3>{{ agenda.agenda_title }}</h3>
+        <p>{{ agenda.agenda_description }}</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -172,44 +166,28 @@ onMounted(async () => {
 
       <!-- Ticket and Merchandise Section -->
       <section id="tickets-merchandise">
-        <h2>Ticket & Merchandise</h2>
-        <p>
-          Get your tickets and explore exclusive merchandise for the event!
-          <RouterLink to="/merchandise"><button class="btn-merchandise">Shop Merchandise</button></RouterLink>
-        </p>
-        <div class="ticket-card">
-          <div class="card-content">
-            <h3>Event Ticket - 01 June 2025</h3>
-            <ul>
-              <li>One night pass access all entertainment</li>
-              <li>Wristband and Snack</li>
-              <li>Meet Event Performers</li>
-              <li>Pick Seat</li>
-            </ul>
-            <div class="price">
-              <span>MYR 15</span>
-              <RouterLink to="/ticket"><button>BUY NOW</button></RouterLink>
-            </div>
-          </div>
+    <h2>Ticket & Merchandise</h2>
+    <p>
+      Get your tickets and explore exclusive merchandise for the event!
+      <RouterLink to="/merchandise"><button class="btn-merchandise">Shop Merchandise</button></RouterLink>
+    </p>
+    <div v-for="ticket in ticketTypes" :key="ticket.ticket_types_id" class="ticket-card">
+      <div class="card-content">
+        <h3>Event Ticket - {{ ticket.ticket_type_desc }}</h3>
+        <ul>
+          <li>Price: MYR {{ ticket.ticket_type_price }}</li>
+          <li>One night pass access to all entertainment</li>
+          <li>Wristband and Snack</li>
+          <li>Meet Event Performers</li>
+          <li>Pick Seat</li>
+        </ul>
+        <div class="price">
+          <RouterLink to="/ticket"><button>BUY NOW</button></RouterLink>
         </div>
+      </div>
+    </div>
+  </section>
 
-
-        <div class="ticket-card">
-          <div class="card-content">
-            <h3>Event Ticket - 01 June 2025 (Student)</h3>
-            <ul>
-              <li>One night pass access all entertainment</li>
-              <li>Wristband and Snack</li>
-              <li>Meet Event Performers</li>
-              <li>Pick Seat</li>
-            </ul>
-            <div class="price">
-              <span>MYR 12</span>
-              <RouterLink to="/ticket"><button>BUY NOW</button></RouterLink>
-            </div>
-          </div>
-          </div>
-      </section>
 
       <!-- Past Winner Section -->
       <section id="past-events">
@@ -840,9 +818,8 @@ h1 {
 
 .price {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
+  justify-content: flex-end; /* Aligns the button to the right */
+  margin-top: 10px;
 }
 
 .price span {

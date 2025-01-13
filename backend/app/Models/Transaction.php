@@ -4,21 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Transaction extends Model
 {
+ 
     use HasFactory;
 
-    protected $table = 'transactions';
-
-    protected $primaryKey = 'transaction_id';
-
     protected $fillable = [
-        'total_price',
-        'student_tickets',
-        'public_tickets',
-        'total_price',
-        'selected_bank',
-
+        'customer_name',
+        'email',
+        'phone',
+        'ticket_category',
+        'total_amount',
+        'status'
     ];
+
+    public function seats()
+{
+    return $this->hasMany(Seat::class);
+}
 }

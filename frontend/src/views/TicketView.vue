@@ -1,804 +1,874 @@
-<script setup>
-import { ref, computed, watch, onMounted } from 'vue';
-import axios from 'axios';
-
-const rows = 15;
-const columns = 24;
-const seatsPerSection = 8;
-
-const bookedSeats = ref([]);
-const selectedSeats = ref([]);
-const studentTickets = ref(0);
-const publicTickets = ref(0);
-const showCheckoutPopup = ref(false);
-const email = ref('');
-const phone = ref('');
-const selectedBank = ref("");
-const fpxIcon = "/src/assets/images/fpx-icon.png";
-const seats = {
-  left: Array.from({ length: rows * (seatsPerSection / 3) }, (_, i) => `L${i + 1}`),
-  center: Array.from({ length: rows * (seatsPerSection / 3) }, (_, i) => `C${i + 1}`),
-  right: Array.from({ length: rows * (seatsPerSection / 3) }, (_, i) => `R${i + 1}`),
-};
-// Banks Data
-const banks = ref([
-  { name: "Maybank", icon: "/src/assets/images/maybank-icon.png" },
-  { name: "CIMB Bank", icon: "/src/assets/images/cimb-icon.png" },
-  { name: "RHB Bank", icon: "/src/assets/images/rhb-icon.png" },
-  { name: "Public Bank", icon: "/src/assets/images/publicbank-icon.png" },
-  { name: "Bank Rakyat", icon: "/src/assets/images/bankrakyat-icon.png" },
-]);
-//adjust ticket methods
-const adjustTickets = (type, value) => {
-  if (type === 'student') {
-    studentTickets.value = Math.min(value, selectedSeats.value.length - publicTickets.value);
-  } else if (type === 'public') {
-    publicTickets.value = Math.min(value, selectedSeats.value.length - studentTickets.value);
-  }
-};
-const isEmailValid = computed(() => /\S+@\S+\.\S+/.test(email.value));
-const isPhoneValid = computed(() => 
-  /^(?:01[0-46-9]-?\d{7,8}|0[2-9]-?\d{7,8})$/.test(phone.value)
-);
-
-
-// Fetch booked seats from the database
-const fetchBookedSeats = async () => {
-  try {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/seats`,);
-    bookedSeats.value = response.data; // Assuming the API returns an array of booked seats
-  } catch (error) {
-    console.error('Error fetching booked seats:', error);
-  }
-};
-
-// Save purchase data to the database
-const savePurchase = async () => {
-  const payload = {
-    selected_seats: selectedSeats.value,
-    student_tickets: studentTickets.value,
-    public_tickets: publicTickets.value,
-    total_price: totalPrice.value,  // Access the computed value here
-    
-    email: email.value,
-    phone: phone.value,
-    selected_bank: selectedBank.value,
-  };
- 
-  
-  try {
-    console.log(totalPrice.value);
-    const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/purchase`, payload);
-    alert('Purchase complete!');
-    bookedSeats.value.push(...selectedSeats.value); // Update local booked seats
-    selectedSeats.value = [];
-    studentTickets.value = 0;
-    publicTickets.value = 0;
-    email.value = '';
-    phone.value = '';
-    selectedBank.value = '';
-    showCheckoutPopup.value = false;
-  } catch (error) {
-    console.error('Error saving purchase:', error);
-    alert('Failed to complete purchase. Please try again.');
-  }
-};
-const selectedBankIcon = computed(() => {
-  const bank = banks.value.find((b) => b.name === selectedBank.value);
-  return bank ? bank.icon : '';
-});
-watch(showCheckoutPopup, (value) => {
-  document.body.style.overflow = value ? 'hidden' : 'auto';
-});
-watch([selectedSeats, studentTickets, publicTickets], ([newSeats, newStudents, newPublic]) => {
-  console.log('Selected Seats:', newSeats);
-  console.log('Student Tickets:', newStudents);
-  console.log('Public Tickets:', newPublic);
-});
-
-// Load booked seats on component mount
-onMounted(fetchBookedSeats);
-
-// Remaining logic for handling seats, tickets, and UI...
-const toggleSeat = (seat) => {
-  if (bookedSeats.value.includes(seat)) return;
-  if (selectedSeats.value.includes(seat)) {
-    selectedSeats.value = selectedSeats.value.filter((s) => s !== seat);
-    if (publicTickets.value > 0) publicTickets.value -= 1;
-    else if (studentTickets.value > 0) studentTickets.value -= 1;
-  } else {
-    selectedSeats.value.push(seat);
-    const totalSeats = selectedSeats.value.length;
-    const currentTotal = studentTickets.value + publicTickets.value;
-    if (currentTotal < totalSeats) publicTickets.value += 1;
-  }
-};
-
-const prices = { student: 15, public: 20 };
-const totalPrice = computed(() => 
-  Number(studentTickets.value) * prices.student + 
-  Number(publicTickets.value) * prices.public
- 
-);
-
-
-</script>
-
-
 <template>
-  <div class="title">
-    <h1>SEAT SELECTION</h1>
-  </div>
-  <div class="page-container">
-    <!-- Seat Grid Section -->
-    <div class="seat-section">
-      <div class="seat-layout">
-        <div class="row-labels">
-          <div v-for="row in rows" :key="row" class="row-label">
-            {{ String.fromCharCode(65 + row - 1) }}
+  <div class="mt-6 max-w-7xl mx-auto bg-white shadow-lg rounded-lg p-8">
+    <h1 class="text-3xl font-bold text-center text-pink-600 mb-8">
+      Seat Booking System
+    </h1>
+
+    <div v-if="loading" class="text-center text-gray-500">
+      Loading seats...
+    </div>
+
+    <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Left Section (L1-L30) -->
+      <div class="flex flex-col space-y-6">
+        <div
+          v-for="(row, rowIndex) in chunkedSeats.left"
+          :key="'left-' + rowIndex"
+          class="grid grid-cols-5 gap-4"
+        >
+          <div
+            v-for="seat in row"
+            :key="seat.id"
+            class="p-4 border rounded-lg flex flex-col items-center cursor-pointer"
+            :class="getSeatClass(seat)"
+            @click="toggleSeatSelection(seat)"
+          >
+            <span class="font-semibold text-lg mb-4">
+              {{ seat.seat_number }}
+            </span>
+
           </div>
         </div>
-        <div class="seat-column">
-          <h3>Left Section</h3>
-          <div class="seat-grid">
-            <div
-              v-for="seat in seats.left"
-              :key="seat"
-              :class="[ 'seat', { booked: bookedSeats.includes(seat), selected: selectedSeats.includes(seat) } ]"
-              @click="toggleSeat(seat)"
-            >
-              {{ seat }}
-            </div>
+      </div>
+
+      <!-- Center Section (C1-C30) -->
+      <div class="flex flex-col space-y-6">
+        <div
+          v-for="(row, rowIndex) in chunkedSeats.center"
+          :key="'center-' + rowIndex"
+          class="grid grid-cols-5 gap-4"
+        >
+          <div
+            v-for="seat in row"
+            :key="seat.id"
+            class="p-4 border rounded-lg flex flex-col items-center cursor-pointer"
+            :class="getSeatClass(seat)"
+            @click="toggleSeatSelection(seat)"
+          >
+            <span class="font-semibold text-lg mb-4">
+              {{ seat.seat_number }}
+            </span>
+
           </div>
         </div>
-        <div class="seat-column">
-          <h3>Centre Section</h3>
-          <div class="seat-grid">
-            <div
-              v-for="seat in seats.center"
-              :key="seat"
-              :class="[ 'seat', { booked: bookedSeats.includes(seat), selected: selectedSeats.includes(seat) } ]"
-              @click="toggleSeat(seat)"
-            >
-              {{ seat }}
-            </div>
-          </div>
-        </div>
-        <div class="seat-column">
-          <h3>Right Section</h3>
-          <div class="seat-grid">
-            <div
-              v-for="seat in seats.right"
-              :key="seat"
-              :class="[ 'seat', { booked: bookedSeats.includes(seat), selected: selectedSeats.includes(seat) } ]"
-              @click="toggleSeat(seat)"
-            >
-              {{ seat }}
-            </div>
+      </div>
+
+      <!-- Right Section (R1-R30) -->
+      <div class="flex flex-col space-y-6">
+        <div
+          v-for="(row, rowIndex) in chunkedSeats.right"
+          :key="'right-' + rowIndex"
+          class="grid grid-cols-5 gap-4"
+        >
+          <div
+            v-for="seat in row"
+            :key="seat.id"
+            class="p-4 border rounded-lg flex flex-col items-center cursor-pointer"
+            :class="getSeatClass(seat)"
+            @click="toggleSeatSelection(seat)"
+          >
+            <span class="font-semibold text-lg mb-4">
+              {{ seat.seat_number }}
+            </span>
+
           </div>
         </div>
       </div>
     </div>
 
-    <div class="ticket-section">
-  <h1 class="section-title">Theatre Seat Booking</h1>
-
-  <!-- Summary -->
-  <div class="summary">
-    <h2 class="summary-title">Selected Seats</h2>
-    <p class="selected-seats">
-      {{ selectedSeats.length > 0 ? selectedSeats.join(', ') : 'None' }}
-    </p>
-  </div>
-
-  <!-- Ticket Options -->
-  <div class="ticket-options">
-    <h2 class="options-title">Ticket Selection</h2>
-
-    <!-- Student Tickets -->
-    <div class="ticket-input">
-      <label for="student-tickets">Student:</label>
-      <input
-        id="student-tickets"
-        type="number"
-        min="0"
-        :max="selectedSeats.length"
-        v-model.number="studentTickets"
-        @input="adjustTickets('student', $event.target.value)"
-      />
-    </div>
-
-    <!-- Public Tickets -->
-    <div class="ticket-input">
-      <label for="public-tickets">Public:</label>
-      <input
-        id="public-tickets"
-        type="number"
-        min="0"
-        :max="selectedSeats.length"
-        v-model.number="publicTickets"
-        @input="adjustTickets('public', $event.target.value)"
-      />
-    </div>
-  </div>
-
-  <!-- Total Price -->
-  <div class="price-summary">
-    <p class="total-price">
-      Total Price: <strong>RM {{ totalPrice }}</strong>
-    </p>
-  </div>
-
-  <!-- Checkout Button -->
-  <button class="checkout-btn" @click="showCheckoutPopup = true">
-    Proceed to Checkout
-  </button>
-    </div>
-  </div>
-    <!-- Popup Overlay -->
-  <div v-if="showCheckoutPopup" class="popup-overlay"></div>
-
-  <!-- Enhanced Checkout Popup -->
-  <div v-if="showCheckoutPopup" class="checkout-popup">
-    <div class="popup-content">
-      <!-- Header -->
-      <h2>Checkout Summary</h2>
-
-      <!-- Summary Section -->
-      <p><strong>Selected Seats:</strong> <span>{{ selectedSeats.join(', ') || 'None' }}</span></p>
-      <p><strong>Number of Student Tickets:</strong> <span>{{ studentTickets }}</span></p>
-      <p><strong>Number of Public Tickets:</strong> <span>{{ publicTickets }}</span></p>
-      <p class="total-price">Total Price: RM {{ totalPrice }}</p>
-
-        <!-- Email and Phone Inputs -->
-        <div class="checkout-inputs">
-          <input
-            type="email"
-            v-model="email"
-            placeholder="Enter your email"
-            :class="{ invalid: !isEmailValid && email }"
-          />
-          <span v-if="email && !isEmailValid" class="error-message">
-            Please enter a valid email address.
-          </span>
-          <input
-            type="text"
-            v-model="phone"
-            placeholder="Enter your phone number"
-            :class="{ invalid: !isPhoneValid && phone }"
-          />
-          <span v-if="phone && !isPhoneValid" class="error-message">
-            Please enter a valid Malaysian phone number.
-          </span>
+    <!-- Checkout Summary -->
+    <div v-if="selectedSeats.length > 0" class="mt-8 border-t pt-8">
+      <div class="bg-gray-50 rounded-lg p-6">
+        <h2 class="text-2xl font-bold mb-4">Booking Summary</h2>
+        
+        <!-- Ticket Category Selection -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Ticket Category
+          </label>
+          <div class="flex gap-4">
+            <button 
+              @click="formData.ticket_category = 'student'"
+              class="flex-1 py-3 px-4 rounded-lg border-2 transition-colors"
+              :class="formData.ticket_category === 'student' 
+                ? 'border-blue-500 bg-blue-50' 
+                : 'border-gray-200 hover:border-gray-300'"
+            >
+              <div class="font-semibold">Student</div>
+              <div class="text-sm text-gray-600">$16 per seat</div>
+            </button>
+            <button 
+              @click="formData.ticket_category = 'public'"
+              class="flex-1 py-3 px-4 rounded-lg border-2 transition-colors"
+              :class="formData.ticket_category === 'public' 
+                ? 'border-blue-500 bg-blue-50' 
+                : 'border-gray-200 hover:border-gray-300'"
+            >
+              <div class="font-semibold">Public</div>
+              <div class="text-sm text-gray-600">$20 per seat</div>
+            </button>
+          </div>
         </div>
 
-        <!-- FPX Bank Selection -->
-      <div class="checkout-inputs">
-        <label for="bank-select">Choose Your Bank (FPX):</label>
-        <div class="bank-dropdown">
-          <select id="bank-select" v-model="selectedBank">
-            <option disabled value="">Select a Bank</option>
-            <option
-              v-for="bank in banks"
-              :key="bank.name"
-              :value="bank.name"
+        <!-- Selected Seats Summary -->
+        <div class="space-y-4 mb-6">
+          <div class="flex justify-between">
+            <span>Selected Seats ({{ selectedSeats.length }}):</span>
+            <span>{{ selectedSeats.map(seat => seat.seat_number).join(', ') }}</span>
+          </div>
+          
+          <div class="flex justify-between font-bold text-lg border-t pt-4">
+            <span>Total Amount:</span>
+            <span>${{ totalAmount }}</span>
+          </div>
+        </div>
+
+        <!-- Customer Information Form -->
+        <form @submit.prevent="submitBooking" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Full Name
+            </label>
+            <input
+              v-model="formData.customer_name"
+              type="text"
+              required
+              class="w-full px-4 py-2 border rounded-lg"
             >
-              {{ bank.name }}
-            </option>
-          </select>
-          <div class="bank-icon">
-            <img
-              v-if="selectedBankIcon"
-              :src="selectedBankIcon"
-              alt="Bank Icon"
-            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Email
+            </label>
+            <input
+              v-model="formData.email"
+              type="email"
+              required
+              class="w-full px-4 py-2 border rounded-lg"
+            >
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Phone
+            </label>
+            <input
+              v-model="formData.phone"
+              type="tel"
+              required
+              class="w-full px-4 py-2 border rounded-lg"
+            >
+          </div>
+
+          <button
+  type="button"
+  @click="showPaymentDialog = true"
+  class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-bold hover:bg-blue-700 transition"
+  :disabled="processing || !formData.ticket_category"
+>
+  Proceed to Payment
+</button>
+        </form>
+
+         <!-- Payment Dialog -->
+    <!-- Payment Dialog -->
+   <!-- Payment Dialog -->
+   <div v-show="showPaymentDialog" class="fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true">
+      <!-- Backdrop -->
+      <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"></div>
+
+      <!-- Dialog Position -->
+      <div class="fixed inset-0 z-50 overflow-y-auto">
+        <div class="flex min-h-full items-center justify-center p-4">
+          <!-- Dialog Panel -->
+          <div class="relative transform overflow-hidden rounded-lg bg-white px-6 py-8 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+            <!-- Close Button -->
+            <button 
+              @click="closePaymentDialog"
+              class="absolute right-4 top-4 text-gray-400 hover:text-gray-500"
+              type="button"
+            >
+              <span class="sr-only">Close</span>
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <!-- Dialog Content -->
+            <div class="text-center mb-6">
+              <h3 class="text-2xl font-bold text-gray-900 mb-2">Complete Your Payment</h3>
+              <p class="text-gray-500">Total Amount: ${{ totalAmount }}</p>
+            </div>
+
+            <!-- Payment Method Selection -->
+            <div class="mb-6">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Select Payment Method</label>
+              <div class="grid grid-cols-3 gap-4">
+                <button
+                  v-for="method in paymentMethods"
+                  :key="method.id"
+                  @click="selectPaymentMethod(method.id)"
+                  class="p-4 border rounded-lg text-center transition-colors"
+                  :class="paymentData.method === method.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'"
+                >
+                  <img :src="method.icon" :alt="method.name" class="h-8 w-auto mx-auto mb-2">
+                  <div class="font-medium">{{ method.name }}</div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Payment Forms -->
+            <form @submit.prevent="submitBooking" class="space-y-6">
+              <!-- Credit Card Form -->
+              <div v-if="paymentData.method === 'credit-card'" class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Card Number</label>
+                  <input
+                    v-model="paymentData.cardNumber"
+                    type="text"
+                    maxlength="19"
+                    placeholder="1234 5678 9012 3456"
+                    class="w-full px-4 py-2 border rounded-lg"
+                    @input="formatCardNumber"
+                  >
+                  <span v-if="validationErrors.cardNumber" class="text-red-500 text-sm">{{ validationErrors.cardNumber }}</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Expiry Date</label>
+                    <input
+                      v-model="paymentData.expiryDate"
+                      type="text"
+                      placeholder="MM/YY"
+                      maxlength="5"
+                      class="w-full px-4 py-2 border rounded-lg"
+                      @input="formatExpiryDate"
+                    >
+                    <span v-if="validationErrors.expiryDate" class="text-red-500 text-sm">{{ validationErrors.expiryDate }}</span>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">CVV</label>
+                    <input
+                      v-model="paymentData.cvv"
+                      type="password"
+                      maxlength="3"
+                      placeholder="123"
+                      class="w-full px-4 py-2 border rounded-lg"
+                    >
+                    <span v-if="validationErrors.cvv" class="text-red-500 text-sm">{{ validationErrors.cvv }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- PayPal Form -->
+              <div v-if="paymentData.method === 'paypal'" class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">PayPal Email</label>
+                  <input
+                    v-model="paymentData.paypalEmail"
+                    type="email"
+                    placeholder="your@email.com"
+                    class="w-full px-4 py-2 border rounded-lg"
+                  >
+                  <span v-if="validationErrors.paypalEmail" class="text-red-500 text-sm">{{ validationErrors.paypalEmail }}</span>
+                </div>
+              </div>
+
+              <!-- Bank Transfer Form -->
+              <div v-if="paymentData.method === 'bank-transfer'" class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Account Number</label>
+                  <input
+                    v-model="paymentData.accountNumber"
+                    type="text"
+                    placeholder="0123456789"
+                    class="w-full px-4 py-2 border rounded-lg"
+                  >
+                  <span v-if="validationErrors.accountNumber" class="text-red-500 text-sm">{{ validationErrors.accountNumber }}</span>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Bank Name</label>
+                  <input
+                    v-model="paymentData.bankName"
+                    type="text"
+                    placeholder="Your Bank Name"
+                    class="w-full px-4 py-2 border rounded-lg"
+                  >
+                  <span v-if="validationErrors.bankName" class="text-red-500 text-sm">{{ validationErrors.bankName }}</span>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="flex gap-4 mt-8">
+                <button
+                  type="button"
+                  @click="closePaymentDialog"
+                  class="flex-1 px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-semibold transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  :disabled="processing || !paymentData.method"
+                  class="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold transition-colors disabled:opacity-50"
+                >
+                  <span v-if="processing">Processing...</span>
+                  <span v-else>Pay ${{ totalAmount }}</span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Complete Purchase Button -->
-      <button
-        class="complete-btn"
-        :disabled="!isEmailValid || !isPhoneValid || !selectedBank"
-        @click="savePurchase"
+    <!-- Toast Notification -->
+    <div 
+      v-if="toast.show" 
+      class="fixed bottom-4 right-4 z-50 min-w-[300px] transform transition-transform duration-300"
+      :class="{
+        'translate-y-0': toast.show,
+        'translate-y-full': !toast.show
+      }"
+    >
+      <div 
+        class="rounded-lg shadow-lg p-4 flex items-center space-x-4"
+        :class="{
+          'bg-green-500 text-white': toast.type === 'success',
+          'bg-red-500 text-white': toast.type === 'error'
+        }"
       >
-      Complete Purchase
-      </button>
-      <button class="close-btn" @click="showCheckoutPopup = false">Close</button>
+        <!-- Success/Error Icon -->
+        <div v-if="toast.type === 'success'">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <div v-else>
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </div>
+        <p>{{ toast.message }}</p>
+      </div>
+    </div>
+      </div>
     </div>
   </div>
 </template>
 
+<script>
+import axios from "axios";
+
+export default {
+  data() {
+    return {
+      seats: [],
+      loading: true,
+      selectedSeats: [],
+      processing: false,
+      formData: {
+        customer_name: '',
+        email: '',
+        phone: '',
+        ticket_category: '',
+      },
+      showPaymentDialog: false,
+      paymentData: {
+        method: '',
+        cardNumber: '',
+        expiryDate: '',
+        cvv: '',
+        paypalEmail: '',
+        accountNumber: '',
+        bankName: ''
+      },
+      validationErrors: {},
+      toast: {
+        show: false,
+        message: '',
+        type: 'success'
+      },
+      paymentMethods: [
+        {
+          id: 'credit-card',
+          name: 'Credit Card',
+          icon: '/api/placeholder/32/32'
+        },
+        {
+          id: 'paypal',
+          name: 'PayPal',
+          icon: '/api/placeholder/32/32'
+        },
+        {
+          id: 'bank-transfer',
+          name: 'Bank Transfer',
+          icon: '/api/placeholder/32/32'
+        }
+      ],
+      paymentData: {
+        method: '',
+        cardNumber: '',
+        expiryDate: '',
+        cvv: '',
+        paypalEmail: '',
+        accountNumber: '',
+        bankName: ''
+      },
+      validationErrors: {},
+      processing: false
+    };
+    
+  },
+  computed: {
+    totalAmount() {
+      const pricePerSeat = this.formData.ticket_category === 'student' ? 16 : 20;
+      return this.selectedSeats.length * pricePerSeat;
+    },
+    chunkedSeats() {
+      const sections = {
+        left: [],
+        center: [],
+        right: []
+      };
+
+      this.seats.forEach(seat => {
+        const seatNumber = seat.seat_number;
+        if (seatNumber.startsWith('L')) {
+          sections.left.push(seat);
+        } else if (seatNumber.startsWith('C')) {
+          sections.center.push(seat);
+        } else if (seatNumber.startsWith('R')) {
+          sections.right.push(seat);
+        }
+      });
+
+      return {
+        left: this.chunkArray(sections.left, 5),
+        center: this.chunkArray(sections.center, 5),
+        right: this.chunkArray(sections.right, 5)
+      };
+    }
+  },
+  methods: {
+    async fetchSeats() {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/seats`);
+        this.seats = response.data.map((seat, index) => {
+          let seatNumber;
+          if (index < 30) {
+            seatNumber = `L${index + 1}`;
+          } else if (index < 60) {
+            seatNumber = `C${index - 29}`;
+          } else {
+            seatNumber = `R${index - 59}`;
+          }
+          return {
+            ...seat,
+            seat_number: seatNumber
+          };
+        });
+        this.loading = false;
+      } catch (error) {
+        this.showToast('Failed to fetch seats. Please refresh the page.', 'error');
+        console.error('Error fetching seats:', error);
+      }
+    },
+    getSeatClass(seat) {
+      if (seat.is_booked) {
+        return 'bg-red-300 border-red-400';
+      }
+      if (this.selectedSeats.includes(seat)) {
+        return 'bg-blue-300 border-blue-400';
+      }
+      return 'bg-green-100 border-green-400';
+    },
+    getButtonClass(seat) {
+      if (seat.is_booked) {
+        return 'bg-red-500';
+      }
+      if (this.selectedSeats.includes(seat)) {
+        return 'bg-blue-500';
+      }
+      return 'bg-green-500 hover:bg-green-600';
+    },
+    getSeatStatus(seat) {
+      if (seat.is_booked) {
+        return 'Booked';
+      }
+      if (this.selectedSeats.includes(seat)) {
+        return 'Selected';
+      }
+      return 'Available';
+    },
+    toggleSeatSelection(seat) {
+      if (seat.is_booked) return;
+
+      const index = this.selectedSeats.findIndex(s => s.id === seat.id);
+      if (index === -1) {
+        this.selectedSeats.push(seat);
+      } else {
+        this.selectedSeats.splice(index, 1);
+      }
+    },
+    chunkArray(array, size) {
+      const chunked = [];
+      for (let i = 0; i < array.length; i += size) {
+        chunked.push(array.slice(i, i + size));
+      }
+      return chunked;
+    },
+    async submitBooking() {
+      if (this.processing || !this.formData.ticket_category) return;
+
+      this.processing = true;
+      try {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/bookings`, {
+          ...this.formData,
+          seat_ids: this.selectedSeats.map(seat => seat.id)
+        });
+
+        alert('Booking successful!');
+        
+        // Reset form and selection
+        this.selectedSeats = [];
+        this.formData = {
+          customer_name: '',
+          email: '',
+          phone: '',
+          ticket_category: ''
+        };
+
+        // Refresh seats data
+        this.fetchSeats();
+      } catch (error) {
+        alert(error.response?.data?.message || 'An error occurred during booking');
+      } finally {
+        this.processing = false;
+      }
+    },
+    formatCardNumber(e) {
+      let value = e.target.value.replace(/\s/g, '').replace(/\D/g, '');
+      let formattedValue = '';
+      for (let i = 0; i < value.length; i++) {
+        if (i > 0 && i % 4 === 0) {
+          formattedValue += ' ';
+        }
+        formattedValue += value[i];
+      }
+      this.paymentData.cardNumber = formattedValue;
+    },
+    formatExpiryDate(e) {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length >= 2) {
+        value = value.slice(0, 2) + '/' + value.slice(2);
+      }
+      this.paymentData.expiryDate = value;
+    },
+    showToast(message, type = 'success') {
+      this.toast = {
+        show: true,
+        message,
+        type
+      };
+      setTimeout(() => {
+        this.toast.show = false;
+      }, 3000);
+    },
+    showPaymentModal() {
+      this.showPaymentDialog = true;
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    },
+    closePaymentDialog() {
+      this.showPaymentDialog = false;
+      document.body.style.overflow = ''; // Restore scrolling
+      this.paymentData = {
+        cardNumber: '',
+        expiryDate: '',
+        cvv: '',
+        nameOnCard: ''
+      };
+    },
+    async submitPayment() {
+      if (this.processing || !this.validatePayment()) return;
+
+      this.processing = true;
+      try {
+        // First, create the booking
+        const bookingData = {
+          customer_name: this.formData.customer_name,
+          email: this.formData.email,
+          phone: this.formData.phone,
+          ticket_category: this.formData.ticket_category,
+          seat_ids: this.selectedSeats.map(seat => seat.id),
+          payment_method: this.paymentData.method,
+          amount: this.totalAmount,
+          payment_details: this.getPaymentDetails()
+        };
+
+        // Make the booking API call
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/api/bookings`, 
+          bookingData
+        );
+
+        if (response.data.success) {
+          // Update the local seats data to reflect the booking
+          this.updateBookedSeats();
+          this.showToast('Booking successful! Check your email for confirmation.', 'success');
+          this.resetForm();
+        } else {
+          throw new Error(response.data.message || 'Booking failed');
+        }
+      } catch (error) {
+        this.showToast(error.message || 'Booking failed. Please try again.', 'error');
+        console.error('Booking error:', error);
+      } finally {
+        this.processing = false;
+        this.closePaymentDialog();
+      }
+    },
+
+    getPaymentDetails() {
+      switch (this.paymentData.method) {
+        case 'credit-card':
+          return {
+            card_number: this.paymentData.cardNumber.replace(/\s/g, ''),
+            expiry_date: this.paymentData.expiryDate,
+            cvv: this.paymentData.cvv
+          };
+        case 'paypal':
+          return {
+            email: this.paymentData.paypalEmail
+          };
+        case 'bank-transfer':
+          return {
+            account_number: this.paymentData.accountNumber,
+            bank_name: this.paymentData.bankName
+          };
+        default:
+          return {};
+      }
+    },
+
+    validatePaymentData() {
+      const { cardNumber, expiryDate, cvv, nameOnCard } = this.paymentData;
+      
+      if (!cardNumber || cardNumber.replace(/\s/g, '').length !== 16) {
+        this.showToast('Please enter a valid card number', 'error');
+        return false;
+      }
+
+      if (!expiryDate || !expiryDate.includes('/')) {
+        this.showToast('Please enter a valid expiry date', 'error');
+        return false;
+      }
+
+      if (!cvv || cvv.length !== 3) {
+        this.showToast('Please enter a valid CVV', 'error');
+        return false;
+      }
+
+      if (!nameOnCard || nameOnCard.length < 3) {
+        this.showToast('Please enter the name on card', 'error');
+        return false;
+      }
+
+      return true;
+    },
+    selectPaymentMethod(methodId) {
+      this.paymentData.method = methodId;
+      this.validationErrors = {};
+    },
+
+    validatePayment() {
+      this.validationErrors = {};
+      let isValid = true;
+
+      switch (this.paymentData.method) {
+        case 'credit-card':
+          if (!this.paymentData.cardNumber || this.paymentData.cardNumber.replace(/\s/g, '').length !== 16) {
+            this.validationErrors.cardNumber = 'Please enter a valid card number';
+            isValid = false;
+          }
+          if (!this.paymentData.expiryDate || !this.paymentData.expiryDate.includes('/')) {
+            this.validationErrors.expiryDate = 'Please enter a valid expiry date';
+            isValid = false;
+          }
+          if (!this.paymentData.cvv || this.paymentData.cvv.length !== 3) {
+            this.validationErrors.cvv = 'Please enter a valid CVV';
+            isValid = false;
+          }
+          break;
+
+        case 'paypal':
+          if (!this.paymentData.paypalEmail || !this.paymentData.paypalEmail.includes('@')) {
+            this.validationErrors.paypalEmail = 'Please enter a valid email address';
+            isValid = false;
+          }
+          break;
+
+        case 'bank-transfer':
+          if (!this.paymentData.accountNumber || this.paymentData.accountNumber.length < 8) {
+            this.validationErrors.accountNumber = 'Please enter a valid account number';
+            isValid = false;
+          }
+          if (!this.paymentData.bankName) {
+            this.validationErrors.bankName = 'Please enter your bank name';
+            isValid = false;
+          }
+          break;
+
+        default:
+          this.validationErrors.method = 'Please select a payment method';
+          isValid = false;
+      }
+
+      return isValid;
+    },
+
+    async submitPayment() {
+      if (this.processing) return;
+      if (!this.validatePayment()) return;
+
+      this.processing = true;
+      try {
+        // Simulate payment processing
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        // Mock successful booking
+        const selectedSeatIds = this.selectedSeats.map(seat => seat.id);
+        
+        // Update local seats data to show as booked
+        this.seats = this.seats.map(seat => {
+          if (selectedSeatIds.includes(seat.id)) {
+            return { ...seat, is_booked: true };
+          }
+          return seat;
+        });
+
+        this.showToast('Payment successful! Your seats have been booked.', 'success');
+        this.closePaymentDialog();
+        
+        // Reset selections and form data
+        this.selectedSeats = [];
+        this.formData = {
+          customer_name: '',
+          email: '',
+          phone: '',
+          ticket_category: ''
+        };
+      } catch (error) {
+        this.showToast('Payment failed. Please try again.', 'error');
+      } finally {
+        this.processing = false;
+      }
+    },
+    updateBookedSeats() {
+      const bookedSeatIds = this.selectedSeats.map(seat => seat.id);
+      this.seats = this.seats.map(seat => ({
+        ...seat,
+        is_booked: seat.is_booked || bookedSeatIds.includes(seat.id)
+      }));
+    },
+
+    formatCardNumber(e) {
+      let value = e.target.value.replace(/\s/g, '').replace(/\D/g, '');
+      let formattedValue = '';
+      for (let i = 0; i < value.length; i++) {
+        if (i > 0 && i % 4 === 0) {
+          formattedValue += ' ';
+        }
+        formattedValue += value[i];
+      }
+      this.paymentData.cardNumber = formattedValue;
+    },
+
+    formatExpiryDate(e) {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length >= 2) {
+        value = value.slice(0, 2) + '/' + value.slice(2);
+      }
+      this.paymentData.expiryDate = value;
+    },
+
+    closePaymentDialog() {
+      this.showPaymentDialog = false;
+      this.paymentData = {
+        method: '',
+        cardNumber: '',
+        expiryDate: '',
+        cvv: '',
+        paypalEmail: '',
+        accountNumber: '',
+        bankName: ''
+      };
+      this.validationErrors = {};
+      document.body.style.overflow = '';
+    },
+    resetForm() {
+      this.selectedSeats = [];
+      this.formData = {
+        customer_name: '',
+        email: '',
+        phone: '',
+        ticket_category: ''
+      };
+      this.paymentData = {
+        method: '',
+        cardNumber: '',
+        expiryDate: '',
+        cvv: '',
+        paypalEmail: '',
+        accountNumber: '',
+        bankName: ''
+      };
+    },
+
+  },
+  created() {
+    this.fetchSeats();
+  }
+  
+};
+</script>
+
 <style scoped>
-/* Layout */
-
-.title{
-  text-align: center;
-  letter-spacing: .9rem;
-  font-family: "Plus Jakarta Sans", serif;
-  margin-top: 2rem;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+.fixed {
+  position: fixed;
 }
 
-.title{
-  font-size: 1.2rem;
-  letter-spacing: 2rem;
-  margin-bottom: 1.5rem;
-  color: #554149;
-  text-transform: uppercase;
-}
-
-.page-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  min-width: 1400px;
-  max-width: 1400px;
-  margin: 50px auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  background: none;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Enhanced Seat Section */
-.seat-section {
-  flex: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  background: linear-gradient(135deg, rgba(255, 240, 245, 0.8), rgba(255, 200, 221, 0.8));
-  border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-/* Seat Layout */
-.seat-layout {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  margin-top: 20px;
-}
-
-/* Seat Column */
-.seat-column {
-  flex: 1;
-  text-align: center;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-}
-
-.seat-column h2 {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #6b4f57;
-  margin-bottom: 10px;
-}
-
-/* Seat Grid */
-.seat-grid {
-  display: grid;
-  grid-template-columns: repeat(8, 35px); /* Adjust for improved seat size */
-  gap: 3px;
-  margin-top: 10px;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-
-/* Individual Seat */
-.seat {
-  width: 35px;
-  height: 35px;
-  border: 1px solid #ddd;
-  text-align: center;
-  line-height: 35px;
-  font-size: 12px;
-  cursor: pointer;
-  background-color: #fff;
-  border-radius: 5px;
-  transition: all 0.3s ease-in-out;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.seat:hover {
-  background-color: #e4f7e8;
-  transform: scale(1.1);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-/* Booked Seat */
-.seat.booked {
-  background-color: #ff4d4f;
-  color: white;
-  cursor: not-allowed;
-  border: 1px solid #d43f3a;
-}
-
-.seat.booked:hover {
-  transform: none;
-  box-shadow: none;
-}
-
-/* Selected Seat */
-.seat.selected {
-  background-color: #4caf50;
-  color: white;
-  border: 1px solid #3e8e41;
-}
-
-/* Row Labels */
-.row-labels {
-  display: grid;
-  grid-template-rows: repeat(15, 35px); /* Match seat height */
-  gap: 3px;
-  margin-right: 10px;
-  padding-top: 40px;
-  align-items: center;
-}
-
-.row-label {
-  font-size: 12px;
-  text-align: center;
-  font-weight: bold;
-  color: #6b4f57;
-}
-
-/* Seat Sections Header */
-.seat-section h2 {
-  text-transform: uppercase;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #6b4f57;
-  margin-bottom: 20px;
-}
-
-/* Subtle Background for Hovered Column */
-.seat-column:hover {
-  background: rgba(255, 200, 221, 0.1);
-  border-radius: 10px;
-}
-
-/* Center Section Divider */
-.seat-layout .seat-column:not(:last-child)::after {
-  content: '';
-  width: 2px;
-  height: 100%;
-  background: rgba(107, 79, 87, 0.2);
-  position: absolute;
+.inset-0 {
   top: 0;
   right: 0;
-}
-
-/* Ticket Section */
-.ticket-section {
-  display: inline-block;
-  flex: 1;
-  padding: 40px;
-  padding-top: 110px;
-  max-width: 350px;
-  background: linear-gradient(135deg, rgba(255, 224, 229, 0.9), rgba(255, 200, 221, 0.7));
-  border-radius: 15px; /* Add rounded corners */
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* More prominent shadow */
-  text-align: center;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  position: relative; /* For decorative elements */
-  overflow: hidden;
-}
-
-/* Decorative Overlay */
-.ticket-section::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent 80%);
-  transform: rotate(45deg);
-  pointer-events: none;
-}
-
-/* Heading */
-.ticket-section h1 {
-  font-size: 1.8rem;
-  color: #554149;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1rem;
-}
-
-/* Subheading */
-.ticket-section h2 {
-  font-size: 1.2rem;
-  color: #6b4f57;
-  font-weight: 500;
-  margin-bottom: 1rem;
-  text-transform: uppercase;
-}
-
-/* Selected Seats */
-.selected-seats {
-  font-size: 1rem;
-  color: #6b4f57;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
-
-/* Ticket Options */
-.ticket-options {
-  margin: 20px 0;
-  font-size: 1rem;
-  color: #333;
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.options-title {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #554149;
-  margin-bottom: 1.2rem; /* Add extra spacing below the title */
-  margin-top: 0.5rem; /* Optional: Add some spacing above the title */
-  margin-left: -1rem;
-  text-align: center; /* Center the title horizontally */
-}
-
-.ticket-options label {
-  flex: 1;
-  text-align: left;
-  font-weight: 500;
-  color: #554149;
-}
-
-.ticket-options input {
-  flex: 0.5;
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
-  text-align: center;
-}
-
-/* Total Price */
-.total-price {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: #554149;
-  margin-top: 1rem;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-/* Checkout Button */
-.checkout-btn {
-  background: linear-gradient(135deg, #a48e69, #dcc39c);
-  color: #2a2a2a;
-  font-size: 1rem;
-  font-weight: bold;
-  border: none;
-  border-radius: 10px;
-  padding: 1rem 2rem;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.3s ease;
-  margin-top: 1.5rem;
-}
-
-.checkout-btn:hover {
-  background: linear-gradient(135deg, #dcc39c, #a48e69);
-  transform: translateY(-3px);
-  color: #2a2a2a;
-}
-
-/* Additional Enhancements for Mobile View */
-@media (max-width: 768px) {
-
-  .ticket-section {
-    max-width: 90%;
-    padding: 20px;
-  }
-
-  .checkout-btn {
-    width: 100%;
-  }
-}
-
-/* Enhanced Checkout Popup */
-.checkout-popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: linear-gradient(135deg, #fff1f5, #ffe5ed);
-  padding: 25px;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  width: 450px;
-  text-align: center;
-  animation: fadeIn 0.3s ease-out;
-  font-family: "Plus Jakarta Sans", sans-serif;
-}
-
-
-/* Popup Animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -45%);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-  }
-}
-
-/* Popup Header */
-.checkout-popup h2 {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #554149;
-  margin-bottom: 0.1rem;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-/* Summary Section */
-.checkout-popup p {
-  font-size: 1rem;
-  color: #6b4f57;
-  font-weight: 500;
-  margin-bottom: 0.3rem;
-}
-
-.checkout-popup p span {
-  font-weight: bold;
-  color: #a48e69;
-}
-
-/* Highlighted Section (Total Price) */
-.checkout-popup .total-price {
-  font-size: 1.6rem;
-  font-weight: bold;
-  color: #554149;
-  margin: 1rem 0;
-  padding: 0.5rem 0;
-  background: linear-gradient(135deg, #ffe8e8, #ffc8dd);
-  border-radius: 10px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-/* Content Layout */
-.popup-content {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* FPX Bank Selection Styling */
-.bank-dropdown {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  justify-content: center;
-  margin-top: -0.3rem;
-}
-
-.bank-dropdown select {
-  padding: 0.75rem;
-  font-size: 1rem;
-  font-weight: bold;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  background-color: #fff;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.bank-dropdown select:hover {
-  border-color: #ffc8dd;
-  background-color: #fff6f8;
-}
-
-.bank-dropdown .bank-icon img {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-  display: inline-block;
-}
-
-/* Error Message */
-.error-message {
-  color: red;
-  font-size: 0.9rem;
-}
-
-/* Buttons */
-.complete-btn {
-  background: linear-gradient(135deg, #6bcf6b, #4caf50);
-  color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: bold;
-  box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
-  transition: background 0.3s ease, transform 0.3s ease;
-}
-
-.complete-btn:hover {
-  background: linear-gradient(135deg, #4caf50, #6bcf6b);
-  transform: translateY(-3px);
-}
-
-.complete-btn:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-.close-btn {
-  background: linear-gradient(135deg, #ff5f57, #d9534f);
-  color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: bold;
-  box-shadow: 0 5px 15px rgba(217, 83, 79, 0.3);
-  transition: background 0.3s ease, transform 0.3s ease;
-}
-
-.close-btn:hover {
-  background: linear-gradient(135deg, #d9534f, #ff5f57);
-  transform: translateY(-3px);
-}
-
-/* Overlay for Dimmed Background */
-.popup-overlay {
-  position: fixed;
-  top: 0;
+  bottom: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 999;
-  animation: fadeOverlay 0.3s ease-out;
 }
 
-/* Overlay Animation */
-@keyframes fadeOverlay {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+/* Add transition classes */
+.dialog-enter-active,
+.dialog-leave-active {
+  transition: opacity 0.3s ease;
 }
 
-/* Inputs */
-.checkout-inputs {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  padding: 10px;
+.dialog-enter-from,
+.dialog-leave-to {
+  opacity: 0;
 }
 
-input {
-  padding: 12px;
-  margin: 5px 0;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
-  width: 100%;
+.toast-enter-active,
+.toast-leave-active {
+  transition: transform 0.3s ease;
 }
 
-input:focus {
-  outline: none;
-  border-color: #ffc8dd;
-  box-shadow: 0 0 5px rgba(255, 200, 221, 0.5);
+.toast-enter-from,
+.toast-leave-to {
+  transform: translateY(100%);
 }
 
 </style>

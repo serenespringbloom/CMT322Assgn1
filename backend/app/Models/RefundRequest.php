@@ -12,7 +12,7 @@ class RefundRequest extends Model
     protected $table = 'refund_requests';
 
     protected $primaryKey = 'refund_id';
-
+    public $timestamps = false;
     protected $fillable = [
         'transaction_id',
         'reason',

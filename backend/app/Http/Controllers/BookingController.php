@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Seat;
-use App\Models\Transaction;
+use App\Models\Booking;
 
-class TransactionController extends Controller
+class BookingController extends Controller
 {
 
 
     public function index()
     {
-        return Transaction::with('seats')->get(); // Include related seats if needed
+        return Booking::with('seats')->get(); // Include related seats if needed
     }
     public function store(Request $request)
     {
@@ -40,7 +40,7 @@ class TransactionController extends Controller
             $pricePerTicket = $request->ticket_category === 'student' ? 16 : 20;
             $totalAmount = $seats->count() * $pricePerTicket;
     
-            $booking = Transaction::create([
+            $booking = Booking::create([
                 'customer_name' => $request->customer_name,
                 'email' => $request->email,
                 'phone' => $request->phone,
@@ -85,7 +85,7 @@ class TransactionController extends Controller
 
 public function refund($bookingId)
 {
-    $booking = Transaction::findOrFail($bookingId);
+    $booking = Booking::findOrFail($bookingId);
 
     if ($booking->refunded_at=='done') {
         return response()->json(['error' => 'Refund request has been done..'], 400);

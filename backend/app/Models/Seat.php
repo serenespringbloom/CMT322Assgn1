@@ -12,7 +12,7 @@ class Seat extends Model
        
         'booking_id'
     ];
-    public function transaction(): BelongsTo
+    public function transaction():BelongsTo
     {
         return $this->belongsTo(Transaction::class);
     }

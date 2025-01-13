@@ -7,13 +7,7 @@ use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\RefundRequestController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\SeatController;
-<<<<<<< HEAD
 use App\Http\Controllers\TransactionController;
-=======
-use App\Http\Controllers\BookingController;
-
-
->>>>>>> testing--branch
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -75,21 +69,11 @@ Route::post('/store-item', function (Request $request) {
 
 //Feedback API
 Route::post('/hello/feedback', [FeedbackController::class, 'store']);
-<<<<<<< HEAD
 Route::get('/admin/feedback', [FeedbackController::class, 'index']);
 
 //Ticket API
 
 Route::post('/purchase', [TransactionController::class, 'store']);
 Route::get('/seats', [SeatController::class, 'index']);
-=======
+Route::get('/bookings', [TransactionController::class, 'store']);
 
-Route::get('/seats', [SeatController::class, 'index']);
-Route::post('/seats/{id}/book', [SeatController::class, 'book']);
-Route::post('/bookings', [BookingController::class, 'store']);
-
-//booking refuncs API
-
-Route::get('/bookings', [BookingController::class, 'index']);
-Route::post('/refbook/{booking}', [BookingController::class, 'refund']);
->>>>>>> testing--branch

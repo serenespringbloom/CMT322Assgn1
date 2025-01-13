@@ -1,6 +1,6 @@
 <template>
-  <div class="mt-6 max-w-7xl mx-auto bg-white shadow-lg rounded-lg p-8">
-    <h1 class="text-3xl font-bold text-center text-pink-600 mb-8">
+  <div class="max-w-7xl mx-auto bg-white shadow-lg rounded-lg p-8">
+    <h1 class="text-3xl font-bold text-center text-blue-600 mb-8">
       Seat Booking System
     </h1>
 
@@ -591,45 +591,7 @@ export default {
         nameOnCard: ''
       };
     },
-    async submitPayment() {
-      if (this.processing || !this.validatePayment()) return;
-
-      this.processing = true;
-      try {
-        // First, create the booking
-        const bookingData = {
-          customer_name: this.formData.customer_name,
-          email: this.formData.email,
-          phone: this.formData.phone,
-          ticket_category: this.formData.ticket_category,
-          seat_ids: this.selectedSeats.map(seat => seat.id),
-          payment_method: this.paymentData.method,
-          amount: this.totalAmount,
-          payment_details: this.getPaymentDetails()
-        };
-
-        // Make the booking API call
-        const response = await axios.post(
-          `${import.meta.env.VITE_API_URL}/api/bookings`, 
-          bookingData
-        );
-
-        if (response.data.success) {
-          // Update the local seats data to reflect the booking
-          this.updateBookedSeats();
-          this.showToast('Booking successful! Check your email for confirmation.', 'success');
-          this.resetForm();
-        } else {
-          throw new Error(response.data.message || 'Booking failed');
-        }
-      } catch (error) {
-        this.showToast(error.message || 'Booking failed. Please try again.', 'error');
-        console.error('Booking error:', error);
-      } finally {
-        this.processing = false;
-        this.closePaymentDialog();
-      }
-    },
+ 
 
     getPaymentDetails() {
       switch (this.paymentData.method) {

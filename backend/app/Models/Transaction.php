@@ -20,7 +20,7 @@ class Transaction extends Model
         'status'
     ];
 
-    public function seats()
+    public function seats():HasMany
 {
     return $this->hasMany(Seat::class);
 }

@@ -75,3 +75,8 @@ Route::post('/hello/feedback', [FeedbackController::class, 'store']);
 Route::get('/seats', [SeatController::class, 'index']);
 Route::post('/seats/{id}/book', [SeatController::class, 'book']);
 Route::post('/bookings', [BookingController::class, 'store']);
+
+//booking refuncs API
+
+Route::get('/bookings', [BookingController::class, 'index']);
+Route::post('/refbook/{booking}', [BookingController::class, 'refund']);

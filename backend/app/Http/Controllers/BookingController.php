@@ -8,6 +8,12 @@ use App\Models\Booking;
 
 class BookingController extends Controller
 {
+
+
+    public function index()
+    {
+        return Booking::with('seats')->get(); // Include related seats if needed
+    }
     public function store(Request $request)
     {
         $request->validate([
@@ -40,10 +46,10 @@ class BookingController extends Controller
                 'phone' => $request->phone,
                 'ticket_category' => $request->ticket_category,
                 'total_amount' => $totalAmount,
-                'status' => 'completed'
+                'status' => 'completed',
+                'seat_number'=>$seats->seat_number,
             ]);
-    
-            // Update seats
+            $booking->seats()->update($request['seat_ids']);            // Update seats
             foreach ($seats as $seat) {
                 $seat->update([
                     'is_booked' => true,
@@ -65,4 +71,34 @@ class BookingController extends Controller
             ], 422);
         }
     }
+
+
+    public function listPurchasedSeats()
+{
+    // Retrieve all purchased seats with their associated booking and buyer details
+    $bookedSeats = Seat::where('status', 'booked')
+        ->with('bookings') // Load bookings associated with each seat
+        ->get();
+
+        return response()->json($bookedSeats);
+}
+
+public function refund($bookingId)
+{
+    $booking = Booking::findOrFail($bookingId);
+
+    if ($booking->refunded_at=='done') {
+        return response()->json(['error' => 'Refund request has been done..'], 400);
+    }
+
+    // Mark booking as refunded
+    $booking->update(['refunded_at' =>'done']);
+
+    // Release associated seats
+    foreach ($booking->seats as $seat) {
+        $seat->update(['is_booked' => 0]);
+    }
+
+    return response()->json(['message' => 'Booking successfully refunded.']);
+}
 }

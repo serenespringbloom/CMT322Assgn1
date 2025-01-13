@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Booking extends Model
 {
+ 
     use HasFactory;
 
     protected $fillable = [
@@ -19,7 +21,7 @@ class Booking extends Model
     ];
 
     public function seats()
-    {
-        return $this->hasMany(Seat::class);
-    }
+{
+    return $this->hasMany(Seat::class);
+}
 }

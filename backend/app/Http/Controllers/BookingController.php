@@ -47,9 +47,9 @@ class BookingController extends Controller
                 'ticket_category' => $request->ticket_category,
                 'total_amount' => $totalAmount,
                 'status' => 'completed',
-                'seat_number'=>$seats->seat_number,
+                
             ]);
-            $booking->seats()->update($request['seat_ids']);            // Update seats
+                    // Update seats
             foreach ($seats as $seat) {
                 $seat->update([
                     'is_booked' => true,

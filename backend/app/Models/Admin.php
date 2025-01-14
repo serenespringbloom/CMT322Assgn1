@@ -1,17 +1,17 @@
 <?php
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class Admin extends Model
+class Admin extends Authenticatable
 {
-    use HasFactory;
+    use Notifiable, HasApiTokens;
 
-    protected $table = 'admins';
-
-    protected $primaryKey = 'admin_id';
+    protected $table = 'admins'; // Explicitly define the table
+    protected $primaryKey = 'admin_id'; // Primary key
+    public $timestamps = true;
 
     protected $fillable = [
         'username',
@@ -22,12 +22,5 @@ class Admin extends Model
     protected $hidden = [
         'password_hash',
         'remember_token',
-    ]; 
-
-    protected function casts(): array
-    {
-        return [
-            'password_hash' => 'hashed',
-        ];
-    }
+    ];
 }

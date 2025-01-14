@@ -19,4 +19,12 @@ class Sponsor extends Model
         'created_by',
         'last_updated_by',
     ];
+
+    // Accessor to return the full URL for sponsor_logo
+    public function getSponsorLogoAttribute($value)
+    {
+        // Generate the full URL for the sponsor logo based on the new directory
+        return $value ? url('images/' . $value) : null;
+    }
+
 }

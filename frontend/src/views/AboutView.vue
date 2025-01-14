@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { getEventById, getAgendasByEvent, getTicketTypes } from '@/api'; // Import API functions
+import { getEventById, getAgendasByEvent, getTicketTypes, getSponsorsByEvent } from '@/api'; // Import API functions
 import CountdownTimer from '@/components/countdownTimer.vue';
 import Footer from '../components/Footer.vue';
 
-// State to hold event, agenda, and ticket types data
+// State to hold event, agenda, ticket types, and sponsors data
 const event = ref(null);
 const agendas = ref([]);
 const ticketTypes = ref([]);
+const sponsors = ref([]);
 const eventId = 12; // Event ID to fetch
 
-// Fetch event and agenda data on component mount
+// Fetch event, agenda, ticket types, and sponsors data on component mount
 onMounted(async () => {
   try {
     const eventResponse = await getEventById(eventId);
@@ -25,6 +26,11 @@ onMounted(async () => {
     const ticketResponse = await getTicketTypes();
     console.log('Ticket types data:', ticketResponse.data); // Debug log for ticket types
     ticketTypes.value = ticketResponse.data;
+
+    // Fetch sponsors
+    const sponsorResponse = await getSponsorsByEvent(eventId);
+    console.log('Sponsors data:', sponsorResponse.data); // Debug log for sponsors
+    sponsors.value = sponsorResponse.data;
   } catch (error) {
     console.error('Error fetching data:', error);
   }
@@ -40,7 +46,6 @@ function formatTime(datetime: string) {
   });
 }
 </script>
-
 
 
 <template>
@@ -235,17 +240,15 @@ function formatTime(datetime: string) {
         </div>
       </section>
 
-      <!-- Sponsors Section -->
-      <section id="sponsors">
-        <h2>Our Event Partners</h2>
+     <!-- Sponsors Section -->
+    <section id="sponsors">
+      <h2>Our Event Partners</h2>
         <ul class="sponsor-list">
-          <li><img src="@/assets/images/ikrar.png" alt="ikrar"></li>
-          <li><img src="@/assets/images/smj-logo.avif" alt="smj"></li>
-          <li><img src="@/assets/images/MDDNPP-logo.png" alt="MDDNPP"></li>
-          <li><img src="@/assets/images/bhepa-usm.png" alt="BHEPA"></li>
-          <li><img src="@/assets/images/ZusCoffee-logo.png" alt="ZusCoffee"></li>
+          <li v-for="sponsor in sponsors" :key="sponsor.sponsor_id" class="sponsor-item">
+            <img :src="sponsor.sponsor_logo" :alt="`Sponsor Logo ${sponsor.sponsor_id}`">
+          </li>
         </ul>
-      </section>
+    </section>
 
 
       <!-- Location Section -->
@@ -835,7 +838,7 @@ h1 {
   font-size: 1rem;
   font-weight: bold;
   border: none;
-  border-radius: 0px;
+  border-radius: 10px;
   padding: 0.85rem 1.5rem;
   margin-right: 1rem;
   cursor: pointer;

@@ -6,6 +6,7 @@ use App\Models\Item;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\TicketTypeController;
+use App\Http\Controllers\SponsorController;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\RefundRequestController;
 use App\Http\Controllers\FeedbackController;
@@ -70,6 +71,10 @@ Route::post('/store-item', function (Request $request) {
 
 // Ticket Type API
     Route::get('/ticket_types', [TicketTypeController::class, 'index']);
+
+// Sponsor API
+    Route::get('/events/{eventId}/sponsors', [SponsorController::class, 'getSponsorsByEvent']);
+
 
 //Refund API
     Route::get('/admin/refunds', [RefundRequestController::class, 'index']);

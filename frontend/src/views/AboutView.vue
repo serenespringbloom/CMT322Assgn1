@@ -379,7 +379,6 @@ h1 {
   font-size: 1rem;
   font-weight: bold;
   border: none;
-  border-radius: 0px;
   border-radius: 10px;
   padding: 0.85rem 1.5rem;
   cursor: pointer;
@@ -819,7 +818,6 @@ h1 {
 
 .price {
   display: flex;
-  justify-content: flex-end; /* Aligns the button to the right */
   justify-content: flex-end;
   margin-top: 10px;
   border-radius: 10px;

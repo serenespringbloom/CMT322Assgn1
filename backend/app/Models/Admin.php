@@ -23,9 +23,4 @@ class Admin extends Authenticatable
         'password_hash',
         'remember_token',
     ];
-
-    public function personalAccessTokens()
-    {
-        return $this->morphMany(PersonalAccessToken::class, 'tokenable');
-    }
 }

@@ -26,22 +26,4 @@ class PersonalAccessToken extends Model
         'last_used_at' => 'datetime',
         'expires_at' => 'datetime',
     ];
-
-    /**
-     * Check if the token is expired.
-     *
-     * @return bool
-     */
-    public function isExpired()
-    {
-        return $this->expires_at && $this->expires_at->isPast();
-    }
-
-    /**
-     * Define the relationship to the tokenable model (polymorphic).
-     */
-    public function tokenable()
-    {
-        return $this->morphTo();
-    }
 }

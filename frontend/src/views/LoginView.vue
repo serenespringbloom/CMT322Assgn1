@@ -3,32 +3,6 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import apiClient from '../api.js'; // Adjust the import path as necessary
 
-/*---------------------------------
-TEST
----------------------------------*/
-//import {onMounted } from 'vue';
-// const testAdmins = ref([]); // To store the fetched data
-// const errortest = ref('');
-
-// // Fetch data from the /test endpoint
-// const fetchTestAdmins = async () => {
-//   try {
-//     const response = await apiClient.get('/test'); // Call the /test API
-//     testAdmins.value = response.data; // Store the data in testAdmins
-//   } catch (err) {
-//     errortest.value = 'Error fetching admin data. Please check the server.';
-//     console.error(err); // Log for debugging
-//   }
-// };
-
-// // Fetch data when the component mounts
-// onMounted(() => {
-//   fetchTestAdmins();
-// });
-/*---------------------------------
-TEST
----------------------------------*/
-
 const username = ref('');
 const password = ref('');
 const error = ref('');

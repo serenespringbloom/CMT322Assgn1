@@ -34,24 +34,6 @@ use App\Http\Controllers\AdminAuthController;
 Route::post('/admin/login', [AdminAuthController::class, 'login']);
 Route::post('/admin/logout', [AdminAuthController::class, 'logout']);
 Route::post('/check-token', [AdminAuthController::class, 'checkToken']);
-
-// Route::middleware('auth:admin')->group(function () {
-//     Route::get('/admin/dashboard', [AdminAuthController::class, 'dashboard']);
-//     Route::post('/admin/logout', [AdminAuthController::class, 'logout']);
-// });
-
-// Route::middleware(['verify.admin.token'])->group(function () {
-//     Route::get('/admin/dashboard', [AdminAuthController::class, 'dashboard']);
-//     Route::post('/admin/logout', [AdminAuthController::class, 'logout']);
-//     // Other admin routes
-// });
-
-
-// // Default user route for authenticated API requests
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
 /*
 |--------------------------------------------------------------------------
 */

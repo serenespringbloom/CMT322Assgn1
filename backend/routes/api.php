@@ -6,6 +6,8 @@ use App\Models\Item;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\RefundRequestController;
 use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\BillingController;
+use App\Http\Controllers\MerchandiseController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -66,4 +68,16 @@ Route::post('/store-item', function (Request $request) {
     Route::get('/validate-pid/{pid}', [RefundRequestController::class, 'validatePid']);
 
 //Feedback API
+//Feedback API
 Route::post('/hello/feedback', [FeedbackController::class, 'store']);
+Route::get('/admin/feedback', [FeedbackController::class, 'index']);
+
+//Billing API
+
+Route::get('/admin/billing', [BillingController::class, 'index']);
+Route::get('/admin/billing2', [BillingController::class, 'index2']);
+
+//Merchandise API
+
+Route::get('/admin/merchandise1', [MerchandiseController::class, 'index']);
+Route::get('/admin/merchandise2', [MerchandiseController::class, 'index2']);

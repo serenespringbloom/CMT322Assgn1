@@ -17,21 +17,20 @@
                 <th class="py-2 px-4 border-b text-left">Customer's Entrance</th>
                 <th class="py-2 px-4 border-b text-left">Email Address</th>
                 <th class="py-2 px-4 border-b text-left">Phone Number</th>
+                <th class="py-2 px-4 border-b text-left">Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in tableData" :key="item.ticketID" class="hover:bg-gray-50">
-                <td class="py-2 px-4 border-b">{{ item.ticketID }}</td>
-                <td class="py-2 px-4 border-b">{{ item.entrance }}</td>
-                <td class="py-2 px-4 border-b">{{ item.email }}</td>
-                <td class="py-2 px-4 border-b">{{ item.phone }}</td>
+              <tr v-for="item in tableData" :key="item.transaction_id" class="hover:bg-gray-50">
+                <td class="py-2 px-4 border-b">{{ item.transaction_id }}</td>
+                <td class="py-2 px-4 border-b">{{ item.ticket_category }}</td>
+                <td class="py-2 px-4 border-b">{{ item.cust_email }}</td>
+                <td class="py-2 px-4 border-b">{{ item.cust_phone }}</td>
                 <td class="py-2 px-4 border-b">
                   <button class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 mb-2">
-                    Download
+                    Update
                   </button>
-                  <button class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 ml-2">
-                    Delete
-                  </button>
+                 
                 </td>
               </tr>
             </tbody>
@@ -42,11 +41,24 @@
   </template>
   
   <script setup>
-  const tableData = [
-    { ticketID: '162838', entrance: '5 April 2024', email: 'RM450',phone:'0134980680' },
-    { ticketID: '162930', entrance: '6 April 2024', email: 'RM100',phone:'0125639493' },
-    { ticketID: '182793', entrance: '7 April 2024', email: 'RM200',phone:'01392339293' },
-  ];
+  import { ref, onMounted } from 'vue';
+  import axios from 'axios';
+  
+  const tableData = ref([]);
+  
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/billing2`);
+      tableData.value = response.data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      // You might want to handle the error appropriately (show error message, etc.)
+    }
+  };
+  
+  onMounted(() => {
+    fetchData();
+  });
   </script>
    <style scoped>
    @import "tailwindcss/base";

@@ -117,7 +117,7 @@ const checkout = () => {
     alert("Please enter valid email and phone number.");
     return;
   }
-
+  
   alert("Checkout successful! Thank you for your purchase.");
   cart.value = [];
   selectedBank.value = ''; // Reset selected bank

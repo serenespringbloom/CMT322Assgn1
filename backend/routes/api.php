@@ -8,6 +8,7 @@ use App\Http\Controllers\RefundRequestController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\MerchandiseController;
+use App\Http\Controllers\SeatController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -81,3 +82,7 @@ Route::get('/admin/billing2', [BillingController::class, 'index2']);
 
 Route::get('/admin/merchandise1', [MerchandiseController::class, 'index']);
 Route::get('/admin/merchandise2', [MerchandiseController::class, 'index2']);
+
+//seatr API
+// Route::get('/seats', [SeatController::class, 'index']);
+// Route::post('/seats/update-status', [SeatController::class, 'updateStatus']);

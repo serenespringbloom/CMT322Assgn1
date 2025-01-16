@@ -36,6 +36,22 @@ window.addEventListener("cartUpdated", updateCartFromLocalStorage);
 onMounted(() => {
   updateCartFromLocalStorage();
 });
+
+// Add this to your existing script setup
+const isRefundMenuOpen = ref(false);
+
+const toggleRefundMenu = () => {
+  isRefundMenuOpen.value = !isRefundMenuOpen.value;
+};
+
+// Close dropdown when clicking outside
+onMounted(() => {
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.dropdown')) {
+      isRefundMenuOpen.value = false;
+    }
+  });
+});
 </script>
 
 <template>
@@ -51,32 +67,91 @@ onMounted(() => {
     <nav v-if="!hideHeader" id="navTop">
       <!-- Brand/Logo -->
       <div class="brand">
-        <img :src="logo" alt="Malam Citra Bayu Logo" />
+        <RouterLink to="/">
+          <img :src="logo" alt="Malam Citra Bayu Logo" />
+        </RouterLink>
       </div>
 
       <!-- Hamburger Icon -->
-      <button class="nav-toggle" @click="toggleMenu">
+      <button class="nav-toggle" @click="toggleMenu" aria-label="Toggle Menu">
+        <span :class="{ open: isMenuOpen }"></span>
+        <span :class="{ open: isMenuOpen }"></span>
         <span :class="{ open: isMenuOpen }"></span>
       </button>
 
       <!-- Navigation Links -->
       <ul class="nav-links" :class="{ open: isMenuOpen }">
-        <li><RouterLink to="/">🏠 HOME</RouterLink></li>
-        <li v-if="!hideHomeLinks"><a href="#about">🎉 EVENT</a></li>
-        <li v-if="!hideHomeLinks"><a href="#location">📞 CONTACT</a></li>
-        <li><RouterLink to="/ticket">🎫 TICKET</RouterLink></li>
-        <li><RouterLink to="/merchandise">🛍️ MERCHANDISE</RouterLink></li>
-        <li><RouterLink to="/feedback">🗣️ FEEDBACK</RouterLink></li>
-        <li><RouterLink to="/refund">💸 REFUND</RouterLink></li>
-        <li><RouterLink to="/dashboard">🛠️ ADMIN</RouterLink></li>
-        <li><RouterLink to="/test">🛠️ TEST</RouterLink></li>
+        <li>
+          <RouterLink to="/" class="nav-item">
+            <span class="icon">🏠</span>
+            <span class="text">HOME</span>
+          </RouterLink>
+        </li>
+        <li v-if="!hideHomeLinks">
+          <a href="#about" class="nav-item">
+            <span class="icon">🎉</span>
+            <span class="text">EVENT</span>
+          </a>
+        </li>
+        <li v-if="!hideHomeLinks">
+          <a href="#location" class="nav-item">
+            <span class="icon">📞</span>
+            <span class="text">CONTACT</span>
+          </a>
+        </li>
+        <li>
+          <RouterLink to="/ticket" class="nav-item">
+            <span class="icon">🎫</span>
+            <span class="text">TICKET</span>
+          </RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/merchandise" class="nav-item">
+            <span class="icon">🛍️</span>
+            <span class="text">MERCHANDISE</span>
+          </RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/feedback" class="nav-item">
+            <span class="icon">🗣️</span>
+            <span class="text">FEEDBACK</span>
+          </RouterLink>
+        </li>
+        <li class="dropdown">
+          <a href="#" @click.prevent="toggleRefundMenu" class="nav-item dropdown-trigger">
+            <span class="icon">💸</span>
+            <span class="text">REFUND</span>
+            <span class="dropdown-arrow" :class="{ 'open': isRefundMenuOpen }">▼</span>
+          </a>
+          <ul class="dropdown-menu" :class="{ 'show': isRefundMenuOpen }">
+            <li>
+              <RouterLink to="/merchandise-refund" class="dropdown-item">
+                <span class="icon">🛍️</span>
+                <span class="text">Merchandise Refund</span>
+              </RouterLink>
+            </li>
+            <li>
+              <RouterLink to="/ticket-refund" class="dropdown-item">
+                <span class="icon">🎫</span>
+                <span class="text">Ticket Refund</span>
+              </RouterLink>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <RouterLink to="/admin/dashboard" class="nav-item">
+            <span class="icon">🛠️</span>
+            <span class="text">ADMIN</span>
+          </RouterLink>
+        </li>
       </ul>
 
-      <!-- Cart Total -->
-      <div class="cart">
+      <!-- Cart -->
+      <RouterLink to="/cart" class="cart">
         <span class="cart-icon">🛒</span>
-        <p><RouterLink to="/cart">CART RM {{ totalPrice }}</RouterLink></p>
-      </div>
+        <span class="cart-text">CART</span>
+        <span class="cart-amount">RM {{ totalPrice }}</span>
+      </RouterLink>
     </nav>
     <main><RouterView /></main>
     <footer v-if="!hideFooter" class="footer">
@@ -85,203 +160,211 @@ onMounted(() => {
   </body>
 </template>
 
-
 <style scoped>
-  template, body {
-    height: 100%; /* Ensure the html and body stretch to fill the viewport */
-    margin: 0; /* Remove default margin */
-    display: flex;
-    flex-direction: column; /* Use a column layout */
-  }
-
-  body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh; /* Make the body fill the viewport height */
-    margin: 0; /* Remove default body margin */
-  }
-
-  main {
-    flex-grow: 1;
-    display: inline-block;
-  }
-
-  #navTop {
-    display: inline-block;
-    top: 0;
-    left: 0;
-    background: #f4d0d6;
-    z-index: 1000;
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    flex-shrink: 0;
-    align-items: center;
-    width: 100%;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  .brand img {
-  height: 50px; /* Adjust logo size */
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 1.5rem; /* Evenly spaced links */
-    list-style: none; /* Removes bullet points from the list */
-    padding: 0;
-    margin: 0;
-  }
-
-  .nav-links li a {
-    text-decoration: none;
-    font-weight: 500;
-    color: #333; /* Dark text for links */
-    padding: 0.5rem 1rem; /* Space around links */
-    transition: color 0.3s, background-color 0.3s;
-  }
-
-  .nav-links li a:hover {
-    color: #007bff; /* Change color on hover */
-    background-color: rgba(0, 123, 255, 0.1); /* Subtle hover background */
-    border-radius: 4px; /* Rounded corners for hover effect */
-  }
-
-  .cart {
-    display: flex;
-    align-items: center;
-    background: #DCC39C;
-    color: #554149;
-    font-size: 1rem;
-    font-weight: bold;
-    padding: 0.5rem 1rem;
-    border-radius: 0px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, background 0.3s ease;
-    margin-left: -20px;
+/* Base styles */
+template, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-.cart:hover {
-  background: #DCC39C;
-  transform: translateY(-3px);
-  cursor: pointer;
+/* Navigation */
+#navTop {
+  background: linear-gradient(to right, #f4d0d6, #DCC39C);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-.cart p a{
+/* Brand/Logo */
+.brand img {
+  height: 50px;
+  transition: transform 0.3s ease;
+}
+
+.brand img:hover {
+  transform: scale(1.05);
+}
+
+/* Navigation Links */
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  color: #554149;
   text-decoration: none;
   font-weight: 500;
-  color: #333; /* Dark text for links */
-  transition: color 0.3s, background-color 0.3s;
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
-.cart p a:hover{
-  color: #007bff; /* Change color on hover */
-  background-color: rgba(0, 123, 255, 0.1); /* Subtle hover background */
-  border-radius: 4px; /* Rounded corners for hover effect */
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
 }
 
-
-.cart-icon {
-  margin-right: 0.5rem;
+.nav-item .icon {
   font-size: 1.2rem;
 }
 
-.cart-total {
-  font-size: 1rem;
-  color: #554149;
-  font-weight: bold;
+/* Dropdown */
+.dropdown {
+  position: relative;
 }
 
-
-  /* Hamburger button */
-.nav-toggle {
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.5rem;
+.dropdown-trigger {
+  padding-right: 2rem;
 }
 
-.nav-toggle span {
-  display: block;
-  width: 30px;
-  height: 3px;
-  background: #333;
-  margin: 6px 0;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+.dropdown-arrow {
+  position: absolute;
+  right: 0.75rem;
+  transition: transform 0.3s ease;
 }
 
-.nav-toggle span.open {
-  transform: rotate(45deg) translate(5px, 5px);
+.dropdown-arrow.open {
+  transform: rotate(180deg);
 }
 
-.nav-toggle span.open + span {
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  min-width: 200px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  padding: 0.5rem;
+  list-style: none;
 }
 
-.nav-toggle span.open + span + span {
-  transform: rotate(-45deg) translate(5px, -5px);
+.dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
-/* When windows is maximised */
- @media (max-width: 100%) {
-    .navTop {
-      flex-direction: column;
-      text-align: center;
-    }
-
-    .nav-links {
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .cart {
-      margin-top: 1rem;
-    }
-  }
-
- /* Responsive design, when windows is minimised */
-@media (max-width: 768px) {
-  .nav-links {
-  flex-direction: column; /* Vertical layout */
-  background: #f4d0d6;
-  position: fixed; /* Stays on top */
-  top: 60px;
-  right: 0;
-  width: 100%;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-in-out;
-  z-index: 999;
-  padding: 0.8rem 0; /* Add padding around the list */
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  color: #554149;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.3s ease;
 }
 
-.nav-links.open {
-  max-height: 400px; /* Adjust dropdown height */
+.dropdown-item:hover {
+  background: #f8f9fa;
 }
 
-.nav-links li {
-  margin: 0.1rem 0; /* Add vertical spacing between list items */
-}
-
-.nav-links li a {
-  display: block; /* Ensures clickable area spans the full width */
+/* Cart */
+.cart {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #DCC39C;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  color: #554149;
   text-decoration: none;
   font-weight: 500;
-  color: #333; /* Dark text for links */
-  padding: 0.5rem 1.5rem; /* Add padding for better spacing */
-  border-radius: 4px; /* Rounded corners for hover effect */
-  transition: color 0.3s, background-color 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.nav-links li a:hover {
-  color: #007bff;
-  background-color: rgba(0, 123, 255, 0.1);
+.cart:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
+
+.cart-icon {
+  font-size: 1.2rem;
+}
+
+.cart-amount {
+  font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
   .nav-toggle {
     display: block;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+
+  .nav-toggle span {
+    display: block;
+    width: 25px;
+    height: 2px;
+    background: #554149;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+  }
+
+  .nav-toggle span.open:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .nav-toggle span.open:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nav-toggle span.open:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: #f4d0d6;
+    padding: 1rem;
+    gap: 0.5rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .nav-links.open {
+    max-height: 500px;
+  }
+
+  .dropdown-menu {
+    position: static;
+    box-shadow: none;
+    padding-left: 1rem;
+  }
+
+  .cart {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
   }
 }
-
 </style>

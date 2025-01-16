@@ -1,5 +1,6 @@
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
+import TicketDisplay from '../components/TicketDisplay.vue';
 
 const rows = 15; // Number of rows
 const columns = 24; // Number of seats per row
@@ -36,6 +37,9 @@ const email = ref(''); // User email
 const phone = ref(''); // User phone number
 const selectedBank = ref("");
 const fpxIcon = "/src/assets/images/fpx-icon.png";
+const customerName = ref('');
+const showTicket = ref(false);
+const ticketData = ref(null);
 
 // Validation for email
 const isEmailValid = computed(() => {
@@ -147,24 +151,103 @@ const totalPrice = computed(() => {
 });
 
 // Complete the purchase and update booked seats
-const completePurchase = () => {
-  if (isEmailValid.value && isPhoneValid.value) {
-    bookedSeats.value.push(...selectedSeats.value);
-    selectedSeats.value = [];
-    studentTickets.value = 0;
-    publicTickets.value = 0;
-    email.value = '';
-    phone.value = '';
-    showCheckoutPopup.value = false;
-    selectedBank.value = ''; // Reset selected bank
-    alert(`Purchase complete!`);
+const completePurchase = async () => {
+  if (isEmailValid.value && isPhoneValid.value && selectedBank.value && customerName.value) {
+    try {
+      // First verify if seats are still available
+      const verifyResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/seats/verify`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          seats: selectedSeats.value,
+          event_id: 1
+        })
+      });
+      
+      const verifyResult = await verifyResponse.json();
+      
+      if (!verifyResult.available) {
+        alert(`Sorry, some seats are no longer available: ${verifyResult.unavailableSeats.join(', ')}`);
+        return;
+      }
+
+      const requestData = {
+        email: email.value,
+        phone: phone.value,
+        selectedSeats: selectedSeats.value,
+        studentTickets: studentTickets.value,
+        publicTickets: publicTickets.value,
+        totalAmount: totalPrice.value,
+        bankName: selectedBank.value,
+        event_id: 1,
+        customerName: customerName.value
+      };
+
+      console.log('Sending request with data:', requestData); // Debug log
+
+      // Proceed with booking
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/seats/book`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify(requestData)
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        // Fetch ticket details
+        const ticketResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/ticket/${result.transaction_id}`);
+        const ticketResult = await ticketResponse.json();
+        
+        if (ticketResult.success) {
+          ticketData.value = ticketResult.data;
+          showTicket.value = true;
+          showCheckoutPopup.value = false;
+        }
+
+        // Reset form fields
+        selectedSeats.value = [];
+        studentTickets.value = 0;
+        publicTickets.value = 0;
+        email.value = '';
+        phone.value = '';
+        customerName.value = '';
+        selectedBank.value = '';
+      } else {
+        throw new Error(result.message || 'Booking failed');
+      }
+    } catch (error) {
+      alert('An error occurred during booking. Please try again.');
+      console.error('Booking error:', error);
+    }
   } else {
-    alert('Please provide valid email and phone number and select a bank.');
+    alert('Please provide all required information (name, email, phone number, and bank).');
   }
 };
 
 // Load data when the component is mounted
 loadFromSessionStorage();
+
+// Add this to your mounted/created hook
+onMounted(async () => {
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/seats?event_id=1`); // Replace with your actual event ID
+    const result = await response.json();
+    if (result.success) {
+      bookedSeats.value = result.data
+        .filter(seat => seat.is_booked)
+        .map(seat => seat.seat_id);
+    }
+  } catch (error) {
+    console.error('Failed to fetch seats:', error);
+  }
+});
 </script>
 
 <template>
@@ -338,6 +421,21 @@ loadFromSessionStorage();
         </div>
       </div>
 
+      <!-- Add this in your checkout-inputs div -->
+      <div class="checkout-inputs">
+        <input
+          type="text"
+          v-model="customerName"
+          placeholder="Enter your name"
+          required
+          :class="{ invalid: !customerName && showValidation }"
+        />
+        <span v-if="!customerName && showValidation" class="error-message">
+          Please enter your name.
+        </span>
+        <!-- Other input fields -->
+      </div>
+
       <!-- Complete Purchase Button -->
       <button
         class="complete-btn"
@@ -348,6 +446,13 @@ loadFromSessionStorage();
       </button>
       <button class="close-btn" @click="showCheckoutPopup = false">Close</button>
     </div>
+  </div>
+
+  <div v-if="showTicket" class="ticket-overlay">
+    <TicketDisplay 
+      :ticketData="ticketData"
+      @close="showTicket = false"
+    />
   </div>
 </template>
 
@@ -843,4 +948,18 @@ input:focus {
   box-shadow: 0 0 5px rgba(255, 200, 221, 0.5);
 }
 
+.ticket-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.95);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  padding: 2rem;
+  overflow-y: auto;
+}
 </style>

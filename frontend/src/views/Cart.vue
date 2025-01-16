@@ -1,13 +1,16 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
+import { useRouter } from 'vue-router'; // Add this import
 
-const cart = ref([]); // Cart items
-const email = ref(""); // User email
-const phone = ref(""); // User phone number
+const router = useRouter(); // Add this
+const cart = ref([]); 
+const email = ref(""); 
+const phone = ref(""); 
 const isEmailValid = ref(false);
 const isPhoneValid = ref(false);
 const selectedBank = ref("");
 const fpxIcon = "/src/assets/images/fpx-icon.png";
+
 
 // Load cart from localStorage on page load
 onMounted(() => {
@@ -107,7 +110,7 @@ const selectedBankIcon = computed(() => {
 
 
 // Simulate checkout process
-const checkout = () => {
+const checkout = async () => {
   if (!cart.value.length) {
     alert("Your cart is empty!");
     return;
@@ -117,11 +120,63 @@ const checkout = () => {
     alert("Please enter valid email and phone number.");
     return;
   }
-  
-  alert("Checkout successful! Thank you for your purchase.");
-  cart.value = [];
-  selectedBank.value = ''; // Reset selected bank
-  saveCartToLocalStorage();
+
+  try {
+    console.log('Sending order request...');
+
+    // Format cart items for the API
+    const items = cart.value.map(item => ({
+      merchandiseId: item.id,
+      size: item.size,
+      quantity: item.quantity
+    }));
+
+    const orderData = {
+      customerName: "Customer",
+      customerEmail: email.value,
+      customerPhone: phone.value,
+      items: items
+    };
+
+    console.log('Order data:', orderData);
+
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/merchandise/orders`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(orderData)
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Error response:', errorText);
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log('Order result:', result);
+
+    if (result.success) {
+      // Clear the cart
+      cart.value = [];
+      email.value = "";
+      phone.value = "";
+      selectedBank.value = "";
+      saveCartToLocalStorage();
+
+      // Store the order ID and redirect to confirmation page
+      const orderId = result.data.order_id;
+      localStorage.setItem('lastOrderId', orderId);
+      router.push(`/order-confirmation/${orderId}`);
+    } else {
+      throw new Error(result.message || 'Failed to create order');
+    }
+  } catch (error) {
+    console.error('Checkout error:', error);
+    alert("Failed to place order: " + error.message);
+  }
 };
 </script>
 
@@ -222,6 +277,42 @@ const checkout = () => {
 </template>
 
 <style scoped>
+textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  border: 1px solid #dcc39c;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+textarea.invalid {
+  border-color: #dc3545;
+  background-color: #fff8f8;
+}
+
+/* ... existing styles ... */
+
+.checkout-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.invalid {
+  border-color: #dc3545;
+  background-color: #fff8f8;
+}
 
 .cart-page {
   font-family: "Plus Jakarta Sans", serif;

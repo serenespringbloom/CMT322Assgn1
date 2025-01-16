@@ -8,16 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class RefundRequest extends Model
 {
     use HasFactory;
-    public $timestamps = false;
-    protected $table = 'refund_requests';
-
-    protected $primaryKey = 'refund_id';
 
     protected $fillable = [
         'transaction_id',
         'reason',
         'status',
+        'refund_amount',
         'processed_by',
-        'processing_comments',
+        'processed_at',
+        'rejection_reason'
     ];
+
+    public function transaction()
+    {
+        return $this->belongsTo(Transaction::class, 'transaction_id', 'transaction_id');
+    }
 }

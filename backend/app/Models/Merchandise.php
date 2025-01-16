@@ -2,24 +2,29 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Merchandise extends Model
 {
-    use HasFactory;
-
     protected $table = 'merchandise';
-
-    protected $primaryKey = 'merch_id';
-
+    protected $primaryKey = 'merchandise_id';
+    
     protected $fillable = [
         'name',
-        'size',
         'price',
-        'stock_quantity',
-        'event_id',
-        'created_by',
-        'last_updated_by',
+        'description',
+        'image_url',
+        'sizes_inventory',
+        'is_active'
     ];
+
+    protected $casts = [
+        'sizes_inventory' => 'array',
+        'is_active' => 'boolean'
+    ];
+
+    public function orderItems()
+    {
+        return $this->hasMany(MerchandiseOrderItem::class, 'merchandise_id');
+    }
 }

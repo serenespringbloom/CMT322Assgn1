@@ -1,96 +1,159 @@
-
 <script setup>
+import { ref, reactive, onMounted } from 'vue';
+import axios from 'axios';
 
-import EventCard from "../components/EventCard.vue";
+const events = ref([]); // Holds the list of events
+const form = reactive({
+  event_id: null,
+  event_title: '',
+  event_subtitle: '',
+  event_venue: '',
+  event_datetime: '',
+  event_about: '',
+  event_email: '',
+  event_phone: '',
+}); // Holds form data
+const isEditing = ref(false); // Tracks whether the form is in edit mode
 
+const fetchEvents = async () => {
+  try {
+    // Log the URL to check if it's correct
+    console.log(`${import.meta.env.VITE_API_URL}/api/events`);
+
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/events`);
+    events.value = response.data; // Update event list with data from API
+  } catch (error) {
+    console.error('Error fetching events:', error);
+  }
+};
+
+const submitForm = async () => {
+  try {
+    if (isEditing.value) {
+      // Update event
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/events/${form.event_id}`, form);
+    } else {
+      // Create new event
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/events`, form);
+    }
+
+    resetForm();
+    await fetchEvents(); // Refresh event list
+  } catch (error) {
+    console.error('Error submitting form:', error);
+  }
+};
+
+const editEvent = (event) => {
+  // Populate the form with event data for editing
+  form.event_id = event.event_id;
+  form.event_title = event.event_title;
+  form.event_subtitle = event.event_subtitle;
+  form.event_venue = event.event_venue;
+  form.event_datetime = event.event_datetime;
+  form.event_about = event.event_about;
+  form.event_email = event.event_email;
+  form.event_phone = event.event_phone;
+  isEditing.value = true;
+};
+
+const deleteEvent = async (id) => {
+  try {
+    await axios.delete(`${import.meta.env.VITE_API_URL}/api/events/${id}`);
+    await fetchEvents(); // Refresh event list
+  } catch (error) {
+    console.error('Error deleting event:', error);
+  }
+};
+
+const resetForm = () => {
+  form.event_id = null;
+  form.event_title = '';
+  form.event_subtitle = '';
+  form.event_venue = '';
+  form.event_datetime = '';
+  form.event_about = '';
+  form.event_email = '';
+  form.event_phone = '';
+  isEditing.value = false;
+};
+
+onMounted(fetchEvents); // Fetch events on page load
 </script>
-<script>
-  import axios from 'axios';
-  
-  export default {
-    data() {
-      return {
-        headline: '',
-        details: '',
-        tags: '',
-        file: null,
-        uploadedImageUrl: null,
-      };
-    },
-    methods: {
-      handleFileUpload(event) {
-        this.file = event.target.files[0]; // Capture the selected file
-      },
-      async uploadFile() {
-        if (!this.file) {
-          alert('Please select a file');
-          return;
-        }
-  
-        const formData = new FormData();
-        formData.append('file', this.file);
-        formData.append('headline', this.headline);
-        formData.append('details', this.details);
-        formData.append('tags', this.tags);
-  
-        try {
-          const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/upload-image`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-  
-          console.log('File uploaded successfully:', response.data);
-          this.uploadedImageUrl = response.data.url;
-        } catch (error) {
-          console.error('Error uploading file:', error.response?.data || error.message);
-        }
-      },
-    },
-  };
-  </script>
+
+
 <template>
-  <div class="container mx-auto px-4 py-6 flex-col">
-    <form @submit.prevent="uploadFile" class="space-y-6 bg-white shadow rounded-lg p-6">
+  <div class="container mx-auto px-4 py-6">
+    <!-- Form Section -->
+    <form @submit.prevent="submitForm" class="space-y-6 bg-white shadow rounded-lg p-6">
+      <h2 class="text-xl font-bold mb-4">{{ isEditing ? 'Edit Event' : 'Add New Event' }}</h2>
+
       <div>
-        <label class="block font-medium text-gray-700">Headline:</label>
+        <label class="block font-medium text-gray-700">Title:</label>
         <input
-          v-model="headline"
+          v-model="form.event_title"
           type="text"
-          placeholder="Enter headline"
+          placeholder="Enter event title"
           required
-          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
+          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
         />
       </div>
 
       <div>
-        <label class="block font-medium text-gray-700">Details:</label>
+        <label class="block font-medium text-gray-700">Subtitle:</label>
+        <input
+          v-model="form.event_subtitle"
+          type="text"
+          placeholder="Enter event subtitle"
+          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
+        />
+      </div>
+
+      <div>
+        <label class="block font-medium text-gray-700">Venue:</label>
+        <input
+          v-model="form.event_venue"
+          type="text"
+          placeholder="Enter event venue"
+          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
+        />
+      </div>
+
+      <div>
+        <label class="block font-medium text-gray-700">Date and Time:</label>
+        <input
+          v-model="form.event_datetime"
+          type="datetime-local"
+          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
+        />
+      </div>
+
+      <div>
+        <label class="block font-medium text-gray-700">About:</label>
         <textarea
-          v-model="details"
-          placeholder="Enter details"
-          required
-          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
+          v-model="form.event_about"
+          placeholder="Enter event description"
+          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
         ></textarea>
       </div>
 
       <div>
-        <label class="block font-medium text-gray-700">Tags (comma-separated):</label>
+        <label class="block font-medium text-gray-700">Email:</label>
         <input
-          v-model="tags"
-          type="text"
-          placeholder="e.g., nature, travel, sunset"
-          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
+          v-model="form.event_email"
+          type="email"
+          placeholder="Enter event email"
+          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
         />
       </div>
 
       <div>
-        <label class="block font-medium text-gray-700">Image:</label>
+        <label class="block font-medium text-gray-700">Phone:</label>
         <input
-          type="file"
-          @change="handleFileUpload"
-          accept="image/*"
-          required
-          class="mt-1 block w-full text-sm text-gray-500 border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
+          v-model="form.event_phone"
+          type="tel"
+          placeholder="Enter phone number"
+          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
         />
       </div>
 
@@ -98,32 +161,48 @@ import EventCard from "../components/EventCard.vue";
         type="submit"
         class="w-full bg-green-500 text-white py-2 px-4 rounded-md shadow hover:bg-green-600"
       >
-        Upload
+        {{ isEditing ? 'Update Event' : 'Create Event' }}
+      </button>
+      <button
+        type="button"
+        v-if="isEditing"
+        @click="resetForm"
+        class="w-full mt-2 bg-gray-500 text-white py-2 px-4 rounded-md shadow hover:bg-gray-600"
+      >
+        Cancel
       </button>
     </form>
 
-    <div v-if="uploadedImageUrl" class="mt-6 text-center">
-      <h3 class="text-lg font-medium text-gray-700">Uploaded Image:</h3>
-      <img
-        :src="uploadedImageUrl"
-        alt="Uploaded Image"
-        class="max-w-xs mx-auto mt-4 rounded-lg shadow"
-      />
-    </div>
-
-    <div class="mt-10 border border-yellow-500 rounded-lg bg-white shadow p-6">
-      <div class="text-lg font-medium bg-gradient-to-r from-yellow-600 to-yellow-300 text-white p-3 rounded-t-md text-center">
-        Event Carousel Album
-      </div>
-      <div class="p-4 text-gray-700 text-center">
-        Fill up the form above to add a new event carousel.
-      </div>
-    </div>
-
-    <div class="mt-10 flex justify-start">
-      <div class="w-full lg:w-7/12">
-        <EventCard />
-      </div>
+    <!-- Table Section -->
+    <div class="mt-10">
+      <h2 class="text-xl font-bold mb-4">Events List</h2>
+      <table class="min-w-full bg-white border border-gray-300">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="py-2 px-4 border-b">Title</th>
+            <th class="py-2 px-4 border-b">Subtitle</th>
+            <th class="py-2 px-4 border-b">Venue</th>
+            <th class="py-2 px-4 border-b">Date & Time</th>
+            <th class="py-2 px-4 border-b">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="event in events" :key="event.event_id">
+            <td class="py-2 px-4 border-b">{{ event.event_title }}</td>
+            <td class="py-2 px-4 border-b">{{ event.event_subtitle }}</td>
+            <td class="py-2 px-4 border-b">{{ event.event_venue }}</td>
+            <td class="py-2 px-4 border-b">{{ new Date(event.event_datetime).toLocaleString() }}</td>
+            <td class="py-2 px-4 border-b">
+              <button @click="editEvent(event)" class="bg-yellow-500 text-white px-4 py-2 rounded-md">
+                Edit
+              </button>
+              <button @click="deleteEvent(event.id)" class="bg-red-500 text-white px-4 py-2 rounded-md ml-2">
+                Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
@@ -133,6 +212,3 @@ import EventCard from "../components/EventCard.vue";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 </style>
-
-
-

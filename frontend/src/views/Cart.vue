@@ -111,19 +111,9 @@ const selectedBankIcon = computed(() => {
 
 // Simulate checkout process
 const checkout = async () => {
-  if (!cart.value.length) {
-    alert("Your cart is empty!");
-    return;
-  }
-
-  if (!isEmailValid.value || !isPhoneValid.value) {
-    alert("Please enter valid email and phone number.");
-    return;
-  }
-
   try {
-    console.log('Sending order request...');
-
+    console.log('Starting checkout process...');
+    
     // Format cart items for the API
     const items = cart.value.map(item => ({
       merchandiseId: item.id,
@@ -138,7 +128,7 @@ const checkout = async () => {
       items: items
     };
 
-    console.log('Order data:', orderData);
+    console.log('Sending order data:', orderData);
 
     const response = await fetch(`${import.meta.env.VITE_API_URL}/api/merchandise/orders`, {
       method: 'POST',
@@ -166,9 +156,12 @@ const checkout = async () => {
       selectedBank.value = "";
       saveCartToLocalStorage();
 
-      // Store the order ID and redirect to confirmation page
-      const orderId = result.data.order_id;
+      // Get the order ID from the response and store it
+      const orderId = result.data.order.id;
+      console.log('Order ID received:', orderId);
       localStorage.setItem('lastOrderId', orderId);
+      
+      // Navigate to the confirmation page with the order ID
       router.push(`/order-confirmation/${orderId}`);
     } else {
       throw new Error(result.message || 'Failed to create order');

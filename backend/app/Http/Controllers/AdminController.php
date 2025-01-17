@@ -39,7 +39,7 @@ class AdminController
                 ->count();
 
             // Get merchandise sales
-            $merchandiseSales = MerchandiseOrder::where('payment_status', ['PAID'])
+            $merchandiseSales = MerchandiseOrder::where('status', ['COMPLETED'])
                 ->sum('total_amount');
 
             $merchandiseCount = MerchandiseOrderItem::all()->sum('quantity');

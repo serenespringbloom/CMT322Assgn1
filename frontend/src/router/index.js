@@ -131,8 +131,8 @@ const router = createRouter({
       component: () => import('../views/MerchandiseRefund.vue')
     },
     {
-      path: '/order-confirmation/:orderId?',
-      name: 'MerchandiseOrderConfirmation',
+      path: '/order-confirmation/:id',
+      name: 'OrderConfirmation',
       component: () => import('../views/MerchandiseOrderConfirmation.vue')
     },
   ],

@@ -78,13 +78,6 @@ Route::post('/store-item', function (Request $request) {
 
 //Billing API
 
-Route::get('/admin/billing', [BillingController::class, 'index']);
-Route::get('/admin/billing2', [BillingController::class, 'index2']);
-
-//Merchandise API
-
-Route::get('/admin/merchandise1', [MerchandiseController::class, 'index']);
-Route::get('/admin/merchandise2', [MerchandiseController::class, 'index2']);
 
 //seatr API
 Route::prefix('seats')->group(function () {
@@ -111,32 +104,33 @@ Route::get('/ticket/{transactionId}', [TicketController::class, 'getTicketDetail
         Route::post('/refunds/{transactionId}/reject', [AdminTicketController::class, 'rejectRefund']);
     });
 
-// Merchandise routes
-Route::prefix('merchandise')->group(function () {
-    Route::post('/orders', [MerchandiseController::class, 'createOrder']);
-    Route::post('/refunds', [MerchandiseController::class, 'requestRefund']);
-    Route::post('/refunds/{refundId}/process', [MerchandiseController::class, 'processRefund']);
-});
+
+
+    Route::prefix('merchandise')->group(function () {
+        // Orders
+        Route::get('/orders', [MerchandiseController::class, 'getAllOrders']);
+        Route::get('/orders/{id}', [MerchandiseController::class, 'getOrder']);
+        Route::post('/orders', [MerchandiseController::class, 'createOrder']);
+        Route::post('/orders/{id}/process', [MerchandiseController::class, 'processOrder']);
+        // Refunds
+        Route::post('/refunds', [MerchandiseController::class, 'requestRefund']);
+    });
+
+
+
+
+   
+    
 
 Route::prefix('admin/merchandise')->group(function () {
-    Route::get('/orders', [MerchandiseController::class, 'getAdminOrders']);
+    Route::get('/orders', [MerchandiseController::class, 'getAllOrders']);  
     Route::get('/refunds', [MerchandiseController::class, 'getAdminRefunds']);
     Route::get('/summary', [MerchandiseController::class, 'getOrderSummary']);
     Route::post('/refunds/{id}/process', [MerchandiseController::class, 'processRefund']);
     Route::post('/refunds/{id}/reject', [MerchandiseController::class, 'rejectRefund']);
-
+     Route::post('/orders/{id}/approve', [MerchandiseController::class, 'approveOrder']);
 });
 
-Route::prefix('user/merchandise')->group(function () {
-    Route::get('/orders', [MerchandiseController::class, 'getUserOrders']);
-    Route::get('/refunds', [MerchandiseController::class, 'getUserRefunds']);
-    Route::post('/refunds', [MerchandiseController::class, 'createRefund']);
-});
-
-Route::get('/merchandise/orders/{id}', [MerchandiseController::class, 'getOrder']);
-Route::get('/merchandise/orders/{id}/receipt', [MerchandiseController::class, 'downloadReceipt']);
-
-Route::post('/admin/merchandise/orders/{id}/approve', [MerchandiseController::class, 'approveOrder']);
 
 // Feedback routes
 // Feedback routes
@@ -154,3 +148,10 @@ Route::prefix('admin/feedback')->group(function () {
 
 Route::get('/admin/summary', [AdminController::class, 'getSummary']);
 
+// Clear routes cache in development
+if (app()->environment('local')) {
+    Route::get('/clear-routes', function() {
+        \Artisan::call('route:clear');
+        return 'Routes cache cleared';
+    });
+}

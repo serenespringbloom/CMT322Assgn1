@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Merchandise extends Model
 {
-    protected $table = 'merchandise';
-    protected $primaryKey = 'merchandise_id';
+    protected $table = 'merchandises';
+    protected $primaryKey = 'id';
     
     protected $fillable = [
         'name',
@@ -25,6 +25,6 @@ class Merchandise extends Model
 
     public function orderItems()
     {
-        return $this->hasMany(MerchandiseOrderItem::class, 'merchandise_id');
+        return $this->hasMany(MerchandiseOrderItem::class, 'id');
     }
 }

@@ -111,7 +111,7 @@ Route::get('/ticket/{transactionId}', [TicketController::class, 'getTicketDetail
         Route::get('/orders', [MerchandiseController::class, 'getAllOrders']);
         Route::get('/orders/{id}', [MerchandiseController::class, 'getOrder']);
         Route::post('/orders', [MerchandiseController::class, 'createOrder']);
-        Route::post('/orders/{id}/process', [MerchandiseController::class, 'processOrder']);
+    
         // Refunds
         Route::post('/refunds', [MerchandiseController::class, 'requestRefund']);
     });
@@ -126,6 +126,7 @@ Route::prefix('admin/merchandise')->group(function () {
     Route::get('/orders', [MerchandiseController::class, 'getAllOrders']);  
     Route::get('/refunds', [MerchandiseController::class, 'getAdminRefunds']);
     Route::get('/summary', [MerchandiseController::class, 'getOrderSummary']);
+    Route::post('/orders/{id}/process', [MerchandiseController::class, 'processOrder']);
     Route::post('/refunds/{id}/process', [MerchandiseController::class, 'processRefund']);
     Route::post('/refunds/{id}/reject', [MerchandiseController::class, 'rejectRefund']);
      Route::post('/orders/{id}/approve', [MerchandiseController::class, 'approveOrder']);

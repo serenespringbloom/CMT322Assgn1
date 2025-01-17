@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
 class Transaction extends Model
 {
     protected $primaryKey = 'transaction_id';
@@ -25,4 +25,11 @@ class Transaction extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
+
+    public function seats(): HasMany 
+    {
+        return $this->hasMany(Seat::class);
+    }
+
+  
 }

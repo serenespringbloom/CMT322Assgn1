@@ -30,4 +30,9 @@ class Seat extends Model
     {
         return ['seat_id', 'event_id'];
     }
+
+    public function transaction()
+    {
+        return $this->belongsTo(Transaction::class);
+    }
 }

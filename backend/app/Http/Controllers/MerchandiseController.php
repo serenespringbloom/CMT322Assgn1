@@ -83,7 +83,7 @@ class MerchandiseController extends Controller
     public function requestRefund(Request $request)
     {
         $request->validate([
-            'orderId' => 'required|exists:merchandise_orders,order_id',
+            'orderId' => 'required|exists:merchandise_orders,id',
             'reason' => 'required|string|min:10'
         ]);
 
@@ -93,12 +93,12 @@ class MerchandiseController extends Controller
             $order = MerchandiseOrder::findOrFail($request->orderId);
             
             // Validate order status
-            if ($order->order_status !== 'COMPLETED') {
+            if ($order->status !== 'COMPLETED') {
                 throw new \Exception('Only completed orders can be refunded');
             }
 
             // Check if refund already exists
-            if ($order->refund()->exists()) {
+            if ($order->refunds()->exists()) {
                 throw new \Exception('A refund request already exists for this order');
             }
 
@@ -109,14 +109,14 @@ class MerchandiseController extends Controller
 
             // Create refund request
             $refund = MerchandiseRefund::create([
-                'order_id' => $order->order_id,
+                'order_id' => $order->id,
                 'reason' => $request->reason,
                 'refund_amount' => $order->total_amount,
                 'status' => 'PENDING'
             ]);
 
             // Update order status
-            $order->update(['order_status' => 'REFUND_REQUESTED']);
+            $order->update(['status' => 'REFUND_REQUESTED']);
 
             DB::commit();
 
@@ -204,7 +204,8 @@ class MerchandiseController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => [
-                    'order' => $orderData
+                    'order' => $orderData,
+                    'items' => $order->orderItems,
                 ]
             ]);
 
@@ -293,9 +294,33 @@ class MerchandiseController extends Controller
     public function getAdminRefunds()
     {
         try {
-            $refunds = MerchandiseRefund::with(['order.items.merchandise'])
+            $refunds = MerchandiseRefund::with(['order.merchandise'])
                 ->orderBy('created_at', 'desc')
-                ->get();
+                ->get()
+                ->map(function ($refund) {
+                    return [
+                        'id' => $refund->id,
+                        'order_id' => $refund->order_id,
+                        'order' => [
+                            'customer_name' => $refund->order->customer_name,
+                            'customer_email' => $refund->order->customer_email,
+                            'merchandise' => [
+                                'name' => $refund->order->merchandise->name,
+                                'price' => $refund->order->merchandise->price
+                            ],
+                            'size' => $refund->order->size,
+                            'quantity' => $refund->order->quantity,
+                            'total_amount' => $refund->order->total_amount
+                        ],
+                        'refund_amount' => $refund->refund_amount,
+                        'reason' => $refund->reason,
+                        'status' => $refund->status,
+                        'processed_by' => $refund->processed_by,
+                        'processed_at' => $refund->processed_at,
+                        'created_at' => $refund->created_at->format('Y-m-d H:i:s'),
+                        'updated_at' => $refund->updated_at->format('Y-m-d H:i:s')
+                    ];
+                });
 
             return response()->json([
                 'success' => true,
@@ -303,9 +328,15 @@ class MerchandiseController extends Controller
             ]);
 
         } catch (\Exception $e) {
+            \Log::error('Error fetching refunds:', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to fetch refunds'
+                'message' => 'Failed to fetch refunds',
+                'error' => $e->getMessage()
             ], 500);
         }
     }

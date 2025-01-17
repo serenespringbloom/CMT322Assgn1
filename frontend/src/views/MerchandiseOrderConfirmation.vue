@@ -52,6 +52,9 @@
       </div>
 
       <div class="actions">
+        <button @click="generateReceipt" class="download-receipt" :disabled="isGeneratingReceipt">
+          {{ isGeneratingReceipt ? 'Generating Receipt...' : 'Download Receipt' }}
+        </button>
         <button @click="router.push('/')" class="continue-shopping">
           Continue Shopping
         </button>
@@ -63,6 +66,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 const router = useRouter();
 const route = useRoute();
@@ -78,6 +83,7 @@ const customerPhone = ref('');
 const customerName = ref('');
 const orderStatus = ref('');
 const paymentStatus = ref('');
+const isGeneratingReceipt = ref(false);
 
 onMounted(async () => {
   try {
@@ -111,7 +117,11 @@ onMounted(async () => {
       customerPhone.value = order.customer_phone;
       orderStatus.value = order.status;
       paymentStatus.value = 'PAID'; // Or get from order if you have payment status
-    } else {
+        console.log(orderNumber.value);
+        console.log(customerPhone.value);
+    } 
+    
+    else {
       throw new Error(result.message || 'Failed to fetch order details');
     }
   } catch (error) {
@@ -131,45 +141,139 @@ const formatDate = (date) => {
   });
 };
 
-const downloadReceipt = async () => {
+const generateReceipt = () => {
   try {
-    const orderId = route.params.orderId || localStorage.getItem('lastOrderId');
+    isGeneratingReceipt.value = true;
     
-    if (!orderId) {
-      throw new Error('Order ID not found');
-    }
+    // Create order object from the existing refs
+    const order = {
+      id: orderNumber.value,
+      created_at: orderDate.value,
+      status: orderStatus.value,
+      customer_name: customerName.value,
+      customer_email: customerEmail.value,
+      customer_phone: customerPhone.value,
+      items: orderItems.value,
+      total_amount: totalAmount.value
+    };
 
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/api/merchandise/orders/${orderId}/receipt`,
-      {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/pdf'
-        }
+    // Create new PDF document (A4 format)
+    const doc = new jsPDF();
+    
+    // Set initial y position
+    let yPos = 20;
+    
+    // Add header
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(20);
+    doc.setTextColor(85, 65, 73); // #554149
+    doc.text('Merchandise Receipt', 105, yPos, { align: 'center' });
+    
+    // Order number and date
+    yPos += 15;
+    doc.setFontSize(12);
+    doc.text(`Order #${order.id}`, 105, yPos, { align: 'center' });
+    yPos += 10;
+    doc.text(new Date(order.created_at).toLocaleDateString('en-MY'), 105, yPos, { align: 'center' });
+    
+    // Add line separator
+    yPos += 10;
+    doc.setDrawColor(220, 195, 156); // #dcc39c
+    doc.line(20, yPos, 190, yPos);
+    
+    // Order Information
+    yPos += 20;
+    doc.setFont('helvetica', 'bold');
+    doc.text('Order Information', 20, yPos);
+    yPos += 10;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.text(`Status: ${order.status}`, 20, yPos);
+    yPos += 7;
+    doc.text(`Payment Status: PAID`, 20, yPos);
+    
+    // Customer Information
+    yPos += 20;
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Customer Information', 20, yPos);
+    yPos += 10;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.text(`Name: ${order.customer_name}`, 20, yPos);
+    yPos += 7;
+    doc.text(`Email: ${order.customer_email}`, 20, yPos);
+    yPos += 7;
+    doc.text(`Phone: ${order.customer_phone}`, 20, yPos);
+    
+    // Order Items Table
+    yPos += 20;
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Order Items', 20, yPos);
+    
+    // Create table
+    const tableColumns = [
+      'Item',
+      'Size',
+      'Quantity',
+      'Unit Price (RM)',
+      'Total (RM)'
+    ];
+    
+    // Ensure orderItems is an array before mapping
+    const tableRows = Array.isArray(order.items) ? order.items.map(item => [
+      item.merchandise?.name || 'Product',
+      item.size,
+      item.quantity.toString(),
+      Number(item.unit_price).toFixed(2),
+      Number(item.total_amount).toFixed(2)
+    ]) : [];
+    
+    doc.autoTable({
+      startY: yPos + 5,
+      head: [tableColumns],
+      body: tableRows,
+      theme: 'striped',
+      headStyles: {
+        fillColor: [164, 142, 105], // #a48e69
+        textColor: 255,
+        fontSize: 10
+      },
+      styles: {
+        fontSize: 9,
+        cellPadding: 5
       }
-    );
-
-    if (!response.ok) {
-      throw new Error('Failed to download receipt');
-    }
-
-    // Create blob from response
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
+    });
     
-    // Create temporary link and trigger download
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `receipt-${orderNumber.value}.pdf`;
-    document.body.appendChild(a);
-    a.click();
+    // Get the final Y position after the table
+    const finalY = doc.lastAutoTable.finalY;
     
-    // Cleanup
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
+    // Total Amount
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Total Amount: RM ${Number(order.total_amount).toFixed(2)}`, 190, finalY + 20, { align: 'right' });
+    
+    // Footer
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(102, 102, 102); // #666
+    doc.text('Thank you for your purchase!', 105, finalY + 40, { align: 'center' });
+    doc.text('If you have any questions, please contact us at support@example.com', 105, finalY + 47, { align: 'center' });
+    doc.text('This is a computer-generated receipt. No signature is required.', 105, finalY + 54, { align: 'center' });
+    
+    // Add line before footer
+    doc.setDrawColor(220, 195, 156); // #dcc39c
+    doc.line(20, finalY + 35, 190, finalY + 35);
+    
+    // Save the PDF
+    doc.save(`merchandise-receipt-${order.id}.pdf`);
+    
   } catch (error) {
-    console.error('Error downloading receipt:', error);
-    alert('Failed to download receipt: ' + error.message);
+    console.error('Error generating receipt:', error);
+    alert('Failed to generate receipt. Please try again.');
+  } finally {
+    isGeneratingReceipt.value = false;
   }
 };
 

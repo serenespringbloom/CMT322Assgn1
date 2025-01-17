@@ -17,7 +17,7 @@ class MerchandiseOrder extends Model
         'total_amount',
         'status'
     ];
-
+ 
     protected $casts = [
         'unit_price' => 'decimal:2',
         'total_amount' => 'decimal:2',

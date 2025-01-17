@@ -5,10 +5,7 @@ import logo from "@/assets/MCBLogo.png";
 import Footer from "./components/Footer.vue";
 
 // Navigation state
-const isMenuOpen = ref(false);
-const toggleMenu = () => {
-  isMenuOpen.value = !isMenuOpen.value;
-};
+
 
 // Route handling
 const route = useRoute();
@@ -73,11 +70,7 @@ onMounted(() => {
       </div>
 
       <!-- Hamburger Icon -->
-      <button class="nav-toggle" @click="toggleMenu" aria-label="Toggle Menu">
-        <span :class="{ open: isMenuOpen }"></span>
-        <span :class="{ open: isMenuOpen }"></span>
-        <span :class="{ open: isMenuOpen }"></span>
-      </button>
+  
 
       <!-- Navigation Links -->
       <ul class="nav-links" :class="{ open: isMenuOpen }">

@@ -76,7 +76,10 @@
     <!-- Refunds Tab -->
     <div v-if="activeTab === 'refunds'" class="content-section">
       <div class="refunds-list">
-        <div class="table-container">
+        <div v-if="refunds.length === 0" class="no-data">
+          No refund requests found.
+        </div>
+        <div v-else class="table-container">
           <table>
             <thead>
               <tr>
@@ -176,20 +179,27 @@ const fetchOrders = async () => {
 
 const fetchRefunds = async () => {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/merchandise/refunds`);
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/merchandise/refunds`);
     const data = await response.json();
+    
     if (data.success) {
-      refunds.value = data.data.refunds;
-      refundCount.value = data.data.refunds.length;
+      refunds.value = data.data || [];
+      refundCount.value = data.data ? data.data.length : 0;
+    } else {
+      console.error('Failed to fetch refunds:', data.message);
+      refunds.value = [];
+      refundCount.value = 0;
     }
   } catch (error) {
     console.error('Error fetching refunds:', error);
+    refunds.value = [];
+    refundCount.value = 0;
   }
 };
 
 const processOrder = async (orderId, status) => {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/merchandise/orders/${orderId}/process`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/merchandise/orders/${orderId}/process`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -213,7 +223,7 @@ const processRefund = (refund) => {
 const confirmRefund = async () => {
   try {
     const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/api/merchandise/refunds/${selectedRefund.value.id}/process`,
+      `${import.meta.env.VITE_API_URL}/api/admin/merchandise/refunds/${selectedRefund.value.id}/process`,
       {
         method: 'POST',
         headers: {
@@ -240,7 +250,7 @@ const confirmRefund = async () => {
 const rejectRefund = async (refundId) => {
   try {
     const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/api/merchandise/refunds/${refundId}/process`,
+      `${import.meta.env.VITE_API_URL}/api/admin/merchandise/refunds/${refundId}/process`,
       {
         method: 'POST',
         headers: {
@@ -442,5 +452,12 @@ th {
     flex-direction: column;
     gap: 0.5rem;
   }
+}
+
+.no-data {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  font-style: italic;
 }
 </style> 

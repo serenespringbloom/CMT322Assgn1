@@ -30,30 +30,18 @@ const handleLogout = async () => {
 </script>
 
 <template>
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Malam Citra Bayu Admin</title>
-  </head>
-
-  <body class="body">
-    <div id="admin">
-      <div class="sidebar">
-        <div class="side-logo">Admin Dashboard</div>
-        <ul class="side-nav-links">
-          <li><RouterLink to="/admin/dashboard">Home</RouterLink></li>
-          <li><RouterLink to="/admin/event">Event</RouterLink></li>
-          <li><RouterLink to="/admin/feedback">Feedback</RouterLink></li>
-          <li><RouterLink to="/admin/tickets">Tickets</RouterLink></li>
-          <li><RouterLink to="/admin/merchandise">Merchandise</RouterLink></li>
-          <li><RouterLink to="/">Back To Main Page</RouterLink></li>
-          <button @click="handleLogout">Logout</button>
-        </ul>
-      </div>
-      <div class="admin-content">
-        <RouterView />
-      </div>
+  <div id="admin">
+    <div class="sidebar">
+      <div class="side-logo">Admin Dashboard</div>
+      <ul class="side-nav-links">
+        <li><RouterLink to="/admin/dashboard">Home</RouterLink></li>
+        <li><RouterLink to="/admin/event">Event</RouterLink></li>
+        <li><RouterLink to="/admin/feedback">Feedback</RouterLink></li>
+        <li><RouterLink to="/admin/tickets">Tickets</RouterLink></li>
+        <li><RouterLink to="/admin/merchandise">Merchandise</RouterLink></li>
+        <li><RouterLink to="/">Back To Main Page</RouterLink></li>
+        <button @click="handleLogout">Logout</button>
+      </ul>
     </div>
     <div class="admin-content">
       <RouterView />

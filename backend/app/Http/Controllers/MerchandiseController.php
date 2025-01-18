@@ -29,7 +29,7 @@ class MerchandiseController extends Controller
                 'quantity' => $request->items[0]['quantity'],
                 'unit_price' => Merchandise::find($request->items[0]['merchandiseId'])->price,
                 'total_amount' => 0, // Will update after calculating total
-                'status' => 'PENDING'
+                'status' => 'COMPLETED'
             ]);
 
             $totalAmount = 0;

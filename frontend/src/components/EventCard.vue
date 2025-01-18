@@ -47,10 +47,10 @@ export default {
   methods: {
     async fetchImages() {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/images');
+        const response = await axios.get('http://127.0.0.1:8003/api/images');
         this.images = response.data.map(image => ({
           ...image,
-          url: `http://127.0.0.1:8000/images/${image.filename}`
+          url: `http://127.0.0.1:8003/images/${image.filename}`
         }));
       } catch (error) {
         console.error('Error fetching images:', error.response?.data || error.message);
@@ -59,7 +59,7 @@ export default {
     async deleteImage(id) {
       if (!confirm('Are you sure you want to delete this image?')) return;
       try {
-        await axios.delete(`http://127.0.0.1:8000/api/images/${id}`);
+        await axios.delete(`http://127.0.0.1:8003/api/images/${id}`);
         this.images = this.images.filter(image => image.id !== id);
       } catch (error) {
         console.error('Error deleting image:', error.response?.data || error.message);
@@ -71,7 +71,7 @@ export default {
     },
     async submitUpdate() {
       try {
-        await axios.put(`http://127.0.0.1:8000/api/images/${this.updateForm.id}`, {
+        await axios.put(`http://127.0.0.1:8003/api/images/${this.updateForm.id}`, {
           headline: this.updateForm.headline,
           details: this.updateForm.details,
           tags: this.updateForm.tags,

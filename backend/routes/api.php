@@ -89,7 +89,7 @@ Route::post('/store-item', function (Request $request) {
 //Billing API
 
 
-//seatr API
+//seat API
 Route::prefix('seats')->group(function () {
     Route::get('/', [SeatController::class, 'index']);
     Route::post('/verify', [SeatController::class, 'verifySeatAvailability']);

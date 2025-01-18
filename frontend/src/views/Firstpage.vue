@@ -100,7 +100,7 @@
   </div>
 </template>
 
-  <script>
+<script>
 import axios from 'axios';
 import { ref } from 'vue';
 
@@ -141,15 +141,15 @@ export default {
     }
   }
 };
-  </script>
-  <script setup>
+</script>
+<script setup>
   
-  import salesImage from '../assets/images/sales.jpg';
-  import clientImage from '../assets/images/client.png';
-  import feedbackImage from '../assets/images/feedback.png';
-  import totalSales from '../assets/images/totalSales.png';
-  import studentSales from '../assets/images/flags/studentic.png';
-  import guestSales from '../assets/images/flags/guestic.png';
+import salesImage from '../assets/images/sales.jpg';
+import clientImage from '../assets/images/client.png';
+import feedbackImage from '../assets/images/feedback.png';
+import totalSales from '../assets/images/totalSales.png';
+import studentSales from '../assets/images/flags/studentic.png';
+import guestSales from '../assets/images/flags/guestic.png';
 
   const cards = [
     {
@@ -194,10 +194,10 @@ export default {
     },
   
   ];
-  </script>
+</script>
   
-  <style >
- @import "tailwindcss/base";
+<style >
+@import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-  </style>
+</style>

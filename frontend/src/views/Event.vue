@@ -73,12 +73,13 @@ const editEvent = (event) => {
 // Delete an event
 const deleteEvent = async (id) => {
   try {
-    await axios.delete(`${apiBaseUrl}${id}`);
+    await axios.delete(`${apiBaseUrl}/${id}`); // Add the '/' before id
     await fetchEvents(); // Refresh events list after deletion
   } catch (error) {
     console.error('Error deleting event:', error);
   }
 };
+
 
 // Reset the form to initial empty state
 const resetForm = () => {

@@ -74,7 +74,7 @@ class EventController extends Controller
             'event_about' => 'nullable|string',
             'event_email' => 'nullable|email',
             'event_phone' => 'nullable|string|max:15',
-            'last_updated_by' => 'required|integer',
+            'last_updated_by' => 'nullable|integer',
         ]);
 
         $event->update($request->all());

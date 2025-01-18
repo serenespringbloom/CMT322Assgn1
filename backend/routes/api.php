@@ -66,8 +66,8 @@ Route::post('/store-item', function (Request $request) {
     // Route::get('/events/{id}', [EventController::class, 'show']);
     Route::get('/event/{id?}', [EventController::class, 'getEvent']);
     Route::post('/event', [EventController::class, 'store']);
-    Route::put('/events/{id}', [EventController::class, 'update']);
-    Route::delete('/events/{id}', [EventController::class, 'destroy']);
+    Route::put('/event/{id}', [EventController::class, 'update']);
+    Route::delete('/event/{id}', [EventController::class, 'destroy']);
 
 // Agenda API
     Route::get('/events/{id}/agendas', [AgendaController::class, 'getAgendasByEvent']);

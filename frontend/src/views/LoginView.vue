@@ -29,7 +29,7 @@ const handleLogin = async () => {
     if (response.data.success) {
       // Successful login
       sessionStorage.setItem('token', response.data.token); // Save the token
-      router.push('/dashboard'); // Redirect to the admin dashboard
+      router.push('/admin/dashboard'); // Redirect to the admin dashboard
     } else {
       error.value = response.data.error; // Show error message
     }

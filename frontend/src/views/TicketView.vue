@@ -5,7 +5,7 @@ import TicketDisplay from '../components/TicketDisplay.vue';
 const rows = 15; // Number of rows
 const columns = 24; // Number of seats per row
 const seatsPerSection = 8;
-const bookedSeats = ref(['A1', 'B3', 'C5']); // Pre-booked seats
+
 
 // Divide seats into three sections
 const seats = computed(() => {

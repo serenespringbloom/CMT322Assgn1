@@ -41,17 +41,17 @@ const fetchEvents = async () => {
 
 // Submit the form (create or update an event)
 const submitForm = async () => {
+  console.log('Form Data Being Sent:', form); // Log form data to the console
   try {
     if (isEditing.value) {
       await axios.put(`${apiBaseUrl}/${form.event_id}`, form);
     } else {
       await axios.post(`${apiBaseUrl}`, form);
     }
-
     resetForm();
     await fetchEvents();
   } catch (error) {
-    console.error('Error submitting form:', error);
+    console.error('Error submitting form:', error.response?.data);
   }
 };
 

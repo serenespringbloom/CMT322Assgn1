@@ -13,6 +13,10 @@ class Event extends Model
 
     protected $primaryKey = 'event_id';
 
+    // Define custom timestamps
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'last_updated_at'; // Use the custom timestamp name
+
     protected $fillable = [
         'event_title',
         'event_subtitle',

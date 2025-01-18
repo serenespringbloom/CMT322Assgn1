@@ -1,275 +1,221 @@
 <template>
-    <div class="ticket-container" ref="ticketContainer">
-      <div class="ticket">
-        <div class="ticket-header">
-          <h1>E-TICKET</h1>
-          <div class="ticket-id">{{ ticketData.ticketId }}</div>
-        </div>
-  
-        <div class="ticket-body">
-          <div class="customer-info">
-            <div class="info-group">
-              <label>Name:</label>
-              <span>{{ ticketData.transaction.cust_name }}</span>
-            </div>
-            <div class="info-group">
-              <label>Email:</label>
-              <span>{{ ticketData.transaction.cust_email }}</span>
-            </div>
-            <div class="info-group">
-              <label>Phone:</label>
-              <span>{{ ticketData.transaction.cust_phone }}</span>
-            </div>
-          </div>
-  
-          <div class="seat-info">
-            <h2>Seat Details</h2>
-            <div class="seat-sections">
-              <div v-if="ticketData.seats.left?.length" class="section">
-                <h3>Left Section</h3>
-                <div class="seat-list">{{ ticketData.seats.left.join(', ') }}</div>
-              </div>
-              <div v-if="ticketData.seats.center?.length" class="section">
-                <h3>Center Section</h3>
-                <div class="seat-list">{{ ticketData.seats.center.join(', ') }}</div>
-              </div>
-              <div v-if="ticketData.seats.right?.length" class="section">
-                <h3>Right Section</h3>
-                <div class="seat-list">{{ ticketData.seats.right.join(', ') }}</div>
-              </div>
-            </div>
-          </div>
-  
-          <div class="payment-info">
-            <div class="info-group">
-              <label>Total Amount:</label>
-              <span>RM {{ ticketData.transaction.total_price }}</span>
-            </div>
-            <div class="info-group">
-              <label>Payment Method:</label>
-              <span>{{ ticketData.transaction.payment_method }}</span>
-            </div>
-            <div class="info-group">
-              <label>Status:</label>
-              <span :class="['status', ticketData.transaction.status.toLowerCase()]">
-                {{ ticketData.transaction.status }}
-              </span>
-            </div>
+  <!-- Overlay -->
+  <div 
+    class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6"
+    @click="closeModal"
+  >
+    <!-- Modal -->
+    <div 
+      class="max-w-4xl w-full bg-white rounded-2xl shadow-2xl overflow-y-auto max-h-[90vh] relative"
+      @click.stop
+      ref="ticketContainer"
+    >
+      <!-- Close Button -->
+      <button 
+        @click="closeModal"
+        class="absolute top-4 right-4 z-10 p-2 rounded-full hover:bg-gray-100 transition-colors"
+      >
+        <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- Ticket Content -->
+      <div class="ticket bg-gradient-to-br from-white to-gray-50">
+        <!-- Ticket Header -->
+        <div class="relative px-6 py-8 text-center border-b border-gray-200">
+          <h1 class="text-3xl sm:text-4xl font-bold text-[#2c3e50]">E-TICKET</h1>
+          <div class="absolute top-4 left-4 bg-gray-50 px-3 py-1.5 rounded-lg">
+            <span class="font-mono text-sm sm:text-base text-[#2c3e50]">
+              {{ ticketData.ticketId }}
+            </span>
           </div>
         </div>
-  
-        <div class="ticket-footer">
+
+        <!-- Ticket Body -->
+        <div class="p-6 space-y-8">
+          <!-- Customer Info -->
+          <div class="bg-gray-50/50 rounded-xl p-4 sm:p-6">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div class="space-y-1">
+                <label class="text-sm font-semibold text-gray-600">Name:</label>
+                <p class="text-[#2c3e50]">{{ ticketData.transaction.cust_name }}</p>
+              </div>
+              <div class="space-y-1">
+                <label class="text-sm font-semibold text-gray-600">Email:</label>
+                <p class="text-[#2c3e50] break-all">{{ ticketData.transaction.cust_email }}</p>
+              </div>
+              <div class="space-y-1">
+                <label class="text-sm font-semibold text-gray-600">Phone:</label>
+                <p class="text-[#2c3e50]">{{ ticketData.transaction.cust_phone }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seat Details -->
+          <div class="bg-gray-50/50 rounded-xl p-4 sm:p-6">
+            <h2 class="text-xl font-semibold text-[#2c3e50] mb-4">Seat Details</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div v-if="ticketData.seats.left?.length" class="space-y-2">
+                <h3 class="font-semibold text-[#2c3e50]">Left Section</h3>
+                <div class="bg-white p-3 rounded-lg font-mono text-sm">
+                  {{ ticketData.seats.left.join(', ') }}
+                </div>
+              </div>
+              <div v-if="ticketData.seats.center?.length" class="space-y-2">
+                <h3 class="font-semibold text-[#2c3e50]">Center Section</h3>
+                <div class="bg-white p-3 rounded-lg font-mono text-sm">
+                  {{ ticketData.seats.center.join(', ') }}
+                </div>
+              </div>
+              <div v-if="ticketData.seats.right?.length" class="space-y-2">
+                <h3 class="font-semibold text-[#2c3e50]">Right Section</h3>
+                <div class="bg-white p-3 rounded-lg font-mono text-sm">
+                  {{ ticketData.seats.right.join(', ') }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Info -->
+          <div class="bg-gray-50/50 rounded-xl p-4 sm:p-6">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div class="space-y-1">
+                <label class="text-sm font-semibold text-gray-600">Total Amount:</label>
+                <p class="text-[#2c3e50]">RM {{ ticketData.transaction.total_price }}</p>
+              </div>
+              <div class="space-y-1">
+                <label class="text-sm font-semibold text-gray-600">Payment Method:</label>
+                <p class="text-[#2c3e50]">{{ ticketData.transaction.payment_method }}</p>
+              </div>
+              <div class="space-y-1">
+                <label class="text-sm font-semibold text-gray-600">Status:</label>
+                <span :class="[
+                  'px-3 py-1 rounded-full text-sm font-semibold',
+                  ticketData.transaction.status.toLowerCase() === 'pending' 
+                    ? 'bg-yellow-100 text-yellow-800' 
+                    : 'bg-green-100 text-green-800'
+                ]">
+                  {{ ticketData.transaction.status }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ticket Footer -->
+        <div class="px-6 py-4 bg-gray-50 text-center space-y-2">
           <div class="qr-code">
-            <!-- You can add a QR code library to generate one here -->
+            <!-- QR code placeholder -->
           </div>
-          <div class="timestamp">
+          <div class="text-sm text-gray-500">
             Generated on: {{ new Date().toLocaleString() }}
           </div>
         </div>
-      </div>
-  
-      <div class="ticket-actions">
-        <button @click="downloadTicket" class="download-btn">
-          Download Ticket
-        </button>
-        <button @click="printTicket" class="print-btn">
-          Print Ticket
-        </button>
-        <button @click="close" class="print-btn">
-          Close
-        </button>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row justify-center gap-4 p-6 bg-gray-50 border-t border-gray-200">
+          <button 
+            @click="downloadTicket"
+            class="px-6 py-2.5 bg-gradient-to-r from-[#a48e69] to-[#dcc39c] text-white 
+                   font-semibold rounded-lg hover:opacity-90 transition-opacity"
+          >
+            Download Ticket
+          </button>
+          <button 
+            @click="printTicket"
+            class="px-6 py-2.5 bg-gray-100 text-gray-700 font-semibold rounded-lg 
+                   hover:bg-gray-200 transition-colors"
+          >
+            Print Ticket
+          </button>
+        </div>
       </div>
     </div>
-  </template>
-  
-  <script setup>
-  import { ref, onMounted } from 'vue';
-  import html2canvas from 'html2canvas';
-  import { useRouter } from 'vue-router';
-  const router = useRouter();
-  const props = defineProps({
-    ticketData: {
-      type: Object,
-      required: true
-    }
-  });
-  
-  const ticketContainer = ref(null);
-  
-  const downloadTicket = async () => {
-    try {
-      const canvas = await html2canvas(ticketContainer.value.querySelector('.ticket'));
-      const link = document.createElement('a');
-      link.download = `ticket-${props.ticketData.ticketId}.png`;
-      link.href = canvas.toDataURL();
-      link.click();
-    } catch (error) {
-      console.error('Error downloading ticket:', error);
-    }
-  };
-  
-  const printTicket = () => {
-    window.print();
-  };
-  const close = () => {
-    router.push('/');
-  };
-  </script>
-  
-  <style scoped>
-  .ticket-container {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 1rem;
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import html2canvas from 'html2canvas';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const ticketContainer = ref(null);
+
+const props = defineProps({
+  ticketData: {
+    type: Object,
+    required: true
+  },
+  onClose: {
+    type: Function,
+    required: true
   }
-  
-  .ticket {
-    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-    position: relative;
-    overflow: hidden;
+});
+
+// Close modal when clicking escape key
+const handleEscape = (e) => {
+  if (e.key === 'Escape') {
+    closeModal();
   }
-  
-  .ticket::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 5px;
-    background: linear-gradient(90deg, #a48e69 0%, #dcc39c 100%);
+};
+
+onMounted(() => {
+  document.addEventListener('keydown', handleEscape);
+  // Prevent body scroll when modal is open
+  document.body.style.overflow = 'hidden';
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener('keydown', handleEscape);
+  // Restore body scroll when modal is closed
+  document.body.style.overflow = 'auto';
+});
+
+const closeModal = () => {
+  props.onClose();
+};
+
+const downloadTicket = async () => {
+  try {
+    const ticketElement = ticketContainer.value.querySelector('.ticket');
+    const canvas = await html2canvas(ticketElement);
+    const link = document.createElement('a');
+    link.download = `ticket-${props.ticketData.ticketId}.png`;
+    link.href = canvas.toDataURL();
+    link.click();
+  } catch (error) {
+    console.error('Error downloading ticket:', error);
   }
-  
-  .ticket-header {
-    text-align: center;
-    margin-bottom: 2rem;
-    position: relative;
-  }
-  
-  .ticket-header h1 {
-    font-size: 2.5rem;
-    color: #2c3e50;
-    margin: 0;
-    font-weight: 700;
-    letter-spacing: 2px;
-  }
-  
-  .ticket-id {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: #f8f9fa;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    font-family: monospace;
-    font-size: 1.1rem;
-    color: #2c3e50;
-  }
-  
-  .ticket-body {
-    display: grid;
-    gap: 2rem;
-  }
-  
-  .customer-info, .seat-info, .payment-info {
-    background: rgba(248, 249, 250, 0.5);
-    padding: 1.5rem;
-    border-radius: 10px;
-  }
-  
-  .info-group {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
-  }
-  
-  .info-group label {
-    font-weight: 600;
-    color: #6c757d;
-  }
-  
-  .seat-sections {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-  
-  .section h3 {
-    color: #2c3e50;
-    margin-bottom: 0.5rem;
-    font-size: 1.1rem;
-  }
-  
-  .seat-list {
-    background: white;
-    padding: 0.5rem;
-    border-radius: 5px;
-    font-family: monospace;
-  }
-  
-  .status {
-    padding: 0.25rem 0.75rem;
-    border-radius: 15px;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-  }
-  
-  .status.pending {
-    background: #fff3cd;
-    color: #856404;
-  }
-  
-  .status.completed {
-    background: #d4edda;
-    color: #155724;
-  }
-  
-  .ticket-footer {
-    margin-top: 2rem;
-    text-align: center;
-    color: #6c757d;
-    font-size: 0.9rem;
-  }
-  
+};
+
+const printTicket = () => {
+  window.print();
+};
+</script>
+
+<style scoped>
+@media print {
   .ticket-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-top: 2rem;
+    display: none;
   }
-  
-  .download-btn, .print-btn {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 5px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.2s;
+}
+
+/* Add smooth entrance animation */
+.fixed {
+  animation: modalFade 0.3s ease-out;
+}
+
+@keyframes modalFade {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
   }
-  
-  .download-btn {
-    background: linear-gradient(135deg, #a48e69 0%, #dcc39c 100%);
-    color: white;
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
-  
-  .print-btn {
-    background: #f8f9fa;
-    color: #2c3e50;
-    border: 1px solid #dee2e6;
-  }
-  
-  .download-btn:hover, .print-btn:hover {
-    transform: translateY(-2px);
-  }
-  
-  @media print {
-    .ticket-actions {
-      display: none;
-    }
-  }
-  </style>
+}
+</style>
   

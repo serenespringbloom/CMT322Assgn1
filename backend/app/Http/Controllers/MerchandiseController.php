@@ -9,6 +9,7 @@ use App\Models\MerchandiseRefund;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PDF;
+use Illuminate\Support\Facades\Mail;
 
 class MerchandiseController extends Controller
 {
@@ -56,6 +57,9 @@ class MerchandiseController extends Controller
 
             DB::commit();
             
+            // Send confirmation email
+            $this->sendOrderConfirmationEmail($order);
+            
             return response()->json([
                 'success' => true,
                 'message' => 'Order created successfully',
@@ -77,6 +81,39 @@ class MerchandiseController extends Controller
                 'message' => 'Failed to create order',
                 'error' => $e->getMessage()
             ], 500);
+        }
+    }
+
+    private function sendOrderConfirmationEmail($order)
+    {
+        try {
+            $items = $order->orderItems->map(function($item) {
+                return [
+                    'name' => $item->merchandise->name,
+                    'size' => $item->size,
+                    'quantity' => $item->quantity,
+                    'price' => $item->unit_price,
+                    'total' => $item->total_amount
+                ];
+            });
+
+            Mail::send('emails.merchandise-order', [
+                'order' => $order,
+                'items' => $items,
+                'customerName' => $order->customer_name,
+                'orderNumber' => $order->id,
+                'totalAmount' => $order->total_amount
+            ], function($message) use ($order) {
+                $message->to($order->customer_email)
+                       ->subject('MCB Merchandise Order Confirmation #' . $order->id);
+            });
+
+            \Log::info('Order confirmation email sent:', ['order_id' => $order->id]);
+        } catch (\Exception $e) {
+            \Log::error('Failed to send order confirmation email:', [
+                'order_id' => $order->id,
+                'error' => $e->getMessage()
+            ]);
         }
     }
 

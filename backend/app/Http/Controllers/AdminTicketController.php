@@ -7,6 +7,7 @@ use App\Models\Seat;
 use App\Models\RefundRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class AdminTicketController extends Controller
 {
@@ -55,6 +56,11 @@ class AdminTicketController extends Controller
                 'status' => $request->status
             ]);
 
+            // Send email if payment is completed
+            if ($request->payment_status === 'COMPLETED') {
+                $this->sendTicketConfirmationEmail($transaction);
+            }
+
             return response()->json([
                 'success' => true,
                 'message' => 'Ticket status updated successfully',
@@ -66,6 +72,34 @@ class AdminTicketController extends Controller
                 'message' => 'Failed to update ticket status',
                 'error' => $e->getMessage()
             ], 500);
+        }
+    }
+
+    private function sendTicketConfirmationEmail($transaction)
+    {
+        try {
+            $seats = Seat::where('ticket_id', $transaction->transaction_id)->get();
+            
+            Mail::send('emails.ticket-order', [
+                'transaction' => $transaction,
+                'seats' => $seats,
+                'customerName' => $transaction->cust_name,
+                'orderNumber' => $transaction->transaction_id,
+                'totalAmount' => $transaction->total_price,
+                'eventDate' => '01 June, 2025',
+                'eventTime' => '7:30 PM',
+                'venue' => 'Dewan Tuanku Syed Putra, USM'
+            ], function($message) use ($transaction) {
+                $message->to($transaction->cust_email)
+                       ->subject('MCB Ticket Order Confirmation #' . $transaction->transaction_id);
+            });
+
+            \Log::info('Ticket confirmation email sent:', ['transaction_id' => $transaction->transaction_id]);
+        } catch (\Exception $e) {
+            \Log::error('Failed to send ticket confirmation email:', [
+                'transaction_id' => $transaction->transaction_id,
+                'error' => $e->getMessage()
+            ]);
         }
     }
 

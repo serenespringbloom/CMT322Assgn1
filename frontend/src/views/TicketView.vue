@@ -522,13 +522,11 @@ onMounted(async () => {
       </div>
     </div>
 
-    <!-- Ticket Display -->
     <TicketDisplay 
-      v-if="showTicket"
-      :ticketData="ticketData"
-      @close="showTicket = false"
-      class="fixed inset-0 z-50"
-    />
+    v-if="showTicket"
+    :ticketData="ticketData"
+    :onClose="() => showTicket = false"
+  />
   </div>
 </template>
 

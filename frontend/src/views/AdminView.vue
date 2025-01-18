@@ -34,11 +34,11 @@ const handleLogout = async () => {
     <div class="sidebar">
       <div class="side-logo">Admin Dashboard</div>
       <ul class="side-nav-links">
-        <li><RouterLink to="/dashboard">Home</RouterLink></li>
-        <li><RouterLink to="/event">Event</RouterLink></li>
-        <li><RouterLink to="/feedback-admin">Feedback</RouterLink></li>
-        <li><RouterLink to="/billing">Billing</RouterLink></li>
-        <li><RouterLink to="/refunding">Refund</RouterLink></li>
+        <li><RouterLink to="/admin/dashboard">Home</RouterLink></li>
+        <li><RouterLink to="/admin/event">Event</RouterLink></li>
+        <li><RouterLink to="/admin/feedback">Feedback</RouterLink></li>
+        <li><RouterLink to="/admin/tickets">Tickets</RouterLink></li>
+        <li><RouterLink to="/admin/merchandise">Merchandise</RouterLink></li>
         <li><RouterLink to="/">Back To Main Page</RouterLink></li>
         <button @click="handleLogout">Logout</button>
       </ul>

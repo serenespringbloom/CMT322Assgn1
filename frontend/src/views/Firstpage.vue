@@ -154,13 +154,13 @@ import guestSales from '../assets/images/flags/guestic.png';
   const cards = [
     {
       id: 1,
-      title: "Todays' Sale",
+      title: "Total Sales",
       description: "+RM400",
       image: salesImage, // Example placeholder image
     },
     {
       id: 2,
-      title: "New Users",
+      title: "Merchandise Sales",
       description: "+30",
       image: clientImage,
     },
@@ -172,7 +172,7 @@ import guestSales from '../assets/images/flags/guestic.png';
     },
     {
       id: 4,
-      title: "Total Sales",
+      title: "Ticket Sales",
       description: "RM5000",
       image: totalSales,
     },

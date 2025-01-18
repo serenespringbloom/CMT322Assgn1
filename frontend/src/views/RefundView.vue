@@ -57,7 +57,7 @@
     methods: {
       async validatePid() {
   try {
-    const response = await axios.get(`http://127.0.0.1:8000/api/validate-pid/${this.refundRequest.pid}`);
+    const response = await axios.get(`http://127.0.0.1:8003/api/validate-pid/${this.refundRequest.pid}`);
     this.isPidValid = response.data.isValid;
     if (this.isPidValid) {
       alert('PID is valid!');

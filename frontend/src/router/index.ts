@@ -107,7 +107,7 @@ const router = createRouter({
               home: false },
       children: [
         { path: '/dashboard', component: () => import('../views/Firstpage.vue') },
-        { path: '/feedback-admin', component: () => import('../views/Feedback.vue') },
+        { path: '/feedback-admin', component: () => import('../views/AdminFeedbackDashboard.vue') },
         { path: '/event', component: () => import('../views/Event.vue') },
         { path: '/billing', component: () => import('../views/Billing.vue') },
       ]

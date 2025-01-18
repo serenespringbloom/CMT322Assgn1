@@ -11,11 +11,13 @@ class Seat extends Model
 
     protected $table = 'seats';
 
-    protected $primaryKey = ['seat_id', 'event_id']; // Composite Key
+    protected $primaryKey = 'seat_id';
 
     public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
+        'seat_id',
         'event_id',
         'is_booked',
         'ticket_id',
@@ -23,4 +25,14 @@ class Seat extends Model
         'disabled_by',
         'disabled_at',
     ];
+
+    public function uniqueIds()
+    {
+        return ['seat_id', 'event_id'];
+    }
+
+    public function transaction()
+    {
+        return $this->belongsTo(Transaction::class);
+    }
 }

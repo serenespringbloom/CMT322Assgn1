@@ -6,6 +6,13 @@ use App\Models\Item;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\RefundRequestController;
 use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\BillingController;
+use App\Http\Controllers\MerchandiseController;
+use App\Http\Controllers\SeatController;
+use App\Http\Controllers\TicketController;
+use App\Http\Controllers\AdminTicketController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminMerchandiseController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -76,4 +83,86 @@ Route::post('/store-item', function (Request $request) {
     Route::get('/validate-pid/{pid}', [RefundRequestController::class, 'validatePid']);
 
 //Feedback API
-Route::post('/hello/feedback', [FeedbackController::class, 'store']);
+
+
+
+//Billing API
+
+
+//seat API
+Route::prefix('seats')->group(function () {
+    Route::get('/', [SeatController::class, 'index']);
+    Route::post('/verify', [SeatController::class, 'verifySeatAvailability']);
+    Route::post('/book', [SeatController::class, 'createBooking']);
+});
+
+Route::get('/ticket/{transactionId}', [TicketController::class, 'getTicketDetails']);
+
+
+
+
+    // Other routes...
+
+    Route::prefix('admin')->group(function () {
+        Route::get('/tickets', [AdminTicketController::class, 'getTicketSales']);
+        Route::get('/tickets/{transactionId}', [AdminTicketController::class, 'getTicketDetails']);
+        Route::put('/tickets/{transactionId}', [AdminTicketController::class, 'updateTicketStatus']);
+        
+        // Refund routes
+        Route::get('/refunds', [AdminTicketController::class, 'getRefundRequests']);
+        Route::post('/refunds/{transactionId}/process', [AdminTicketController::class, 'processRefund']);
+        Route::post('/refunds/{transactionId}/reject', [AdminTicketController::class, 'rejectRefund']);
+    });
+
+
+
+    Route::prefix('merchandise')->group(function () {
+        // Orders
+        Route::get('/orders', [MerchandiseController::class, 'getAllOrders']);
+        Route::get('/orders/{id}', [MerchandiseController::class, 'getOrder']);
+        Route::post('/orders', [MerchandiseController::class, 'createOrder']);
+    
+        // Refunds
+        Route::post('/refunds', [MerchandiseController::class, 'requestRefund']);
+    });
+
+
+
+
+   
+    
+
+Route::prefix('admin/merchandise')->group(function () {
+    Route::get('/orders', [MerchandiseController::class, 'getAllOrders']);  
+    Route::get('/refunds', [MerchandiseController::class, 'getAdminRefunds']);
+    Route::get('/summary', [MerchandiseController::class, 'getOrderSummary']);
+    Route::post('/orders/{id}/process', [MerchandiseController::class, 'processOrder']);
+    Route::post('/refunds/{id}/process', [MerchandiseController::class, 'processRefund']);
+    Route::post('/refunds/{id}/reject', [MerchandiseController::class, 'rejectRefund']);
+     Route::post('/orders/{id}/approve', [MerchandiseController::class, 'approveOrder']);
+});
+
+
+// Feedback routes
+// Feedback routes
+Route::prefix('feedback')->group(function () {
+    Route::get('/', [FeedbackController::class, 'index']);
+    Route::post('/', [FeedbackController::class, 'store']); // Add this line to allow POST requests
+
+});
+// Admin feedback routes
+Route::prefix('admin/feedback')->group(function () {
+    Route::get('/', [FeedbackController::class, 'index']);
+
+    Route::delete('/{id}', [FeedbackController::class, 'destroy']);
+});
+
+Route::get('/admin/summary', [AdminController::class, 'getSummary']);
+
+// Clear routes cache in development
+if (app()->environment('local')) {
+    Route::get('/clear-routes', function() {
+        \Artisan::call('route:clear');
+        return 'Routes cache cleared';
+    });
+}

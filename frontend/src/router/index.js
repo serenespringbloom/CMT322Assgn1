@@ -89,7 +89,7 @@ const router = createRouter({
             },
     },
     {
-      path: '/refund',
+      path: '/ticket-refund',
       name: 'refund',
       component: () => import('../views/RefundView.vue'),
       meta: { showHeader: true,
@@ -124,13 +124,26 @@ const router = createRouter({
       component: () => import('../views/AdminView.vue'),
       meta: { showHeader: false, showFooter: false, requiresAuth: true, home: false },
       children: [
-        { path: '/dashboard', name: 'admin-dashboard', component: () => import('../views/Firstpage.vue') },
-        { path: '/feedback-admin', name: 'feedback-admin', component: () => import('../views/Feedback.vue') },
-        { path: '/event', name: 'event', component: () => import('../views/Event.vue') },
-        { path: '/billing', name: 'billing', component: () => import('../views/Billing.vue') },
-        { path: '/refunding', name: 'refunding', component: () => import('../views/Refund.vue') },
-      ],
-    }      
+        { path: '/admin/dashboard', component: () => import('../views/AdminSummaryDashboard.vue') },
+        { path: '/admin/feedback', component: () => import('../views/AdminFeedbackDashboard.vue') },
+        { path: '/admin/event', component: () => import('../views/Event.vue') },
+        {path: '/admin/tickets',component: () => import('../views/AdminTicketDashboard.vue')},
+        {path: '/admin/merchandise',  component: () => import('../views/AdminMerchandiseOrders.vue')  },
+      ]
+    },
+ 
+
+    {path: '/admin/merchandise',  component: () => import('../views/AdminMerchandiseOrders.vue')  },
+    {
+      path: '/merchandise-refund',
+      name: 'UserMerchandiseRefund',
+      component: () => import('../views/MerchandiseRefund.vue')
+    },
+    {
+      path: '/order-confirmation/:id',
+      name: 'OrderConfirmation',
+      component: () => import('../views/MerchandiseOrderConfirmation.vue')
+    },
   ],
 })
 

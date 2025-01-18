@@ -22,10 +22,10 @@ class AppServiceProvider extends ServiceProvider
     {
         // Define routes for the application
         Route::middleware('api')
-            ->prefix('api')
-            ->group(base_path('routes/api.php'));
+            ->prefix('api') // All API routes will be prefixed with 'api'
+            ->group(base_path('routes/api.php')); // Load the API routes file
 
         Route::middleware('web')
-            ->group(base_path('routes/web.php'));
+            ->group(base_path('routes/web.php')); // Load the web routes file
     }
 }

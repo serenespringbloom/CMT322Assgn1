@@ -65,7 +65,7 @@ Route::post('/store-item', function (Request $request) {
     // Route::get('/events', [EventController::class, 'index']);
     // Route::get('/events/{id}', [EventController::class, 'show']);
     Route::get('/event/{id?}', [EventController::class, 'getEvent']);
-    Route::post('/events', [EventController::class, 'store']);
+    Route::post('/event', [EventController::class, 'store']);
     Route::put('/events/{id}', [EventController::class, 'update']);
     Route::delete('/events/{id}', [EventController::class, 'destroy']);
 
@@ -87,3 +87,12 @@ Route::post('/store-item', function (Request $request) {
 
 //Feedback API
 Route::post('/hello/feedback', [FeedbackController::class, 'store']);
+
+
+// Endpoint API
+Route::get('/endpoint', function () {
+    return response()->json(['message' => 'API is working!'], 200);
+});
+Route::options('{any}', function () {
+    return response()->json(['status' => 'OK'], 200);
+})->where('any', '.*');

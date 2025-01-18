@@ -2,7 +2,10 @@
 import { ref, reactive, onMounted } from 'vue';
 import axios from 'axios';
 
-const events = ref([]); // Holds the list of events
+// Reactive state to hold the events list
+const events = ref([]);
+
+// Form data for creating or editing an event
 const form = reactive({
   event_id: null,
   event_title: '',
@@ -12,40 +15,50 @@ const form = reactive({
   event_about: '',
   event_email: '',
   event_phone: '',
-}); // Holds form data
-const isEditing = ref(false); // Tracks whether the form is in edit mode
+});
 
+// Flag to determine if we are in edit mode
+const isEditing = ref(false);
+
+// Base API URL (updated for your environment)
+const apiBaseUrl = 'http://127.0.0.1:8003/api/event';
+
+// Fetch all events from the backend
 const fetchEvents = async () => {
   try {
     // Log the URL to check if it's correct
-    console.log(`${import.meta.env.VITE_API_URL}/api/events`);
+    console.log(`${apiBaseUrl}`);
 
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/events`);
-    events.value = response.data; // Update event list with data from API
+    // Make API request to fetch events
+    const response = await axios.get(`${apiBaseUrl}`);
+    console.log('Fetched Events:', response.data); // Log the response data for debugging
+
+    events.value = response.data; // Update events list with data from API
   } catch (error) {
     console.error('Error fetching events:', error);
   }
 };
 
+// Submit the form (create or update an event)
 const submitForm = async () => {
   try {
     if (isEditing.value) {
-      // Update event
-      await axios.put(`${import.meta.env.VITE_API_URL}/api/events/${form.event_id}`, form);
+      await axios.put(`${apiBaseUrl}/${form.event_id}`, form);
     } else {
-      // Create new event
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/events`, form);
+      await axios.post(`${apiBaseUrl}`, form);
     }
 
     resetForm();
-    await fetchEvents(); // Refresh event list
+    await fetchEvents();
   } catch (error) {
     console.error('Error submitting form:', error);
   }
 };
 
+
+
+// Pre-fill form for editing an event
 const editEvent = (event) => {
-  // Populate the form with event data for editing
   form.event_id = event.event_id;
   form.event_title = event.event_title;
   form.event_subtitle = event.event_subtitle;
@@ -54,18 +67,20 @@ const editEvent = (event) => {
   form.event_about = event.event_about;
   form.event_email = event.event_email;
   form.event_phone = event.event_phone;
-  isEditing.value = true;
+  isEditing.value = true; // Set to editing mode
 };
 
+// Delete an event
 const deleteEvent = async (id) => {
   try {
-    await axios.delete(`${import.meta.env.VITE_API_URL}/api/events/${id}`);
-    await fetchEvents(); // Refresh event list
+    await axios.delete(`${apiBaseUrl}${id}`);
+    await fetchEvents(); // Refresh events list after deletion
   } catch (error) {
     console.error('Error deleting event:', error);
   }
 };
 
+// Reset the form to initial empty state
 const resetForm = () => {
   form.event_id = null;
   form.event_title = '';
@@ -75,12 +90,12 @@ const resetForm = () => {
   form.event_about = '';
   form.event_email = '';
   form.event_phone = '';
-  isEditing.value = false;
+  isEditing.value = false; // Reset to add mode
 };
 
-onMounted(fetchEvents); // Fetch events on page load
+// Fetch events when the component is mounted
+onMounted(fetchEvents);
 </script>
-
 
 <template>
   <div class="container mx-auto px-4 py-6">
@@ -173,10 +188,12 @@ onMounted(fetchEvents); // Fetch events on page load
       </button>
     </form>
 
-    <!-- Table Section -->
+    <!-- Events List Section -->
     <div class="mt-10">
       <h2 class="text-xl font-bold mb-4">Events List</h2>
-      <table class="min-w-full bg-white border border-gray-300">
+      <div v-if="events.length === 0" class="text-gray-500">No events available</div>
+
+      <table v-else class="min-w-full bg-white border border-gray-300">
         <thead class="bg-gray-100">
           <tr>
             <th class="py-2 px-4 border-b">Title</th>
@@ -196,7 +213,7 @@ onMounted(fetchEvents); // Fetch events on page load
               <button @click="editEvent(event)" class="bg-yellow-500 text-white px-4 py-2 rounded-md">
                 Edit
               </button>
-              <button @click="deleteEvent(event.id)" class="bg-red-500 text-white px-4 py-2 rounded-md ml-2">
+              <button @click="deleteEvent(event.event_id)" class="bg-red-500 text-white px-4 py-2 rounded-md ml-2">
                 Delete
               </button>
             </td>

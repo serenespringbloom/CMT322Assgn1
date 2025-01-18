@@ -38,17 +38,18 @@ class EventController extends Controller
         return response()->json($event, 200);
     }
 
-    public function store(Request $request)
+        public function store(Request $request)
     {
+        // Handle the store logic
         $request->validate([
-            'event_title' => 'required|string|max:255',
-            'event_subtitle' => 'nullable|string|max:255',
-            'event_venue' => 'nullable|string|max:255',
-            'event_datetime' => 'nullable|date',
-            'event_about' => 'nullable|string',
-            'event_email' => 'nullable|email',
-            'event_phone' => 'nullable|string|max:15',
-            'created_by' => 'required|integer',
+        'event_title' => 'required|string|max:255',
+        'event_subtitle' => 'nullable|string|max:255',
+        'event_venue' => 'nullable|string|max:255',
+        'event_datetime' => 'nullable|date',
+        'event_about' => 'nullable|string',
+        'event_email' => 'nullable|email',
+        'event_phone' => 'nullable|string|max:15',
+        'created_by' => 'required|integer',
         ]);
 
         $event = Event::create($request->all());

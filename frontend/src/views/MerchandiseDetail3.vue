@@ -1,293 +1,179 @@
-<script>
-export default {
-  data() {
-    return {
-      // Merchandise data
-      merchandise: [
-        { id: 3, name: "White Blue Cotton Tee", price: 38, image: "../assets/images/merchant3.png" }
-      ],
-      // Selected size and quantity state
-      selectedSize: "",
-      quantity: 1,
-    };
-  },
-  methods: {
-    increment() {
-      this.quantity++;
-    },
-    decrement() {
-      if (this.quantity > 1) this.quantity--;
-    },
-    addToCart(item) {
-      if (!this.selectedSize) {
-        alert("Please select a size.");
-        return;
-      }
+<script setup>
+import { ref } from 'vue';
 
-      // Get the current cart from localStorage or initialize it to an empty array
-      const currentCart = JSON.parse(localStorage.getItem("cart")) || [];
+const merchandise = ref([
+  { id: 3, name: "White Blue Cotton Tee", price: 38, image: "../assets/images/merchant3.png" }
+]);
 
-      // Check if the item already exists in the cart
-      const existingItem = currentCart.find((cartItem) => cartItem.id === item.id && cartItem.size === this.selectedSize);
+const selectedSize = ref("");
+const quantity = ref(1);
 
-      if (existingItem) {
-        // If the item exists and the size matches, increase the quantity
-        existingItem.quantity += this.quantity;
-      } else {
-        // If the item doesn't exist, add it with the selected size and quantity
-        currentCart.push({
-          ...item,
-          size: this.selectedSize,
-          quantity: this.quantity,
-          image: item.image,
-        });
-      }
+const increment = () => {
+  quantity.value++;
+};
 
-      // Save the updated cart to localStorage
-      localStorage.setItem("cart", JSON.stringify(currentCart));
+const decrement = () => {
+  if (quantity.value > 1) quantity.value--;
+};
 
-      // Dispatch an event to notify other components of the cart update
-      window.dispatchEvent(new Event("cartUpdated"));
-
-      this.selectedSize = ""; // Unselect size
-      this.quantity = 1; // Reset quantity to default value
-
-      // Show feedback message
-      alert(`${item.name} in size ${this.selectedSize} has been added to the cart!`);
-    }
+const addToCart = (item) => {
+  if (!selectedSize.value) {
+    alert("Please select a size.");
+    return;
   }
+
+  const currentCart = JSON.parse(localStorage.getItem("cart")) || [];
+  const existingItem = currentCart.find(
+    (cartItem) => cartItem.id === item.id && cartItem.size === selectedSize.value
+  );
+
+  if (existingItem) {
+    existingItem.quantity += quantity.value;
+  } else {
+    currentCart.push({
+      ...item,
+      size: selectedSize.value,
+      quantity: quantity.value,
+    });
+  }
+
+  localStorage.setItem("cart", JSON.stringify(currentCart));
+  window.dispatchEvent(new Event("cartUpdated"));
+
+  alert(`${item.name} in size ${selectedSize.value.toUpperCase()} has been added to the cart!`);
+
+  selectedSize.value = "";
+  quantity.value = 1;
 };
 </script>
 
 <template>
-  <div>
+  <div class="min-h-screen bg-gray-50 py-8">
     <!-- Header -->
-    <div class="header">
-      <h1>{{ merchandise[0].name.toUpperCase() }}</h1>
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-[#554149] tracking-[2rem] font-['Plus_Jakarta_Sans']">
+        {{ merchandise[0].name.toUpperCase() }}
+      </h1>
     </div>
 
     <!-- Product Section -->
-    <section class="product-container">
-      <!-- Product Image -->
-      <div class="product-image">
-        <img src="../assets/images/merchant3.png" alt="White Blue Cotton Tee" />
-      </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+        <!-- Product Image -->
+        <div class="bg-white rounded-2xl shadow-lg p-8 transition-transform hover:scale-[1.02]">
+          <img 
+            src="../assets/images/merchant3.png" 
+            :alt="merchandise[0].name"
+            class="w-full h-auto object-cover rounded-xl"
+          />
+        </div>
 
-      <!-- Product Info -->
-      <div class="product-details">
-        <p class="brand">Malam Citra Bayu</p>
-        <h2 class="product-name">{{ merchandise[0].name }}</h2>
-        <p class="price">RM {{ merchandise[0].price }}</p>
+        <!-- Product Details -->
+        <div class="space-y-8">
+          <!-- Brand and Name -->
+          <div>
+            <p class="text-gray-500 text-lg mb-2">Malam Citra Bayu</p>
+            <h2 class="text-3xl font-bold text-[#554149] mb-4">
+              {{ merchandise[0].name }}
+            </h2>
+            <p class="text-2xl font-semibold text-[#927e5b]">
+              RM {{ merchandise[0].price }}
+            </p>
+          </div>
 
-        <!-- Size Selector -->
-        <div class="size-selector">
-          <label class="label">Shirt Size:</label>
-          <div class="size-options">
-            <div
-              v-for="(size, index) in ['S', 'M', 'L', 'XL']"
-              :key="index"
-              class="size-option"
-            >
-              <input
-                type="radio"
-                :id="'size' + index"
-                name="size"
-                :value="size.toLowerCase()"
-                v-model="selectedSize"
-              />
-              <label :for="'size' + index" class="size-label">{{ size }}</label>
+          <!-- Size Selection -->
+          <div class="space-y-4">
+            <label class="block text-lg font-medium text-[#554149]">
+              Shirt Size:
+            </label>
+            <div class="flex gap-4">
+              <div v-for="size in ['S', 'M', 'L', 'XL']" :key="size" class="relative">
+                <input
+                  type="radio"
+                  :id="'size' + size"
+                  name="size"
+                  :value="size.toLowerCase()"
+                  v-model="selectedSize"
+                  class="sr-only peer"
+                />
+                <label
+                  :for="'size' + size"
+                  class="flex items-center justify-center w-14 h-14 rounded-full border-2 border-[#dcc39c] 
+                         cursor-pointer transition-all duration-200 
+                         peer-checked:bg-gradient-to-r peer-checked:from-[#a48e69] peer-checked:to-[#dcc39c] 
+                         peer-checked:text-white hover:shadow-md"
+                >
+                  {{ size }}
+                </label>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Quantity Selector -->
-        <div class="quantity-selector">
-          <label class="label">Quantity:</label>
-          <div class="quantity-controls">
-            <button class="btn" @click="decrement">-</button>
-            <input type="text" v-model="quantity" readonly />
-            <button class="btn" @click="increment">+</button>
+          <!-- Quantity Selection -->
+          <div class="space-y-4">
+            <label class="block text-lg font-medium text-[#554149]">
+              Quantity:
+            </label>
+            <div class="flex items-center gap-4">
+              <button 
+                @click="decrement"
+                class="w-12 h-12 rounded-lg bg-[#dcc39c] text-[#554149] text-2xl font-bold
+                       hover:bg-[#e0b987] transition-colors duration-200 flex items-center justify-center"
+              >
+                -
+              </button>
+              <input 
+                type="text" 
+                v-model="quantity" 
+                readonly
+                class="w-16 h-12 text-center border border-gray-300 rounded-lg text-lg"
+              />
+              <button 
+                @click="increment"
+                class="w-12 h-12 rounded-lg bg-[#dcc39c] text-[#554149] text-2xl font-bold
+                       hover:bg-[#e0b987] transition-colors duration-200 flex items-center justify-center"
+              >
+                +
+              </button>
+            </div>
           </div>
-        </div>
 
-        <!-- Add to Cart -->
-        <button class="add-to-cart" @click="addToCart(merchandise[0])">
-          Add to Cart
-        </button>
+          <!-- Product Description -->
+          <div class="space-y-4">
+            <h3 class="text-lg font-medium text-[#554149]">Description:</h3>
+            <p class="text-gray-600 leading-relaxed">
+              Introducing our White Blue Cotton Tee, a perfect blend of style and comfort. 
+              This unique design features a striking blue accent on premium white cotton, 
+              making it a standout piece in your MCB collection.
+            </p>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Premium cotton blend</li>
+              <li>Blue accent design</li>
+              <li>Durable stitching</li>
+              <li>Limited edition MCB print</li>
+            </ul>
+          </div>
+
+          <!-- Add to Cart Button -->
+          <button 
+            @click="addToCart(merchandise[0])"
+            class="w-full py-4 px-8 bg-gradient-to-r from-[#a48e69] to-[#dcc39c] text-[#554149]
+                   rounded-full text-lg font-bold hover:shadow-lg transform hover:-translate-y-1
+                   transition-all duration-200 flex items-center justify-center gap-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            Add to Cart
+          </button>
+        </div>
       </div>
-    </section>
+    </div>
   </div>
 </template>
 
 <style scoped>
-/* Header */
-.header {
-  text-align: center;
-  margin: 2rem 0;
-  font-family: "Plus Jakarta Sans", serif;
-}
-
-.header h1 {
-  font-size: 2.5rem;
-  letter-spacing: 2rem;
-  color: #554149;
-  text-transform: uppercase;
-}
-
-
-
-/* Product Container */
-.product-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 6rem;
-  padding: 2rem;
-}
-
-.product-image img {
-  width: 100%;
-  max-width: 400px;
-  padding: 2rem;
-  border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-}
-
-.product-details {
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-/* Brand and Name */
-.brand {
-  font-size: 1rem;
-  color: #888;
-}
-
-.product-name {
-  font-size: 2rem;
-  color: #554149;
-  font-weight: bold;
-}
-
-.price {
-  font-size: 1.5rem;
-  color: #927e5b;
-  font-weight: bold;
-}
-
-/* Size Selector */
-.size-selector {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.label {
-  font-size: 1rem;
-  color: #554149;
-  font-weight: bold;
-}
-
-.size-options {
-  display: flex;
-  gap: 1rem;
-}
-
-.size-option {
-  position: relative;
-}
-
-.size-option input {
-  display: none;
-}
-
-.size-label {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-  height: 50px;
-  border: 2px solid #dcc39c;
-  border-radius: 50%;
-  background-color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.size-option input:checked + .size-label {
-  background: linear-gradient(108deg, #a48e69 -50%, #dcc39c 100%);
-  color: #fff;
-}
-
-/* Quantity Selector */
-.quantity-selector {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.quantity-controls {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.quantity-controls .btn {
-  width: 40px;
-  height: 40px;
-  background-color: #dcc39c;
-  border: none;
-  border-radius: 5px;
-  font-size: 1.5rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.quantity-controls .btn:hover {
-  background-color: #e0b987;
-}
-
-.quantity-controls input {
-  width: 50px;
-  height: 40px;
-  text-align: center;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-/* Add to Cart Button */
-.add-to-cart {
-  background: linear-gradient(108deg, #a48e69 -50%, #dcc39c 100%);
-  color: #554149;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  font-weight: bold;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.add-to-cart:hover {
-  background-color: #e0b987;
-  transform: translateY(-2px);
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .product-container {
-    flex-direction: column;
-    gap: 2rem;
-  }
-
-  .product-details {
-    max-width: 90%;
-  }
-}
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 </style>

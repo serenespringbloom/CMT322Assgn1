@@ -3,10 +3,13 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header Section -->
       <div class="text-center mb-12">
-        <h1 class="text-4xl font-bold text-[#554149] mb-2">FEEDBACK</h1>
-        <h2 class="text-2xl text-[#a48e69]">OUR PARTICIPANTS SAY</h2>
-      </div>
-
+      <h1 class="text-4xl mb-[10px] font-bold text-gray-800 tracking-[0.9em] font-['Plus_Jakarta_Sans']">
+        FEEDBACK
+      </h1>
+      <h2 class="text-2xl text-[#a48e69] mb-[10px]">OUR PARTICIPANTS SAY</h2>
+      <div class="w-24 h-1 bg-[#dcc39c] mx-auto"></div>
+    </div>
+    
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Left Section: Testimonial and Form -->
         <div class="lg:col-span-2 space-y-8">

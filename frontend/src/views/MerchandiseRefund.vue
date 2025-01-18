@@ -1,43 +1,101 @@
 <template>
-  <div class="refund-container">
-    <div class="refund-form">
-      <h1>Request a Refund</h1>
-      <p class="instruction">Please enter your purchase ID to request a refund</p>
-
-      <div class="form-group">
-        <label for="orderId">Purchase ID</label>
-        <input 
-          type="text" 
-          id="orderId" 
-          v-model="orderId"
-          placeholder="Enter your Purchase ID (e.g., 000123)"
-          @input="validateOrderId"
-        />
-        <span class="error-message" v-if="orderIdError">{{ orderIdError }}</span>
+  <div class="min-h-screen bg-[#FFC8DD] py-16">
+    <div class="max-w-2xl mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-[#554149] tracking-[1rem] font-['Plus_Jakarta_Sans'] uppercase mb-4">
+          Request a Refund
+        </h1>
+        <div class="w-24 h-1 bg-[#dcc39c] mx-auto mb-6"></div>
+        <p class="text-gray-600">
+          Please enter your merchandise order details to request a refund
+        </p>
       </div>
 
-      <div class="form-group">
-        <label for="reason">Reason for Refund</label>
-        <textarea 
-          id="reason" 
-          v-model="reason"
-          rows="4"
-          placeholder="Please explain why you're requesting a refund"
-        ></textarea>
-        <span class="error-message" v-if="reasonError">{{ reasonError }}</span>
-      </div>
+      <!-- Refund Form -->
+      <div class="bg-white rounded-2xl shadow-lg p-8">
+        <!-- Order ID Field -->
+        <div class="mb-6">
+          <label 
+            for="orderId" 
+            class="block text-[#554149] font-medium mb-2"
+          >
+            Order ID
+          </label>
+          <input 
+            type="text" 
+            id="orderId" 
+            v-model="orderId"
+            placeholder="Enter your Purchase ID (e.g., 000123)"
+            @input="validateOrderId"
+            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-[#dcc39c] 
+                   focus:ring-2 focus:ring-[#dcc39c] focus:ring-opacity-50 transition-colors
+                   placeholder-gray-400"
+            :class="{ 'border-red-500 focus:border-red-500 focus:ring-red-500': orderIdError }"
+          />
+          <p v-if="orderIdError" class="mt-2 text-red-500 text-sm">
+            {{ orderIdError }}
+          </p>
+        </div>
 
-      <button 
-        class="submit-btn" 
-        @click="submitRefund"
-        :disabled="!isFormValid || isSubmitting"
-      >
-        {{ isSubmitting ? 'Submitting...' : 'Submit Refund Request' }}
-      </button>
+        <!-- Reason Field -->
+        <div class="mb-8">
+          <label 
+            for="reason" 
+            class="block text-[#554149] font-medium mb-2"
+          >
+            Reason for Refund
+          </label>
+          <textarea 
+            id="reason" 
+            v-model="reason"
+            rows="4"
+            placeholder="Please explain why you're requesting a refund"
+            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-[#dcc39c] 
+                   focus:ring-2 focus:ring-[#dcc39c] focus:ring-opacity-50 transition-colors
+                   placeholder-gray-400 resize-none"
+            :class="{ 'border-red-500 focus:border-red-500 focus:ring-red-500': reasonError }"
+          ></textarea>
+          <p v-if="reasonError" class="mt-2 text-red-500 text-sm">
+            {{ reasonError }}
+          </p>
+        </div>
 
-      <!-- Success Message -->
-      <div v-if="successMessage" class="success-message">
-        {{ successMessage }}
+        <!-- Submit Button -->
+        <button 
+          @click="submitRefund"
+          :disabled="!isFormValid || isSubmitting"
+          class="w-full py-4 bg-gradient-to-r from-[#a48e69] to-[#dcc39c] text-white rounded-lg
+                 font-medium transition-all duration-300 transform hover:-translate-y-0.5
+                 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed
+                 disabled:hover:translate-y-0"
+        >
+          <span v-if="isSubmitting" class="flex items-center justify-center gap-2">
+            <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Processing...
+          </span>
+          <span v-else>
+            Submit Refund Request
+          </span>
+        </button>
+
+        <!-- Success Message -->
+        <div 
+          v-if="successMessage" 
+          class="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg"
+        >
+          <div class="flex items-center gap-3">
+            <svg class="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+            <p class="text-green-700">
+              {{ successMessage }}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -120,107 +178,4 @@ const submitRefund = async () => {
     isSubmitting.value = false;
   }
 };
-</script>
-
-<style scoped>
-.refund-container {
-  max-width: 600px;
-  margin: 2rem auto;
-  padding: 2rem;
-}
-
-.refund-form {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-  color: #554149;
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
-.instruction {
-  text-align: center;
-  color: #6c757d;
-  margin-bottom: 2rem;
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-label {
-  display: block;
-  color: #554149;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-}
-
-input, textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #dcc39c;
-  border-radius: 5px;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
-}
-
-input:focus, textarea:focus {
-  outline: none;
-  border-color: #a48e69;
-}
-
-textarea {
-  resize: vertical;
-  min-height: 100px;
-}
-
-.error-message {
-  color: #dc3545;
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
-  display: block;
-}
-
-.submit-btn {
-  width: 100%;
-  padding: 1rem;
-  background: linear-gradient(108deg, #a48e69 -50%, #dcc39c 100%);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.submit-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.submit-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.success-message {
-  margin-top: 1rem;
-  padding: 1rem;
-  background-color: #d4edda;
-  color: #155724;
-  border-radius: 5px;
-  text-align: center;
-}
-
-@media (max-width: 768px) {
-  .refund-container {
-    margin: 1rem;
-    padding: 1rem;
-  }
-}
-</style> 
+</script> 

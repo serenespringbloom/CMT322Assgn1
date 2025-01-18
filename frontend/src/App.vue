@@ -5,7 +5,10 @@ import logo from "@/assets/MCBLogo.png";
 import Footer from "./components/Footer.vue";
 
 // Navigation state
-
+const isMenuOpen = ref(false);
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value;
+};
 
 // Route handling
 const route = useRoute();
@@ -15,349 +18,338 @@ const hideHomeLinks = computed(() => route.meta.home === false);
 
 // Cart-related logic
 const cart = ref([]);
-
-// Calculate total price
 const totalPrice = computed(() =>
   cart.value.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)
 );
 
-// Load cart data from localStorage
-const updateCartFromLocalStorage = () => {
-  cart.value = JSON.parse(localStorage.getItem("cart")) || [];
-};
-
-// Listen for cart updates
-window.addEventListener("cartUpdated", updateCartFromLocalStorage);
-
-// Load cart on component mount
-onMounted(() => {
-  updateCartFromLocalStorage();
-});
-
-// Add this to your existing script setup
+// Refund dropdown state
 const isRefundMenuOpen = ref(false);
-
 const toggleRefundMenu = () => {
   isRefundMenuOpen.value = !isRefundMenuOpen.value;
 };
 
-// Close dropdown when clicking outside
+// Load cart data and handle clicks
 onMounted(() => {
+  updateCartFromLocalStorage();
   document.addEventListener('click', (e) => {
-    if (!e.target.closest('.dropdown')) {
-      isRefundMenuOpen.value = false;
+    const target = e.target;
+    const isHamburger = target.closest('.hamburger-button');
+    const isMenu = target.closest('.mobile-menu');
+    
+    if (!isHamburger && !isMenu && isMenuOpen.value) {
+      isMenuOpen.value = false;
     }
   });
 });
+
+const updateCartFromLocalStorage = () => {
+  cart.value = JSON.parse(localStorage.getItem("cart")) || [];
+};
+
+window.addEventListener("cartUpdated", updateCartFromLocalStorage);
 </script>
 
 <template>
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Malam Citra Bayu</title>
-  </head>
-
-  <body>
+  <div class="min-h-screen flex flex-col">
     <div class="backgroundImage" v-if="hideHomeLinks"></div>
-    <nav v-if="!hideHeader" id="navTop">
-      <!-- Brand/Logo -->
-      <div class="brand">
-        <RouterLink to="/">
-          <img :src="logo" alt="Malam Citra Bayu Logo" />
-        </RouterLink>
+    
+    <!-- Navbar -->
+    <nav v-if="!hideHeader" class="bg-gradient-to-r from-[#f4d0d6] to-[#DCC39C] sticky top-0 z-50 shadow-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <!-- Logo -->
+          <RouterLink to="/" class="flex-shrink-0">
+            <img :src="logo" alt="MCB Logo" class="h-12 w-auto hover:scale-105 transition-transform duration-200">
+          </RouterLink>
+
+          <!-- Hamburger Menu Button -->
+          <button 
+            @click.stop="toggleMenu"
+            class="hamburger-button p-2 rounded-md text-[#554149] hover:bg-[#e8c5ca] transition-colors duration-200"
+          >
+            <svg 
+              class="h-6 w-6" 
+              :class="{ 'hidden': isMenuOpen }"
+              xmlns="http://www.w3.org/2000/svg" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg 
+              class="h-6 w-6" 
+              :class="{ 'hidden': !isMenuOpen }"
+              xmlns="http://www.w3.org/2000/svg" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          <!-- Navigation Links -->
+          <div 
+            class="hidden lg:flex lg:items-center lg:space-x-4 nav-links"
+          >
+            <RouterLink 
+              to="/" 
+              class="nav-link"
+            >
+              <span class="text-xl">🏠</span>
+              <span>HOME</span>
+            </RouterLink>
+
+            <a 
+              v-if="!hideHomeLinks" 
+              href="#about" 
+              class="nav-link"
+            >
+              <span class="text-xl">🎉</span>
+              <span>EVENT</span>
+            </a>
+
+            <a 
+              v-if="!hideHomeLinks" 
+              href="#location" 
+              class="nav-link"
+            >
+              <span class="text-xl">📞</span>
+              <span>CONTACT</span>
+            </a>
+
+            <RouterLink 
+              to="/ticket" 
+              class="nav-link"
+            >
+              <span class="text-xl">🎫</span>
+              <span>TICKET</span>
+            </RouterLink>
+
+            <RouterLink 
+              to="/merchandise" 
+              class="nav-link"
+            >
+              <span class="text-xl">🛍️</span>
+              <span>MERCHANDISE</span>
+            </RouterLink>
+
+            <RouterLink 
+              to="/feedback" 
+              class="nav-link"
+            >
+              <span class="text-xl">🗣️</span>
+              <span>FEEDBACK</span>
+            </RouterLink>
+
+            <!-- Refund Dropdown -->
+            <div class="relative dropdown">
+              <button 
+                @click.prevent="toggleRefundMenu"
+                class="nav-link"
+              >
+                <span class="text-xl">💸</span>
+                <span>REFUND</span>
+                <span 
+                  class="ml-1 transition-transform duration-200"
+                  :class="{ 'rotate-180': isRefundMenuOpen }"
+                >
+                  ▼
+                </span>
+              </button>
+
+              <div 
+                v-show="isRefundMenuOpen"
+                class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2"
+              >
+                <RouterLink 
+                  to="/merchandise-refund" 
+                  class="block px-4 py-2 text-[#554149] hover:bg-[#f4d0d6] transition-colors duration-200"
+                >
+                  🛍️ Merchandise Refund
+                </RouterLink>
+                <RouterLink 
+                  to="/ticket-refund" 
+                  class="block px-4 py-2 text-[#554149] hover:bg-[#f4d0d6] transition-colors duration-200"
+                >
+                  🎫 Ticket Refund
+                </RouterLink>
+              </div>
+            </div>
+
+            <RouterLink 
+              to="/admin/dashboard" 
+              class="nav-link"
+            >
+              <span class="text-xl">🛠️</span>
+              <span>ADMIN</span>
+            </RouterLink>
+          </div>
+
+          <!-- Cart -->
+          <RouterLink 
+            to="/cart"
+            class="hidden lg:flex items-center px-4 py-2 bg-[#DCC39C] rounded-lg text-[#554149] 
+                   hover:bg-[#c4ad89] transition-colors duration-200"
+          >
+            <span class="text-xl mr-2">🛒</span>
+            <span class="font-medium">RM {{ totalPrice }}</span>
+          </RouterLink>
+        </div>
       </div>
 
-      <!-- Hamburger Icon -->
-  
+      <!-- Mobile Menu -->
+      <div 
+        v-show="isMenuOpen"
+        class="mobile-menu absolute top-16 right-0 w-64 bg-white shadow-lg rounded-lg mt-2 py-2 z-50"
+      >
+        <div class="px-2 pt-2 pb-3 space-y-1">
+          <RouterLink 
+            to="/" 
+            class="mobile-nav-link"
+            @click="isMenuOpen = false"
+          >
+            <span class="text-xl">🏠</span>
+            <span>HOME</span>
+          </RouterLink>
 
-      <!-- Navigation Links -->
-      <ul class="nav-links" :class="{ open: isMenuOpen }">
-        <li>
-          <RouterLink to="/" class="nav-item">
-            <span class="icon">🏠</span>
-            <span class="text">HOME</span>
-          </RouterLink>
-        </li>
-        <li v-if="!hideHomeLinks">
-          <a href="#about" class="nav-item">
-            <span class="icon">🎉</span>
-            <span class="text">EVENT</span>
+          <a 
+            v-if="!hideHomeLinks" 
+            href="#about" 
+            class="mobile-nav-link"
+            @click="isMenuOpen = false"
+          >
+            <span class="text-xl">🎉</span>
+            <span>EVENT</span>
           </a>
-        </li>
-        <li v-if="!hideHomeLinks">
-          <a href="#location" class="nav-item">
-            <span class="icon">📞</span>
-            <span class="text">CONTACT</span>
-          </a>
-        </li>
-        <li>
-          <RouterLink to="/ticket" class="nav-item">
-            <span class="icon">🎫</span>
-            <span class="text">TICKET</span>
-          </RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/merchandise" class="nav-item">
-            <span class="icon">🛍️</span>
-            <span class="text">MERCHANDISE</span>
-          </RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/feedback" class="nav-item">
-            <span class="icon">🗣️</span>
-            <span class="text">FEEDBACK</span>
-          </RouterLink>
-        </li>
-        <li class="dropdown">
-          <a href="#" @click.prevent="toggleRefundMenu" class="nav-item dropdown-trigger">
-            <span class="icon">💸</span>
-            <span class="text">REFUND</span>
-            <span class="dropdown-arrow" :class="{ 'open': isRefundMenuOpen }">▼</span>
-          </a>
-          <ul class="dropdown-menu" :class="{ 'show': isRefundMenuOpen }">
-            <li>
-              <RouterLink to="/merchandise-refund" class="dropdown-item">
-                <span class="icon">🛍️</span>
-                <span class="text">Merchandise Refund</span>
-              </RouterLink>
-            </li>
-            <li>
-              <RouterLink to="/ticket-refund" class="dropdown-item">
-                <span class="icon">🎫</span>
-                <span class="text">Ticket Refund</span>
-              </RouterLink>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <RouterLink to="/admin/dashboard" class="nav-item">
-            <span class="icon">🛠️</span>
-            <span class="text">ADMIN</span>
-          </RouterLink>
-        </li>
-      </ul>
 
-      <!-- Cart -->
-      <RouterLink to="/cart" class="cart">
-        <span class="cart-icon">🛒</span>
-        <span class="cart-text">CART</span>
-        <span class="cart-amount">RM {{ totalPrice }}</span>
-      </RouterLink>
+          <a 
+            v-if="!hideHomeLinks" 
+            href="#location" 
+            class="mobile-nav-link"
+            @click="isMenuOpen = false"
+          >
+            <span class="text-xl">📞</span>
+            <span>CONTACT</span>
+          </a>
+
+          <RouterLink 
+            to="/ticket" 
+            class="mobile-nav-link"
+            @click="isMenuOpen = false"
+          >
+            <span class="text-xl">🎫</span>
+            <span>TICKET</span>
+          </RouterLink>
+
+          <RouterLink 
+            to="/merchandise" 
+            class="mobile-nav-link"
+            @click="isMenuOpen = false"
+          >
+            <span class="text-xl">🛍️</span>
+            <span>MERCHANDISE</span>
+          </RouterLink>
+
+          <RouterLink 
+            to="/feedback" 
+            class="mobile-nav-link"
+            @click="isMenuOpen = false"
+          >
+            <span class="text-xl">🗣️</span>
+            <span>FEEDBACK</span>
+          </RouterLink>
+
+          <div class="relative">
+            <button 
+              @click="toggleRefundMenu"
+              class="mobile-nav-link w-full text-left"
+            >
+              <span class="text-xl">💸</span>
+              <span>REFUND</span>
+              <span 
+                class="ml-1 transition-transform duration-200"
+                :class="{ 'rotate-180': isRefundMenuOpen }"
+              >
+                ▼
+              </span>
+            </button>
+
+            <div 
+              v-show="isRefundMenuOpen"
+              class="pl-8 space-y-1"
+            >
+              <RouterLink 
+                to="/merchandise-refund" 
+                class="mobile-nav-link"
+                @click="isMenuOpen = false"
+              >
+                <span class="text-xl">🛍️</span>
+                <span>Merchandise Refund</span>
+              </RouterLink>
+              <RouterLink 
+                to="/ticket-refund" 
+                class="mobile-nav-link"
+                @click="isMenuOpen = false"
+              >
+                <span class="text-xl">🎫</span>
+                <span>Ticket Refund</span>
+              </RouterLink>
+            </div>
+          </div>
+
+          <RouterLink 
+            to="/admin/dashboard" 
+            class="mobile-nav-link"
+            @click="isMenuOpen = false"
+          >
+            <span class="text-xl">🛠️</span>
+            <span>ADMIN</span>
+          </RouterLink>
+
+          <RouterLink 
+            to="/cart"
+            class="mobile-nav-link"
+            @click="isMenuOpen = false"
+          >
+            <span class="text-xl">🛒</span>
+            <span>CART - RM {{ totalPrice }}</span>
+          </RouterLink>
+        </div>
+      </div>
     </nav>
-    <main><RouterView /></main>
-    <footer v-if="!hideFooter" class="footer">
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+      <RouterView />
+    </main>
+
+    <!-- Footer -->
+    <footer v-if="!hideFooter">
       <Footer />
     </footer>
-  </body>
+  </div>
 </template>
 
-<style scoped>
-/* Base styles */
-template, body {
-  height: 100%;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-}
+<style>
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
-/* Navigation */
-#navTop {
-  background: linear-gradient(to right, #f4d0d6, #DCC39C);
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-
-/* Brand/Logo */
-.brand img {
-  height: 50px;
-  transition: transform 0.3s ease;
-}
-
-.brand img:hover {
-  transform: scale(1.05);
-}
-
-/* Navigation Links */
-.nav-links {
-  display: flex;
-  gap: 1.5rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  align-items: center;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  color: #554149;
-  text-decoration: none;
-  font-weight: 500;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.nav-item:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-}
-
-.nav-item .icon {
-  font-size: 1.2rem;
-}
-
-/* Dropdown */
-.dropdown {
-  position: relative;
-}
-
-.dropdown-trigger {
-  padding-right: 2rem;
-}
-
-.dropdown-arrow {
-  position: absolute;
-  right: 0.75rem;
-  transition: transform 0.3s ease;
-}
-
-.dropdown-arrow.open {
-  transform: rotate(180deg);
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: white;
-  min-width: 200px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-10px);
-  transition: all 0.3s ease;
-  padding: 0.5rem;
-  list-style: none;
-}
-
-.dropdown-menu.show {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.dropdown-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  color: #554149;
-  text-decoration: none;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-}
-
-.dropdown-item:hover {
-  background: #f8f9fa;
-}
-
-/* Cart */
-.cart {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  background: #DCC39C;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  color: #554149;
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.cart:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.cart-icon {
-  font-size: 1.2rem;
-}
-
-.cart-amount {
-  font-weight: 600;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .nav-toggle {
-    display: block;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem;
+@layer components {
+  .nav-link {
+    @apply flex items-center px-4 py-2 text-[#554149] rounded-lg hover:bg-[#e8c5ca] 
+           transition-colors duration-200 font-medium space-x-2;
   }
 
-  .nav-toggle span {
-    display: block;
-    width: 25px;
-    height: 2px;
-    background: #554149;
-    margin: 5px 0;
-    transition: all 0.3s ease;
+  .mobile-nav-link {
+    @apply flex items-center px-4 py-2 text-[#554149] rounded-lg hover:bg-[#e8c5ca] 
+           transition-colors duration-200 font-medium space-x-2 w-full;
   }
+}
 
-  .nav-toggle span.open:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-  }
-
-  .nav-toggle span.open:nth-child(2) {
-    opacity: 0;
-  }
-
-  .nav-toggle span.open:nth-child(3) {
-    transform: rotate(-45deg) translate(5px, -5px);
-  }
-
-  .nav-links {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    flex-direction: column;
-    background: #f4d0d6;
-    padding: 1rem;
-    gap: 0.5rem;
-    max-height: 0;
-    overflow: hidden;
-    transition: all 0.3s ease;
-  }
-
-  .nav-links.open {
-    max-height: 500px;
-  }
-
-  .dropdown-menu {
-    position: static;
-    box-shadow: none;
-    padding-left: 1rem;
-  }
-
-  .cart {
-    font-size: 0.9rem;
-    padding: 0.5rem 1rem;
-  }
+.mobile-menu {
+  @apply transition-all duration-200 ease-in-out transform;
 }
 </style>

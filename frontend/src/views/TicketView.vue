@@ -198,6 +198,7 @@ const completePurchase = async () => {
         body: JSON.stringify(requestData)
       });
 
+      
       const result = await response.json();
       
       if (result.success) {
@@ -210,7 +211,7 @@ const completePurchase = async () => {
           showTicket.value = true;
           showCheckoutPopup.value = false;
         }
-
+        
         // Reset form fields
         selectedSeats.value = [];
         studentTickets.value = 0;

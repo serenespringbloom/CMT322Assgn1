@@ -264,7 +264,7 @@ class MerchandiseController extends Controller
     public function getAllOrders()
     {
         try {
-            $orders = MerchandiseOrder::with('merchandise')
+            $orders = MerchandiseOrder::with(['merchandise', 'orderItems.merchandise'])
                 ->orderBy('created_at', 'desc')
                 ->get()
                 ->map(function ($order) {
@@ -273,13 +273,15 @@ class MerchandiseController extends Controller
                         'customer_name' => $order->customer_name ?? '',
                         'customer_email' => $order->customer_email ?? '',
                         'customer_phone' => $order->customer_phone ?? '',
-                        'merchandise' => $order->merchandise ? [
-                            'id' => $order->merchandise->id,
-                            'name' => $order->merchandise->name
-                        ] : null,
-                        'size' => $order->size ?? '',
-                        'quantity' => $order->quantity ?? 0,
-                        'unit_price' => $order->unit_price ?? 0,
+                        'items' => $order->orderItems->map(function ($item) {
+                            return [
+                                'merchandise_name' => $item->merchandise->name,
+                                'size' => $item->size,
+                                'quantity' => $item->quantity,
+                                'unit_price' => $item->unit_price,
+                                'total_amount' => $item->total_amount
+                            ];
+                        }),
                         'total_amount' => $order->total_amount ?? 0,
                         'status' => $order->status ?? 'PENDING',
                         'created_at' => $order->created_at ? $order->created_at->toDateTimeString() : null,

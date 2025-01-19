@@ -78,22 +78,12 @@
 
       <!-- Charts Section -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <!-- Sales Trend Chart -->
-        <div class="bg-white rounded-xl shadow-md p-6">
-          <h3 class="text-lg font-semibold text-[#554149] mb-4">Sales Trend</h3>
-          <!-- Add your chart component here -->
-        </div>
-
-        <!-- Feedback Distribution Chart -->
-        <div class="bg-white rounded-xl shadow-md p-6">
-          <h3 class="text-lg font-semibold text-[#554149] mb-4">Feedback Distribution</h3>
-          <!-- Add your chart component here -->
-        </div>
+      
       </div>
 
       <!-- Recent Activity -->
-      <div class="bg-white rounded-xl shadow-md p-6">
-        <h3 class="text-lg font-semibold text-[#554149] mb-4">Recent Activity</h3>
+      <div class="bg-white rounded-xl shadow-md p-6 mb-2">
+        <h3 class="text-lg font-semibold text-[#554149] mb-4">Recent Ticket Purchase Activity</h3>
         <div class="overflow-x-auto">
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -123,6 +113,38 @@
           </table>
         </div>
       </div>
+
+      <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold text-[#554149] mb-4">Recent Merchandise Purchase Activity</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer Phone</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Details</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr v-for="activity in merchActivities" :key="activity.id" class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {{ formatDate(activity.date) }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span  class="px-2 py-1 text-xs rounded-full">
+                    {{ activity.phone }}
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-sm text-gray-500">{{ activity.details }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  RM {{ activity.amount.toFixed(2) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -130,6 +152,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { formatDate } from '@/utils/formatters';
+// import DashboardCharts from '@/components/DashboardCharts.vue';
 
 // State variables with default values
 const ticketSales = ref(0);
@@ -139,6 +162,8 @@ const merchandiseCount = ref(0);
 const newFeedbackCount = ref(0);
 const averageRating = ref(0);
 const recentActivities = ref([]);
+const merchActivities = ref([]);
+const feedbackCount = ref([]);
 
 // Computed properties with number conversion
 const totalSales = computed(() => {
@@ -177,6 +202,8 @@ const fetchSummaryData = async () => {
       newFeedbackCount.value = parseInt(data.newFeedbackCount) || 0;
       averageRating.value = parseFloat(data.averageRating) || 0;
       recentActivities.value = data.recentActivities || [];
+      merchActivities.value = data.merchActivities || [];
+      feedbackCount.value = data.feedbackCount || [];
       
       console.log('Processed Values:', {
         ticketSales: ticketSales.value,

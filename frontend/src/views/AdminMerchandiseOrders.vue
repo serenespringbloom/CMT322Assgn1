@@ -46,9 +46,7 @@
             <tr>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Size</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
@@ -63,15 +61,20 @@
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="text-sm text-gray-900">{{ order.customer_name }}</div>
                 <div class="text-sm text-gray-500">{{ order.customer_email }}</div>
+                <div class="text-sm text-gray-500">{{ order.customer_phone }}</div>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {{ order.merchandise?.name }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {{ order.size?.toUpperCase() }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {{ order.quantity }}
+              <td class="px-6 py-4">
+                <div v-for="(item, index) in order.items" :key="index" 
+                     class="mb-2 last:mb-0 p-2 bg-gray-50 rounded">
+                  <div class="text-sm text-gray-900">{{ item.merchandise_name }}</div>
+                  <div class="text-xs text-gray-500">
+                    Size: {{ item.size.toUpperCase() }} | Qty: {{ item.quantity }} | 
+                    RM {{ item.unit_price }} each
+                  </div>
+                  <div class="text-xs font-medium text-gray-700">
+                    Subtotal: RM {{ item.total_amount }}
+                  </div>
+                </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 RM {{ order.total_amount }}

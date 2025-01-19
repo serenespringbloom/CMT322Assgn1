@@ -52,18 +52,33 @@ class AdminController
 
             // Get recent activities with less restrictive conditions
             $recentActivities = Transaction::orderBy('created_at', 'desc')
-                ->take(10)
+                ->take(5)
                 ->get()
                 ->map(function ($transaction) {
                     return [
                         'id' => $transaction->transaction_id,
                         'date' => $transaction->created_at,
                         'type' => $transaction->transaction_type,
-                        'details' => "Transaction by {$transaction->cust_name}",
+                        'details' => "Transaction by {$transaction->cust_email}",
                         'amount' => floatval($transaction->total_price),
                         'status' => $transaction->payment_status
                     ];
                 });
+
+                $merchActivities = MerchandiseOrder::with('orderItems')->orderBy('created_at', 'desc')
+                ->take(5)
+                ->get()
+                ->map(function ($merchOrder) {
+                    return [
+                        'id' => $merchOrder->id,
+                        'date' => $merchOrder->created_at,
+                        'phone' => $merchOrder->customer_phone,
+                        'details' => "Transaction by {$merchOrder->customer_email}",
+                        'amount' => floatval($merchOrder->total_amount),
+                        'status' => $merchOrder->status
+                    ];
+                });
+
 
             $response = [
                 'success' => true,
@@ -74,11 +89,13 @@ class AdminController
                 'newFeedbackCount' => intval($newFeedbackCount),
                 'averageRating' => round(floatval($averageRating), 1),
                 'recentActivities' => $recentActivities,
+                'merchActivities' => $merchActivities,
                 'debug' => [
                     'totalTransactions' => $allTransactions->count(),
                     'rawTicketSales' => $ticketSales,
                     'rawMerchandiseSales' => $merchandiseSales
                 ]
+
             ];
 
             \Log::info('Final Response:', $response);

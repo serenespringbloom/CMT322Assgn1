@@ -69,15 +69,16 @@ Route::post('/store-item', function (Request $request) {
     Route::put('/event/{id}', [EventController::class, 'update']);
     Route::delete('/event/{id}', [EventController::class, 'destroy']);
 
-// Agenda API
+// Agendas routes
     Route::get('/events/{id}/agendas', [AgendaController::class, 'getAgendasByEvent']);
+    Route::post('/events/{eventId}/agendas', [AgendaController::class, 'store']);
+
+// Sponsors routes
+    Route::get('/events/{eventId}/sponsors', [SponsorController::class, 'getSponsorsByEvent']);
+    Route::post('/events/{eventId}/sponsors', [SponsorController::class, 'store']);
 
 // Ticket Type API
     Route::get('/ticket_types', [TicketTypeController::class, 'index']);
-
-// Sponsor API
-    Route::get('/events/{eventId}/sponsors', [SponsorController::class, 'getSponsorsByEvent']);
-
 
 //Refund API
     Route::get('/admin/refunds', [RefundRequestController::class, 'index']);

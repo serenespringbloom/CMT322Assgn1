@@ -27,7 +27,7 @@ onMounted(async () => {
     console.log('Ticket types data:', ticketResponse.data); // Debug log for ticket types
     ticketTypes.value = ticketResponse.data;
 
-    // Fetch sponsors
+    // Fetch sponsors for the event
     const sponsorResponse = await getSponsorsByEvent(eventId);
     console.log('Sponsors data:', sponsorResponse.data); // Debug log for sponsors
     sponsors.value = sponsorResponse.data;
@@ -36,8 +36,20 @@ onMounted(async () => {
   }
 });
 
-// Utility function to format time
+// Utility function to format the date
+function formatDate(datetime: string) {
+  if (!datetime) return null; // Handle null or undefined datetime
+  const date = new Date(datetime);
+  return date.toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  });
+}
+
+// Utility function to format the time
 function formatTime(datetime: string) {
+  if (!datetime) return null; // Handle null or undefined datetime
   const date = new Date(datetime);
   return date.toLocaleTimeString('en-US', {
     hour: '2-digit',
@@ -53,7 +65,7 @@ function formatTime(datetime: string) {
     <div class="hero" id="hero">
       <!-- Left Side: Title and Buttons -->
       <div class="hero-content left">
-        <p class="date">{{ event?.event_datetime || 'Invalid Date' }}</p>
+        <p class="date">{{ formatDate(event?.event_datetime) || 'Invalid Date' }}</p>
         <h1 class="title">{{ event?.event_title|| 'Event Title' }}</h1>
         <p class="tagline">{{ event?.event_subtitle || 'Event Subtitle' }}</p>
         <div class="buttons">
@@ -133,14 +145,14 @@ function formatTime(datetime: string) {
       </section>
 
       <!-- Agenda Section -->
-      <section id="agenda">
+<section id="agenda">
   <div class="agenda-container">
     <!-- Left Side -->
     <div class="agenda-title">
       <h2>Agenda</h2>
-      <h2>{{ event?.event_datetime || 'Event Date' }}</h2>
+      <h2>{{ formatDate(event?.event_datetime) || 'Invalid Date' }}</h2>
       <div class="gradient-overlay2">
-        <img src="@/assets/images/background-agenda.jpg" alt="" />
+        <img src="@/assets/images/background-agenda.jpg" alt="Agenda Background" />
       </div>
     </div>
 
@@ -159,6 +171,7 @@ function formatTime(datetime: string) {
     </div>
   </div>
 </section>
+
 
       <!-- Performers Section
       <section id="performers">
@@ -241,13 +254,13 @@ function formatTime(datetime: string) {
       </section>
 
      <!-- Sponsors Section -->
-    <section id="sponsors">
+     <section id="sponsors" v-if="sponsors.length">
       <h2>Our Event Partners</h2>
-        <ul class="sponsor-list">
-          <li v-for="sponsor in sponsors" :key="sponsor.sponsor_id" class="sponsor-item">
-            <img :src="sponsor.sponsor_logo" :alt="`Sponsor Logo ${sponsor.sponsor_id}`">
-          </li>
-        </ul>
+      <ul class="sponsor-list">
+        <li v-for="sponsor in sponsors" :key="sponsor.sponsor_id" class="sponsor-item">
+          <img :src="sponsor.sponsor_logo.replace('/assets', '')" :alt="`Sponsor Logo ${sponsor.sponsor_id}`" />
+        </li>
+      </ul>
     </section>
 
 

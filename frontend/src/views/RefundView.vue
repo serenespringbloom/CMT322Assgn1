@@ -27,22 +27,11 @@
               type="text"
               id="pid"
               v-model="refundRequest.pid"
-              @input="validatePid"
               placeholder="Enter your purchase ID"
               class="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-[#dcc39c] 
                      focus:border-transparent transition-colors duration-200"
-              :class="{
-                'border-red-300 focus:ring-red-200': !isPidValid && refundRequest.pid,
-                'border-gray-300': isPidValid || !refundRequest.pid
-              }"
               required
             />
-            <p 
-              v-if="refundRequest.pid && !isPidValid" 
-              class="mt-2 text-red-500 text-sm"
-            >
-              Please enter a valid purchase ID.
-            </p>
           </div>
 
           <!-- Reason Field -->
@@ -68,7 +57,7 @@
           <!-- Submit Button -->
           <button
             type="submit"
-            :disabled="!isPidValid || !refundRequest.reason"
+            :disabled="!refundRequest.pid || !refundRequest.reason"
             class="w-full py-4 bg-gradient-to-r from-[#a48e69] to-[#dcc39c] text-white 
                    rounded-lg font-medium transition-all duration-300 transform 
                    hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-50 
@@ -113,67 +102,50 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      refundRequest: {
-        pid: "",
-        reason: "",
-      },
-      isPidValid: false,
-      message: "",
-      success: false,
-    };
-  },
-  methods: {
-    async validatePid() {
-      try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/validate-pid/${this.refundRequest.pid}`);
-        this.isPidValid = response.data.isValid;
-      } catch (error) {
-        console.error('Error validating PID:', error);
-        this.isPidValid = false;
-      }
-    },
-    async submitRefund() {
-      if (!this.refundRequest.pid || !this.refundRequest.reason) {
-        this.message = "All fields are required!";
-        this.success = false;
-        return;
-      }
+<script setup>
+import { ref } from 'vue';
 
-      if (!this.isPidValid) {
-        this.message = "Invalid purchase ID.";
-        this.success = false;
-        return;
-      }
+const refundRequest = ref({
+  pid: "",
+  reason: "",
+});
 
-      try {
-        const formData = new FormData();
-        formData.append('transaction_id', this.refundRequest.pid);
-        formData.append('reason', this.refundRequest.reason);
-        
-        await axios.post(`${import.meta.env.VITE_API_URL}/api/user/refunds`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+const message = ref("");
+const success = ref(false);
 
-        this.message = `Refund request for Purchase ID ${this.refundRequest.pid} submitted successfully!`;
-        this.success = true;
+const submitRefund = async () => {
+  if (!refundRequest.value.pid || !refundRequest.value.reason) {
+    message.value = "All fields are required!";
+    success.value = false;
+    return;
+  }
 
-        // Clear the form
-        this.refundRequest.pid = "";
-        this.refundRequest.reason = "";
-        this.isPidValid = false;
-      } catch (error) {
-        console.error('Error submitting refund:', error);
-        this.message = "Failed to submit refund request. Please try again.";
-        this.success = false;
-      }
-    },
-  },
+  try {
+    const formData = new FormData();
+    formData.append('transaction_id', refundRequest.value.pid);
+    formData.append('reason', refundRequest.value.reason);
+    
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/user/refunds`, {
+      method: 'POST',
+      body: formData
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      message.value = `Refund request for Purchase ID ${refundRequest.value.pid} submitted successfully!`;
+      success.value = true;
+      // Clear the form
+      refundRequest.value.pid = "";
+      refundRequest.value.reason = "";
+    } else {
+      throw new Error(data.message || 'Failed to submit refund request');
+    }
+  } catch (error) {
+    console.error('Error submitting refund:', error);
+    message.value = "Failed to submit refund request. Please try again.";
+    success.value = false;
+  }
 };
 </script>
   

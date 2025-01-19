@@ -47,36 +47,109 @@ const returnHome = () => {
 </script>
 
 <template>
-  <div class="login-page">
-   
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <a class="home-link" @click="returnHome">Return to Home</a>
-      <div class="login-content">
-        <img src="../assets/MCBLogo.png" alt="Logo" class="logo" />
-        <h2>Admin Login</h2>
-        <form @submit.prevent="handleLogin" class="login-form">
-          <div class="form-group">
-            <input id="username" v-model="username" type="text" placeholder="Enter your username" />
-          </div>
-
-          <div class="form-group">
-            <input id="password" v-model="password" type="password" placeholder="Enter your password" />
-          </div>
-
-          <button type="submit" class="btn-login" :disabled="loading">
-            <span v-if="loading">Signing In...</span>
-            <span v-else>Sign In</span>
-          </button>
-        </form>
-
-        <p v-if="error" class="error">{{ error }}</p>
-      </div>
+  <div class="min-h-screen relative flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <!-- Background Image with Overlay -->
+    <div class="absolute inset-0 z-0">
+      <img 
+        src="@/assets/backgroundMain.png" 
+        class="w-full h-full object-cover"
+        alt="Background"
+      />
+      <div class="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
     </div>
 
-    <!-- Background -->
-    <div class="background">
-      <h1>Welcome Back!</h1>
+    <!-- Login Container -->
+    <div class="w-full max-w-md z-10 space-y-8">
+      <!-- Logo & Title -->
+      <div class="text-center">
+        <img 
+          src="@/assets/MCBLogo.png" 
+          class="mx-auto h-24 w-auto animate-fade-in"
+          alt="MCB Logo" 
+        />
+        <h2 class="mt-6 text-3xl font-bold tracking-tight text-white">
+          Admin Login
+        </h2>
+      </div>
+
+      <!-- Login Form -->
+      <form @submit.prevent="handleLogin" 
+            class="mt-8 space-y-6 bg-white/90 backdrop-blur-md rounded-xl p-8 shadow-2xl 
+                   transform transition duration-500 hover:scale-[1.02]">
+               
+        <!-- Username Field -->
+        <div>
+          <label for="username" class="block text-sm font-medium text-gray-700">
+            Username
+          </label>
+          <input 
+            id="username" 
+            v-model="username" 
+            type="text" 
+            required
+            class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md 
+                   shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 
+                   focus:ring-[#a48e69] focus:border-[#a48e69] sm:text-sm
+                   transition duration-300"
+            placeholder="Enter your username"
+          />
+        </div>
+
+        <!-- Password Field -->
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700">
+            Password
+          </label>
+          <input 
+            id="password" 
+            v-model="password" 
+            type="password" 
+            required
+            class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md 
+                   shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 
+                   focus:ring-[#a48e69] focus:border-[#a48e69] sm:text-sm
+                   transition duration-300"
+            placeholder="Enter your password"
+          />
+        </div>
+
+        <!-- Error Message -->
+        <div v-if="error" 
+             class="text-red-500 text-sm text-center bg-red-50 p-2 rounded-md animate-shake">
+          {{ error }}
+        </div>
+
+        <!-- Submit Button -->
+        <button 
+          type="submit" 
+          :disabled="loading"
+          class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md 
+                 shadow-sm text-sm font-medium text-white bg-gradient-to-r from-[#a48e69] 
+                 to-[#dcc39c] hover:opacity-90 focus:outline-none focus:ring-2 
+                 focus:ring-offset-2 focus:ring-[#a48e69] disabled:opacity-50 
+                 disabled:cursor-not-allowed transition duration-300"
+        >
+          <span v-if="loading" class="flex items-center">
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+            </svg>
+            Signing In...
+          </span>
+          <span v-else>Sign In</span>
+        </button>
+
+        <!-- Return Home Link -->
+        <div class="text-center mt-4">
+          <a 
+            @click="returnHome" 
+            class="text-sm text-[#a48e69] hover:text-[#dcc39c] cursor-pointer 
+                   transition duration-300"
+          >
+            Return to Home
+          </a>
+        </div>
+      </form>
     </div>
   </div>
 </template>
@@ -129,11 +202,7 @@ const returnHome = () => {
   margin-bottom: 1rem;
 }
 
-h2 {
-  margin-bottom: 2rem;
-  font-size: 1.75rem;
-  color: #ff69b4; /* Hot Pink */
-}
+
 
 /* Form Styling */
 .login-form {
